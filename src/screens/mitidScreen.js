@@ -2,8 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Image } from 'react-native';
 import {Text, View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import { NavigationActivation } from '@react-navigation/native';
 
-const MitidScreen = () => {
+import FrontScreen from './frontScreen.js';
+
+
+const MitidScreen = ({ navigation }) => {
 
   return(
     <View style={styles.container}>
@@ -21,7 +25,7 @@ const MitidScreen = () => {
         <TextInput style={styles.textInput} />
       </View>
 
-      <TouchableOpacity style={styles.buttonCont}>
+      <TouchableOpacity style={styles.buttonCont} onPress={() => navigation.navigate("Front")}>
         <Text style={styles.buttonText}>FORTSÆT</Text>
         <Image style={styles.buttonIcon} source={require('../../assets/right-arrow.png')} />
       </TouchableOpacity>
