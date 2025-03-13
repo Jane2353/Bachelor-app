@@ -1,20 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react'; // Import useState
 import { Image } from 'react-native';
 import {Text, View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import { NavigationActivation } from '@react-navigation/native';
-
 import FrontScreen from './frontScreen.js';
 
-
 const MitidScreen = ({ navigation }) => {
+  const [userId, setUserId] = useState('');
 
   return(
     <View style={styles.container}>
 
       <View style={styles.titleContainer}>
         <Text style={styles.textTitle}>Log på med MitID </Text>
-        <Image style={styles.mitidIcon} source={require('../../assets/mitid.png')} />
+        <Image 
+        style={styles.mitidIcon} 
+        source={require('../../assets/mitid.png')} />
       </View>
 
       <View style={styles.line}>
@@ -22,17 +23,30 @@ const MitidScreen = ({ navigation }) => {
 
       <View style={styles.inputContainer}>
         <Text style={styles.text}>BRUGER-ID</Text>
-        <TextInput style={styles.textInput} />
+        <TextInput 
+          style={styles.textInput} 
+          value={userId} 
+          onChangeText={setUserId}
+        />
       </View>
 
-      <TouchableOpacity style={styles.buttonCont} onPress={() => navigation.navigate("Front")}>
+      <TouchableOpacity 
+        style={[styles.buttonCont, { backgroundColor: userId ? '#007AFF' : '#c8c8c8' }]} 
+        // Conditional rendering of button. Background colour of the button is blue if userId is not empty, otherwise it's set to grey.
+        onPress={() => userId && navigation.navigate("Front")} 
+        // When pressing button, navigate to FrontScreen if userId is not empty.
+        disabled={!userId} 
+        // Disables prop if userId is empty.
+      >
         <Text style={styles.buttonText}>FORTSÆT</Text>
-        <Image style={styles.buttonIcon} source={require('../../assets/right-arrow.png')} />
+        <Image 
+        style={styles.buttonIcon} 
+        source={require('../../assets/right-arrow.png')} />
       </TouchableOpacity>
 
     </View>
-    )
-  }
+  )
+}
 
 const styles = StyleSheet.create({
 
