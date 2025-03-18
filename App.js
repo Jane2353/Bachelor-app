@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import FrontScreen from './src/screens/frontScreen.js';
 import MitidScreen from './src/screens/mitidScreen.js';
+import ProfileScreen from './src/screens/profileScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -12,6 +13,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={MitidScreen} />
         <Stack.Screen name="Front" component={FrontScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
