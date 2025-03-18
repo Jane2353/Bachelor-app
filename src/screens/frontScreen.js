@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const FrontScreen = () => {
+const FrontScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Welcome to the Front Screen!</Text>
+      <TouchableOpacity style={styles.buttonCont} onPress={() => navigation.navigate("Profile")}>
+        <Text style={styles.buttonText}>Profil</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -20,6 +23,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#007AFF', 
+  },
+  buttonCont: {
+    backgroundColor: '#007AFF',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
   },
 });
 
