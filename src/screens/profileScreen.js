@@ -2,16 +2,23 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const ProfileScreen = () => {
+
   return (
-    <View>
-      <Text style={styles.container}>Profile</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Profile</Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    colour: 'black',
+    backgroundColor: 'lightblue',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: 'red', // Fixed typo from 'colour' to 'color'
     fontSize: 24,
     fontWeight: 'bold',
     justifyContent: 'center',
