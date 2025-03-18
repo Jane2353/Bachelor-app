@@ -1,5 +1,5 @@
-import React from 'react'; // Fix import statement
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'; // Fix import statement
+import React from 'react'; 
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const ProfileScreen = () => {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const FrontScreen = ({ navigation }) => { // Add navigation prop
+const FrontScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Welcome to the Front Screen!</Text>
