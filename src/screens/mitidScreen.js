@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { Image } from 'react-native';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
 import FrontScreen from './frontScreen.js';
 
 const MitidScreen = ({ navigation }) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback, Image } from 'react-native';
 
 export default function Popup({ modalVisible, setModalVisible }) {
   const closeModal = () => {
@@ -17,8 +17,9 @@ export default function Popup({ modalVisible, setModalVisible }) {
         <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
                 <View style={styles.modal}>
-                    <Text style={styles.modalText}>Congratulations! </Text>
-                    <Text style={styles.modalText}>You have earned an achievement</Text>
+                    <Text style={styles.modalTextBold}>Congratulations </Text>
+                    <Text style={styles.modalText}>You have earned a new badge</Text>
+                    <Image style={styles.modalImage} source={require('../../assets/badge.png')} />
                 </View>
             </View>
         </View>
@@ -42,11 +43,25 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     elevation: 10,
+    alignItems: 'center',
   },
   modalText: {
     fontSize: 24,
     marginBottom: 20,
     justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'center',
+  },
+  modalTextBold: {
+  fontSize: 24,
+  marginBottom: 20,
+  justifyContent: 'center',
+  textAlign: 'center',
+  fontWeight: 'bold',
+  },
+  modalImage: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
+    marginBottom: 10,
   }
 });
