@@ -14,11 +14,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'lightblue',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   text: {
-    color: 'red', // Fixed typo from 'colour' to 'color'
+    color: 'red',
     fontSize: 24,
     fontWeight: 'bold',
     justifyContent: 'center',

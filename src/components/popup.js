@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback, Image } from 'react-native';
 
-export default function Popup({ modalVisible, setModalVisible }) {
+export default function Popup({ modalVisible, setModalVisible, title, message, imageSource }) {
   const closeModal = () => {
     setModalVisible(false);
   }
@@ -17,9 +17,9 @@ export default function Popup({ modalVisible, setModalVisible }) {
         <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
                 <View style={styles.modal}>
-                    <Text style={styles.modalTextBold}>Congratulations </Text>
-                    <Text style={styles.modalText}>You have earned a new badge</Text>
-                    <Image style={styles.modalImage} source={require('../../assets/badge.png')} />
+                    <Text style={styles.modalTextBold}>{title} </Text>
+                    <Text style={styles.modalText}>{message}</Text>
+                    <Image style={styles.modalImage} source={imageSource} />
                 </View>
             </View>
         </View>
