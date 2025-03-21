@@ -43,7 +43,7 @@ export const ConditionalFooter = () => {
 
 const styles = StyleSheet.create({
     container: {
-        height: 80,
+        height: '10%',
         width: '100%',
         backgroundColor: '#1976D2',
         justifyContent: 'space-between', 
@@ -51,16 +51,17 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         flexDirection: 'row',
+        paddingHorizontal: 20,
     },
     text: {
         color: 'black',
         fontSize: 24,
     },
     icon: {
-        width: 50, 
+        width: 40,
+        maxWidth: '100%', 
         height: 40,
         resizeMode: 'contain',
-        paddingHorizontal: 50,
         tintColor: 'white',
     }
 
