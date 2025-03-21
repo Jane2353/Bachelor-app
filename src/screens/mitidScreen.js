@@ -1,8 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { Image } from 'react-native';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import { NavigationActivation } from '@react-navigation/native';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
 import FrontScreen from './frontScreen.js';
 
 const MitidScreen = ({ navigation }) => {
@@ -123,9 +121,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   buttonText: {
-      color: 'white',
-      fontSize: 15,
-      fontWeight: 'light',
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'normal',
   },
   buttonIcon: {
     tintColor: 'white',

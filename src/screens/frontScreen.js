@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Popup from '../components/popup';
 
 const FrontScreen = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setModalVisible(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Welcome to the Front Screen!</Text>
