@@ -18,13 +18,6 @@ const FrontScreen = ({ navigation }) => {
       <TouchableOpacity style={styles.buttonCont} onPress={() => navigation.navigate("Profile")}>
         <Text style={styles.buttonText}>Profil</Text>
       </TouchableOpacity>
-      <Popup 
-      modalVisible={modalVisible} 
-      setModalVisible={setModalVisible}
-      title="Congratulations"
-      message="You have earned a new badge"
-      imageSource={require('../../assets/badge.png')} 
-      />
     </View>
   );
 }

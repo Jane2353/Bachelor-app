@@ -12,15 +12,13 @@ const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'lightblue',
     flex: 1,
-  },
-  text: {
-    color: 'red',
-    fontSize: 24,
-    fontWeight: 'bold',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  text: {
+    color: 'black',
+    fontSize: 24,
   },
 });
 
