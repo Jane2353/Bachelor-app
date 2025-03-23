@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import FrontScreen from './src/screens/frontScreen.js';
 import MitidScreen from './src/screens/mitidScreen.js';
 import ProfileScreen from './src/screens/profileScreen.js';
-import { ConditionalFooter } from './src/components/footer.js'; // Import ConditionalFooter
+import { ConditionalFooter } from './src/components/footer.js';
 
 const Stack = createStackNavigator();
 
