@@ -111,6 +111,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: '40%',
+    top: '-1%',
+    zIndex: '-1',
   },
   opsparetGenstand: {
     color: 'white',
