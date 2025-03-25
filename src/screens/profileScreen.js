@@ -1,9 +1,11 @@
 import React, { useState } from 'react'; 
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Directions } from 'react-native-gesture-handler';
 
 const ProfileScreen = () => {
   const [isPressed1, setIsPressed1] = useState(false);
   const [isPressed2, setIsPressed2] = useState(false);
+  const [showOpsparetGenstand, setShowOpsparetGenstand] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -16,7 +18,10 @@ const ProfileScreen = () => {
         <TouchableOpacity
           style={[styles.box, isPressed1 && styles.boxPressed]}
           onPressIn={() => setIsPressed1(true)}
-          onPressOut={() => setIsPressed1(false)}
+          onPressOut={() => {
+            setIsPressed1(false);
+            setShowOpsparetGenstand(!showOpsparetGenstand); // Toggle visibility
+          }}
           activeOpacity={1}
         >
           <Text style={styles.boxText}>Opsparet genstand</Text>
@@ -30,6 +35,17 @@ const ProfileScreen = () => {
           <Text style={styles.boxText}>Badges</Text>
         </TouchableOpacity>
       </View>
+      {showOpsparetGenstand && (
+        <View style={styles.opsparetGenstandContainer}>
+          <Text style={styles.opsparetGenstand}>Du har sparet hvad der svarer til en:</Text>
+          <Text style={styles.opsparetGenstandVærdi}>Smartphone</Text>
+          <View style={styles.circle}>
+            <Image style={styles.circleIcon} source={require('../../assets/smartphone-call.png')} />
+          </View>
+          <Text style={styles.opsparetGenstandVærdi}>Til en værdi af</Text>
+          <Text style={styles.opsparetGenstandlilleText}>5000,-</Text>
+        </View>
+      )}
     </View>
   )
 }
@@ -40,19 +56,18 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     paddingTop: '10%',
-    flex: 1, 
-    justifyContent: 'center',
+    flexDirection: 'column',
     alignItems: 'center',
+    marginTop: '40%',
   },
   text: {
     color: 'black',
     fontSize: 20,
-    marginTop: 10, 
   },
   textSmall: {
     color: 'black',
     fontSize: 14,
-    marginTop: 5, 
+    marginBottom: '20%',
   },
   icon: {
     width: 100,
@@ -61,34 +76,73 @@ const styles = StyleSheet.create({
     tintColor: 'black',
   },
 
-
-
-
   boxContainer: {
-    flex: 1, 
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center', 
-    width: '100%', 
-    backgroundColor: 'grey',
+    width: '100%',
+    flexWrap: 'wrap',
+    height: '5%',
   },
   box: {
     backgroundColor: 'grey',
     width: '50%', 
-    height: '10%', 
-    borderRadius: 10, 
-    borderColor: 'black', 
-    borderWidth: 1.5, 
-    marginBottom: '100%',
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    height: '100%',
+    borderRadius: 10,
+    borderColor: 'black',
+    borderWidth: 1.5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   boxPressed: {
-    backgroundColor: 'blue',
+    backgroundColor: '#5e5e5e',
+    shadowColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
   },
   boxText: {
     color: 'white',
     fontSize: 13,
+    textAlign: 'center',
+  },
+  opsparetGenstandContainer: {
+    flexDirection: 'column',
+    backgroundColor: 'grey',
+    alignItems: 'center',
+    width: '100%',
+    height: '40%',
+  },
+  opsparetGenstand: {
+    color: 'white',
+    fontsize: 15,
+    alignItems: 'center',
+    marginTop: '7%',
+  },
+  circle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '5%',
+    resizeMode: 'contain',
+  },
+  circleIcon: {
+    tintColor: 'black',
+    resizeMode:'contain',
+    width: 60,
+    height: 60,
+  },
+  opsparetGenstandVærdi: {
+    color: 'white',
+    fontSize: 15,
+    marginTop: '2%',
+  },
+  opsparetGenstandlilleText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'light',
   },
 });
 
