@@ -14,8 +14,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Budget" component={BudgetTracker} />
         <Stack.Screen name="Login" component={MitidScreen} />
+        <Stack.Screen name="Budget" component={BudgetTracker} />
         <Stack.Screen name="Front" component={FrontScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
