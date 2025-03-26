@@ -1,10 +1,23 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Popup from '../components/popup';
 
-const FrontScreen = () => {
+const FrontScreen = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setModalVisible(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Welcome to the Front Screen!</Text>
+      <TouchableOpacity style={styles.buttonCont} onPress={() => navigation.navigate("Profile")}>
+        <Text style={styles.buttonText}>Profil</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -20,6 +33,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#007AFF', 
+  },
+  buttonCont: {
+    backgroundColor: '#007AFF',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
   },
 });
 
