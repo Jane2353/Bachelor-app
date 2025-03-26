@@ -5,7 +5,8 @@ import { Directions } from 'react-native-gesture-handler';
 const ProfileScreen = () => {
   const [isPressed1, setIsPressed1] = useState(false);
   const [isPressed2, setIsPressed2] = useState(false);
-  const [showOpsparetGenstand, setShowOpsparetGenstand] = useState(false);
+  const [showOpsparetGenstand, setShowOpsparetGenstand] = useState(true);
+  const [showBadges, setShowBadges] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -20,7 +21,8 @@ const ProfileScreen = () => {
           onPressIn={() => setIsPressed1(true)}
           onPressOut={() => {
             setIsPressed1(false);
-            setShowOpsparetGenstand(!showOpsparetGenstand); // Toggle visibility
+            setShowOpsparetGenstand(true); 
+            setShowBadges(false); // Switch to Opsparet Genstand container
           }}
           activeOpacity={1}
         >
@@ -29,7 +31,11 @@ const ProfileScreen = () => {
         <TouchableOpacity
           style={[styles.box, isPressed2 && styles.boxPressed]}
           onPressIn={() => setIsPressed2(true)}
-          onPressOut={() => setIsPressed2(false)}
+          onPressOut={() => {
+            setIsPressed2(false);
+            setShowBadges(true);
+            setShowOpsparetGenstand(false); // Switch to Badges container
+          }}
           activeOpacity={1}
         >
           <Text style={styles.boxText}>Badges</Text>
@@ -44,6 +50,12 @@ const ProfileScreen = () => {
           </View>
           <Text style={styles.opsparetGenstandVærdi}>Til en værdi af</Text>
           <Text style={styles.opsparetGenstandlilleText}>5000,-</Text>
+        </View>
+      )}
+      {showBadges && (
+        <View style={styles.badgesContainer}>
+          <Text style={styles.badgesText}>Your Badges</Text>
+          {/* Add your badges content here */}
         </View>
       )}
     </View>
@@ -75,7 +87,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     tintColor: 'black',
   },
-
   boxContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -104,6 +115,20 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 13,
     textAlign: 'center',
+  },
+  greyContainer: {
+    flexDirection: 'column',
+    backgroundColor: 'grey',
+    alignItems: 'center',
+    width: '100%',
+    height: '40%',
+    top: '-1%',
+    zIndex: '-1',
+  },
+  greyText: {
+    color: 'white',
+    fontSize: 15,
+    marginTop: '7%',
   },
   opsparetGenstandContainer: {
     flexDirection: 'column',
@@ -145,6 +170,20 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 15,
     fontWeight: 'light',
+  },
+  badgesContainer: {
+    flexDirection: 'column',
+    backgroundColor: 'grey',
+    alignItems: 'center',
+    width: '100%',
+    height: '40%',
+    top: '-1%',
+    zIndex: '-1',
+  },
+  badgesText: {
+    color: 'white',
+    fontSize: 15,
+    marginTop: '7%',
   },
 });
 
