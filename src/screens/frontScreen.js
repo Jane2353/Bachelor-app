@@ -14,35 +14,21 @@ const FrontScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Welcome to the Front Screen!</Text>
-      <TouchableOpacity style={styles.buttonCont} onPress={() => navigation.navigate("Profile")}>
-        <Text style={styles.buttonText}>Profil</Text>
-      </TouchableOpacity>
+      <Text style={styles.text}>Hold dig til din rutine og dit badge vises her:</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexDirection: 'row',
+    marginTop: '40%',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white', 
   },
   text: {
-    fontSize: 24,
+    fontSize: 15,
     fontWeight: 'bold',
-    color: '#007AFF', 
-  },
-  buttonCont: {
-    backgroundColor: '#007AFF',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 20,
+    color: 'black', 
   },
 });
 

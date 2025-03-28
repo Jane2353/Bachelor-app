@@ -42,22 +42,21 @@ const ProfileScreen = () => {
         </TouchableOpacity>
       </View>
       {showOpsparetGenstand && (
-        <View style={styles.opsparetGenstandContainer}>
-          <Text style={styles.opsparetGenstand}>Du har sparet hvad der svarer til en:</Text>
-          <Text style={styles.opsparetGenstandVærdi}>Smartphone</Text>
-          <View style={styles.circle}>
-            <Image style={styles.circleIcon} source={require('../../assets/smartphone-call.png')} />
-          </View>
-          <Text style={styles.opsparetGenstandVærdi}>Til en værdi af</Text>
-          <Text style={styles.opsparetGenstandlilleText}>5000,-</Text>
+      <View style={[styles.opsparetGenstandContainer]}>
+        <Text style={styles.opsparetGenstand}>Du har sparet hvad der svarer til en: Smartphone</Text>
+        <View style={styles.circle}>
+          <Image style={styles.circleIcon} source={require('../../assets/smartphone-call.png')} />
         </View>
-      )}
-      {showBadges && (
-        <View style={styles.badgesContainer}>
-          <Text style={styles.badgesText}>Your Badges</Text>
-          {/* Add your badges content here */}
-        </View>
-      )}
+        <Text style={styles.opsparetGenstandVærdi}>Til en værdi af</Text>
+        <Text style={styles.opsparetGenstandlilleText}>5000,-</Text>
+      </View>
+    )}
+    {showBadges && (
+      <View style={[styles.badgesContainer]}>
+       <Text style={styles.badgesText}>Your Badges</Text>
+       {/* Add your badges content here */}
+      </View>
+    )}
     </View>
   )
 }
@@ -93,26 +92,26 @@ const styles = StyleSheet.create({
     width: '100%',
     flexWrap: 'wrap',
     height: '5%',
+    zIndex: 2, // Ensure boxes are above other containers
   },
   box: {
-    backgroundColor: 'grey',
+    backgroundColor: '#70a9e0',
     width: '50%', 
     height: '100%',
     borderRadius: 10,
-    borderColor: 'black',
-    borderWidth: 1.5,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1, // Ensure consistent zIndex for boxes
   },
   boxPressed: {
-    backgroundColor: '#5e5e5e',
+    backgroundColor: '#1976D2',
     shadowColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black shadow
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
   },
   boxText: {
-    color: 'white',
+    color: 'black',
     fontSize: 13,
     textAlign: 'center',
   },
@@ -123,33 +122,33 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '40%',
     top: '-1%',
-    zIndex: '-1',
+    zIndex: 0,
   },
   greyText: {
-    color: 'white',
+    color: 'black',
     fontSize: 15,
     marginTop: '7%',
   },
   opsparetGenstandContainer: {
     flexDirection: 'column',
-    backgroundColor: 'grey',
+    backgroundColor: '#bacfe3',
     alignItems: 'center',
     width: '100%',
     height: '40%',
     top: '-1%',
-    zIndex: '-1',
+    zIndex: 1, // Ensure proper layering
   },
   opsparetGenstand: {
-    color: 'white',
+    color: 'black',
     fontsize: 15,
     alignItems: 'center',
-    marginTop: '7%',
+    marginTop: '15%',
   },
   circle: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: 'white',
+    backgroundColor: '#bacfe3',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: '5%',
@@ -162,26 +161,25 @@ const styles = StyleSheet.create({
     height: 60,
   },
   opsparetGenstandVærdi: {
-    color: 'white',
+    color: 'black',
     fontSize: 15,
     marginTop: '2%',
   },
   opsparetGenstandlilleText: {
-    color: 'white',
+    color: 'black',
     fontSize: 15,
-    fontWeight: 'light',
   },
   badgesContainer: {
     flexDirection: 'column',
-    backgroundColor: 'grey',
+    backgroundColor: '#bacfe3',
     alignItems: 'center',
     width: '100%',
     height: '40%',
     top: '-1%',
-    zIndex: '-1',
+    zIndex: 1, // Ensure proper layering
   },
   badgesText: {
-    color: 'white',
+    color: 'black',
     fontSize: 15,
     marginTop: '7%',
   },
