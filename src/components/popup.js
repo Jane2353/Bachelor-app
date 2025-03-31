@@ -19,7 +19,7 @@ export default function Popup({ modalVisible, setModalVisible, title, message, i
                 <View style={styles.modal}>
                     <Text style={styles.modalTextBold}>{title} </Text>
                     <Text style={styles.modalText}>{message}</Text>
-                    <Image style={styles.modalImage} source={imageSource} />
+                    {imageSource && <Image style={styles.modalImage} source={imageSource} />} {/* Conditionally render image */}
                 </View>
             </View>
         </View>
@@ -48,15 +48,13 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 24,
     marginBottom: 20,
-    justifyContent: 'center',
-    textAlign: 'center',
   },
   modalTextBold: {
-  fontSize: 24,
-  marginBottom: 20,
-  justifyContent: 'center',
-  textAlign: 'center',
-  fontWeight: 'bold',
+    fontSize: 24,
+    marginBottom: 20,
+    justifyContent: 'center',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   modalImage: {
     width: 100,
