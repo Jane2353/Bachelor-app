@@ -266,6 +266,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginEnd: 20,
     width: '100%',
+    paddingBottom: 90,
   },
   badgeImage: {
     width: 80, 
