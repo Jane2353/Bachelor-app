@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Popup from '../components/popup';
 
 const FrontScreen = ({ navigation }) => {
@@ -13,22 +13,42 @@ const FrontScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Hold dig til din rutine og dit badge vises her:</Text>
+    <View>
+      <View style={styles.carContainer}>
+        <Image style={styles.carIcon} source={require('../../assets/Car/Car.png')} />
+      </View>
+      <View style={styles.carFuelContainer}>
+        <Image style={styles.carFuelIcon} source={require('../../assets/Car/Fuel.png')} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  carContainer: {
+    marginTop: '20%',
     flexDirection: 'row',
-    marginTop: '40%',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: 'black', 
+  carIcon: {
+    width: 400,
+    height: 400,
+    resizeMode: 'contain',
+  },
+  carFuelContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'baseline',
+  },
+  carFuelIcon: {
+    width: 400,
+    height: 500,
+    resizeMode: 'contain',
+  },
+  carFuelText: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
   },
 });
 
