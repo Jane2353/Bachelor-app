@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const days = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
 const categories = ['Mad', 'Bolig', 'Transport', 'Fritid', 'Husholdning', 'Andre'];
@@ -14,6 +15,18 @@ const BudgetTracker = () => {
     const [selectedCategory, setSelectedCategory] = useState(categories[0]);
     const [expenses, setExpenses] = useState({});
     const [lockedDays, setLockedDays] = useState([]);
+    const [uploadedData, setUploadedData] = useState([]);
+
+    useEffect(() => {
+        const loadUploadedData = async () => {
+            const data = await AsyncStorage.getItem('bankData');
+            if (data) {
+                setUploadedData(JSON.parse(data));
+            }
+        };
+
+        loadUploadedData();
+    }, []);
 
     const distributeBudget = (budget) => {
         const budgetFloat = parseFloat(budget);
@@ -94,6 +107,11 @@ const BudgetTracker = () => {
         };
     };
 
+    const categorizeTransaction = (transaction) => {
+        // Logic to categorize transactions based on user input
+        // Example: Assign categories to deposits/withdrawals
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.headerRow}>
@@ -146,11 +164,11 @@ const BudgetTracker = () => {
                 value={amount}
                 onChangeText={setAmount}
             />
-{lockedDays.includes(selectedDay) && (
-  <Text style={{ color: 'red', marginBottom: 8 }}>
-    Du kan ikke tilføje forbrug på en låst dag
-  </Text>
-)}
+            {lockedDays.includes(selectedDay) && (
+                <Text style={{ color: 'red', marginBottom: 8 }}>
+                    Du kan ikke tilføje forbrug på en låst dag
+                </Text>
+            )}
 
             <FlatList
                 data={categories}
@@ -169,12 +187,11 @@ const BudgetTracker = () => {
                 )}
             />
 
-<Button 
-  title={lockedDays.includes(selectedDay) ? "Dagen er låst" : "Tilføj forbrug"}
-  onPress={handleAddExpense}
-  disabled={lockedDays.includes(selectedDay) || !selectedDay}
-/>
-
+            <Button 
+                title={lockedDays.includes(selectedDay) ? "Dagen er låst" : "Tilføj forbrug"}
+                onPress={handleAddExpense}
+                disabled={lockedDays.includes(selectedDay) || !selectedDay}
+            />
 
             <FlatList
                 data={days}
@@ -190,6 +207,19 @@ const BudgetTracker = () => {
                     </View>
                 )}
             />
+
+            <Text style={styles.header}>Uploaded Transactions</Text>
+            <FlatList
+                data={uploadedData}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.transaction}>
+                        <Text>{item.type}: {item.amount} kr</Text>
+                        <Text>{item.date}</Text>
+                        <Button title="Categorize" onPress={() => categorizeTransaction(item)} />
+                    </View>
+                )}
+            />
         </View>
     );
 };
@@ -197,7 +227,7 @@ const BudgetTracker = () => {
 const styles = StyleSheet.create({
     container: { flex: 1, paddingHorizontal: 15, paddingVertical: 20 },
     headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
-    header: { fontSize: 18, fontWeight: 'bold' },
+    header: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
     budgetInput: { borderWidth: 1, padding: 6, width: 100, borderRadius: 5, textAlign: 'center' },
     remainingBudget: { fontSize: 16, fontWeight: 'bold', marginBottom: 10 },
     daysRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 10 },
@@ -213,7 +243,8 @@ const styles = StyleSheet.create({
     selectedCategory: { backgroundColor: '#4CAF50' },
     categoryText: { fontSize: 12, textAlign: 'center' },
     expenseText: { fontSize: 14, marginVertical: 2, fontWeight: 'bold' },
-    expenseDetail: { fontSize: 12, marginLeft: 10 }
+    expenseDetail: { fontSize: 12, marginLeft: 10 },
+    transaction: { marginBottom: 10, padding: 10, backgroundColor: '#f9f9f9', borderRadius: 5 },
 });
 
 export default BudgetTracker;
