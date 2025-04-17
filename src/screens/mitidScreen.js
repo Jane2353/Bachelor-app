@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
-import FrontScreen from './frontScreen.js';
 
 const MitidScreen = ({ navigation }) => {
   const [userId, setUserId] = useState('');
@@ -31,7 +30,7 @@ const MitidScreen = ({ navigation }) => {
       <TouchableOpacity 
         style={[styles.buttonCont, { backgroundColor: userId ? '#007AFF' : '#c8c8c8' }]} 
         // Conditional rendering of button. Background colour of the button is blue if userId is not empty, otherwise it's set to grey.
-        onPress={() => userId && navigation.navigate("Front")} 
+        onPress={() => userId && navigation.navigate("Overview")} 
         // When pressing button, navigate to FrontScreen if userId is not empty.
         disabled={!userId} 
         // Disables prop if userId is empty.
