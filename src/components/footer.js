@@ -7,16 +7,13 @@ const Footer = () => {
 
     return (
         <View style={styles.container}>
-          <TouchableOpacity onPress={() => navigation.navigate('Front')}>
-            <Image style={styles.icon} source={require('../../assets/home.png')} />
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <Image style={styles.icon} source={require('../../assets/user.png')} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('AccountSetup')}>
-            <Image style={styles.icon} source={require('../../assets/plus.png')} />
+          <TouchableOpacity onPress={() => navigation.navigate('Pig')}>
+            <Image style={styles.icon} source={require('../../assets/home.png')} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Budget')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Overview')}>
             <Image style={styles.icon} source={require('../../assets/statistics.png')} />
           </TouchableOpacity>
         </View>
@@ -45,13 +42,13 @@ const styles = StyleSheet.create({
     container: {
         height: '10%',
         width: '100%',
-        backgroundColor: '#1976D2',
+        backgroundColor: '#FFB2B2',
         justifyContent: 'space-between', 
         alignItems: 'center',
         position: 'absolute',
         bottom: 0,
         flexDirection: 'row',
-        paddingHorizontal: 20,
+        paddingHorizontal: 50,
     },
     text: {
         color: 'black',
@@ -62,7 +59,7 @@ const styles = StyleSheet.create({
         maxWidth: '100%', 
         height: 40,
         resizeMode: 'contain',
-        tintColor: 'white',
+        tintColor: 'black',
     }
 
 });
