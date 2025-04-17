@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedba
 export default function Popup({ modalVisible, setModalVisible, title, message, imageSource }) {
   const closeModal = () => {
     setModalVisible(false);
-  }
+  };
 
   return (
     <Modal
@@ -15,17 +15,17 @@ export default function Popup({ modalVisible, setModalVisible, title, message, i
     >
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-                <View style={styles.modal}>
-                    <Text style={styles.modalTextBold}>{title} </Text>
-                    <Text style={styles.modalText}>{message}</Text>
-                    {imageSource && <Image style={styles.modalImage} source={imageSource} />} {/* Conditionally render image */}
-                </View>
+          <View style={styles.modalContent}>
+            <View style={styles.modal}>
+              <Text style={styles.modalTextBold}>{title}</Text>
+              {imageSource && <Image style={styles.modalImage} source={imageSource} />}
+              {message ? <Text style={styles.modalText}>{message}</Text> : null}
             </View>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </Modal>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -57,9 +57,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   modalImage: {
-    width: 100,
-    height: 100,
+    width: 250, // Increased width
+    height: 250, // Increased height
     alignSelf: 'center',
     marginBottom: 10,
-  }
+  },
 });
