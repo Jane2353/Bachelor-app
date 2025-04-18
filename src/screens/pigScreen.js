@@ -145,12 +145,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
   },
   pigIcon: {
+    marginTop: '10%',
     width: 200,
     height: 200,
     resizeMode: 'contain',
   },
   donutChartContainer: {
-    marginTop: '10%',
+    marginTop: '5%',
     width: 250, // Width of the donut chart
     height: 250, // Height of the donut chart
     justifyContent: 'center',
