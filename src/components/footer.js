@@ -40,6 +40,7 @@ export const ConditionalFooter = () => {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: 'white',
         height: '10%',
         width: '100%',
         backgroundColor: '#FFB2B2',
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         flexDirection: 'row',
         paddingHorizontal: 50,
+        zIndex: 1,
     },
     text: {
         color: 'black',
