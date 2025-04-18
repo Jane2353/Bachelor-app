@@ -71,9 +71,15 @@ const PigScreen = () => {
     <View style={styles.container}>
       <Text style={styles.Title}>Piggy is happy to see you!</Text>
       <View style={styles.containerButtons}>
-        <TouchableOpacity style={styles.blackButton}>Home</TouchableOpacity>
-        <TouchableOpacity style={styles.blackButtonUnclicked}>Challenge</TouchableOpacity>
-        <TouchableOpacity style={styles.blackButtonUnclicked}>Shop</TouchableOpacity>
+        <TouchableOpacity style={styles.blackButton}>
+          <Text style={styles.blackButtonText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.blackButtonUnclicked}>
+          <Text style={styles.blackButtonTextUnclicked}>Challenge</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.blackButtonUnclicked}>
+          <Text style={styles.blackButtonTextUnclicked}>Shop</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.containerMeter}></View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
@@ -123,6 +129,14 @@ const styles = StyleSheet.create({
     color: 'black',
     borderWidth: 1,
     borderColor: 'black',
+  },
+  blackButtonText: {
+    fontSize: 20,
+    color: 'white',
+  },
+  blackButtonTextUnclicked: {
+    fontSize: 20,
+    color: 'black',
   },
   containerMeter: {
     marginTop: '5%',
