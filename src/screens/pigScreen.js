@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { Circle, G, Svg } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import NavigationButtons from '../components/NavigationButtons';
 
 // OBS: If i wanna change the size of the donut, change the radius and strokeWidth. It is important that the:
 // <Svg width={180} height={180}> is radius + half of strokeWidth per side. Also remember to change the cx and cy in both
@@ -67,23 +69,14 @@ const DonutChart = ({ percentage, total }) => {
 };
 
 const PigScreen = () => {
+  const navigation = useNavigation(); // Initialize navigation
+
   return (
     <View style={styles.container}>
       <Text style={styles.Title}>Piggy is happy to see you!</Text>
-      <View style={styles.containerButtons}>
-        <TouchableOpacity style={styles.blackButton}>
-          <Text style={styles.blackButtonText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.blackButtonUnclicked}>
-          <Text style={styles.blackButtonTextUnclicked}>Challenge</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.blackButtonUnclicked}>
-          <Text style={styles.blackButtonTextUnclicked}>Shop</Text>
-        </TouchableOpacity>
-      </View>
+      <NavigationButtons />
       <View style={styles.containerMeter}></View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
-      {/* The 385 is percentage and total is the numbers inside the donut.. */}
       <DonutChart percentage={200} total={500} />
     </View>
   );

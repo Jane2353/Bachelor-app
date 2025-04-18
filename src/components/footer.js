@@ -10,7 +10,7 @@ const Footer = () => {
           <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <Image style={styles.icon} source={require('../../assets/user.png')} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Pig')}>
+          <TouchableOpacity onPress={() => navigation.navigate('PigScreen')}> {/* Corrected navigation target */}
             <Image style={styles.icon} source={require('../../assets/pigIcon.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Overview')}>
