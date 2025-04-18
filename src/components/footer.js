@@ -11,7 +11,7 @@ const Footer = () => {
             <Image style={styles.icon} source={require('../../assets/user.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Pig')}>
-            <Image style={styles.icon} source={require('../../assets/home.png')} />
+            <Image style={styles.icon} source={require('../../assets/pigIcon.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Overview')}>
             <Image style={styles.icon} source={require('../../assets/statistics.png')} />
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     icon: {
         width: 40,
         maxWidth: '100%', 
-        height: 40,
+        height: 50,
         resizeMode: 'contain',
         tintColor: 'black',
     }
