@@ -71,7 +71,7 @@ const DonutChart = ({ percentage, total }) => {
 const PigScreen = () => {
   return (
     <View style={styles.container}>
-      <NavigationButtons />
+      <NavigationButtons currentScreen="PigScreen" />
       <View style={styles.containerMeter}></View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
       <DonutChart percentage={200} total={500} />

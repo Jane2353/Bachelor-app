@@ -5,7 +5,7 @@ import NavigationButtons from '../components/NavigationButtons';
 const PigChallengeScreen = () => {
   return (
     <View style={styles.container}>
-      <NavigationButtons />
+      <NavigationButtons currentScreen="PigChallengeScreen" />
     </View>
   );
 };

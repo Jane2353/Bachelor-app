@@ -2,21 +2,36 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const NavigationButtons = () => {
+const NavigationButtons = ({ currentScreen }) => {
   const navigation = useNavigation();
+
+  const getButtonStyle = (screen) =>
+    screen === currentScreen ? styles.blackButton : styles.blackButtonUnclicked;
+
+  const getTextStyle = (screen) =>
+    screen === currentScreen ? styles.blackButtonText : styles.blackButtonTextUnclicked;
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Piggy is happy to see you!</Text>
       <View style={styles.containerButtons}>
-        <TouchableOpacity style={styles.blackButton} onPress={() => navigation.navigate('PigScreen')}>
-          <Text style={styles.blackButtonText}>Home</Text>
+        <TouchableOpacity
+          style={getButtonStyle('PigScreen')}
+          onPress={() => navigation.navigate('PigScreen')}
+        >
+          <Text style={getTextStyle('PigScreen')}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.blackButtonUnclicked} onPress={() => navigation.navigate('PigChallengeScreen')}>
-          <Text style={styles.blackButtonTextUnclicked}>Challenge</Text>
+        <TouchableOpacity
+          style={getButtonStyle('PigChallengeScreen')}
+          onPress={() => navigation.navigate('PigChallengeScreen')}
+        >
+          <Text style={getTextStyle('PigChallengeScreen')}>Challenge</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.blackButtonUnclicked} onPress={() => navigation.navigate('PigShopScreen')}>
-          <Text style={styles.blackButtonTextUnclicked}>Shop</Text>
+        <TouchableOpacity
+          style={getButtonStyle('PigShopScreen')}
+          onPress={() => navigation.navigate('PigShopScreen')}
+        >
+          <Text style={getTextStyle('PigShopScreen')}>Shop</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -29,7 +44,7 @@ const styles = StyleSheet.create({
     marginTop: '5%',
   },
   title: {
-    fontSize: 32, // Match original size
+    fontSize: 32,
     marginTop: '10%',
   },
   containerButtons: {
@@ -47,8 +62,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: 20,
-    color: 'white',
   },
   blackButtonUnclicked: {
     flex: 'row',
@@ -58,8 +71,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: 20,
-    color: 'black',
     borderWidth: 1,
     borderColor: 'black',
   },

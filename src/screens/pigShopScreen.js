@@ -5,7 +5,7 @@ import NavigationButtons from '../components/NavigationButtons';
 const PigShopScreen = () => {
   return (
     <View style={styles.container}>
-      <NavigationButtons />
+      <NavigationButtons currentScreen="PigShopScreen" />
     </View>
   );
 };
