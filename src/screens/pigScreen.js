@@ -2,34 +2,57 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Circle, G, Svg } from 'react-native-svg';
 
+// OBS: If i wanna change the size of the donut, change the radius and strokeWidth. It is important that the:
+// <Svg width={180} height={180}> is radius + half of strokeWidth per side. Also remember to change the cx and cy in both
+// The background circle and the progress circle. The progress is currently based on the percentage. (note: I changed it so it calculates it itself :D)
 const DonutChart = ({ percentage, total }) => {
-  const radius = 50; // Radius of the donut
-  const strokeWidth = 20; // Thickness of the donut
+  const radius = 75; // Radius of the donut
+  const strokeWidth = 30; // Thickness of the donut
   const circumference = 2 * Math.PI * radius; // Circumference of the circle
   const progress = (percentage / total) * circumference; // Progress based on percentage
+  const svgSize = 250; // Size of the SVG container (should be radius + strokeWidth / 2 * 2) but i rather insert it myself.
+  // svgSize = size of the canvas where the donus chart is drawn. Defines width and height, basically a container.
 
   return (
     <View style={styles.donutChartContainer}>
-      <Svg width={120} height={120}>
-        <G rotation="-90" origin="60, 60">
+      <Svg width={svgSize} height={svgSize}>
+        <G rotation="-90" origin={`${svgSize / 2}, ${svgSize / 2}`}>
           {/* Background Circle */}
           <Circle
-            cx="60"
-            cy="60"
-            r={radius}
+            cx={svgSize / 2}
+            cy={svgSize / 2}
+            r={radius - 1} // Slightly smaller radius to separate the outline
             stroke="#e6e6e6"
             strokeWidth={strokeWidth}
             fill="none"
           />
           {/* Progress Circle */}
           <Circle
-            cx="60"
-            cy="60"
-            r={radius}
+            cx={svgSize / 2}
+            cy={svgSize / 2}
+            r={radius} // Keep the radius for the pink circle
             stroke="#FF6B6B"
             strokeWidth={strokeWidth}
             strokeDasharray={`${progress} ${circumference}`}
-            strokeLinecap="round"
+            strokeLinecap="butt" // Flat edges
+            fill="none"
+          />
+          {/* Outer Border */}
+          <Circle
+            cx={svgSize / 2}
+            cy={svgSize / 2}
+            r={radius + strokeWidth / 2} // Slightly larger radius for the outer border
+            stroke="black"
+            strokeWidth={1} // Thin black border
+            fill="none"
+          />
+          {/* Inner Border */}
+          <Circle
+            cx={svgSize / 2}
+            cy={svgSize / 2}
+            r={radius - strokeWidth / 2 - 1} // Slightly smaller radius for the inner border
+            stroke="black"
+            strokeWidth={1} // Thin black border
             fill="none"
           />
         </G>
@@ -54,7 +77,8 @@ const PigScreen = () => {
       </View>
       <View style={styles.containerMeter}></View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
-      <DonutChart percentage={385} total={440} />
+      {/* The 385 is percentage and total is the numbers inside the donut.. */}
+      <DonutChart percentage={200} total={500} />
     </View>
   );
 };
@@ -112,10 +136,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   donutChartContainer: {
-    marginTop: '20%',
-    width: '100%',
-    height: '30%',
-    resizeMode: 'contain',
+    marginTop: '10%',
+    width: 250, // Width of the donut chart
+    height: 250, // Height of the donut chart
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   donutChartTextContainer: {
     position: 'absolute',
@@ -128,7 +153,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   donutChartTotal: {
-    fontSize: 18,
+    fontSize: 24,
     color: 'green',
   },
 });
