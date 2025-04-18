@@ -69,11 +69,8 @@ const DonutChart = ({ percentage, total }) => {
 };
 
 const PigScreen = () => {
-  const navigation = useNavigation(); // Initialize navigation
-
   return (
     <View style={styles.container}>
-      <Text style={styles.Title}>Piggy is happy to see you!</Text>
       <NavigationButtons />
       <View style={styles.containerMeter}></View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />

@@ -6,21 +6,32 @@ const NavigationButtons = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.containerButtons}>
-      <TouchableOpacity style={styles.blackButton} onPress={() => navigation.navigate('PigScreen')}>
-        <Text style={styles.blackButtonText}>Home</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.blackButtonUnclicked} onPress={() => navigation.navigate('PigChallengeScreen')}>
-        <Text style={styles.blackButtonTextUnclicked}>Challenge</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.blackButtonUnclicked} onPress={() => navigation.navigate('PigShopScreen')}>
-        <Text style={styles.blackButtonTextUnclicked}>Shop</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <Text style={styles.title}>Piggy is happy to see you!</Text>
+      <View style={styles.containerButtons}>
+        <TouchableOpacity style={styles.blackButton} onPress={() => navigation.navigate('PigScreen')}>
+          <Text style={styles.blackButtonText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.blackButtonUnclicked} onPress={() => navigation.navigate('PigChallengeScreen')}>
+          <Text style={styles.blackButtonTextUnclicked}>Challenge</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.blackButtonUnclicked} onPress={() => navigation.navigate('PigShopScreen')}>
+          <Text style={styles.blackButtonTextUnclicked}>Shop</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    marginTop: '5%',
+  },
+  title: {
+    fontSize: 32, // Match original size
+    marginTop: '10%',
+  },
   containerButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
