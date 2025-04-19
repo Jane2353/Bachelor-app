@@ -5,7 +5,6 @@ import Popup from '../components/popup';
 const OverviewScreen = () => {
   return (
     <View>
-      <Text>Oversigt</Text>
     </View>
   );
 };

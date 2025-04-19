@@ -1,65 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { Circle, G, Svg, Rect, Defs, LinearGradient, Stop } from 'react-native-svg'; // Fix: Verify that all these components exist in the installed version of `react-native-svg`.
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import { ProgressChart } from 'react-native-chart-kit';
+import { useNavigation } from '@react-navigation/native';
 import NavigationButtons from '../components/NavigationButtons';
+import { LinearGradient } from 'expo-linear-gradient';
 
-// OBS: If i wanna change the size of the donut, change the radius and strokeWidth. It is important that the:
-// <Svg width={180} height={180}> is radius + half of strokeWidth per side. Also remember to change the cx and cy in both
-// The background circle and the progress circle. The progress is currently based on the percentage. (note: I changed it so it calculates it itself :D)
 const DonutChart = ({ percentage, total }) => {
-  const radius = 75; // Radius of the donut
-  const strokeWidth = 30; // Thickness of the donut
-  const circumference = 2 * Math.PI * radius; // Circumference of the circle
-  const progress = (percentage / total) * circumference; // Progress based on percentage
-  const svgSize = 250; // Size of the SVG container (should be radius + strokeWidth / 2 * 2) but i rather insert it myself.
-  // svgSize = size of the canvas where the donus chart is drawn. Defines width and height, basically a container.
+  const data = {
+    data: [percentage / total],
+  };
 
   return (
     <View style={styles.donutChartContainer}>
-      <Svg width={svgSize} height={svgSize}>
-        <G rotation="-90" origin={`${svgSize / 2}, ${svgSize / 2}`}>
-          {/* Background Circle */}
-          <Circle
-            cx={svgSize / 2}
-            cy={svgSize / 2}
-            r={radius - 1} // Slightly smaller radius to separate the outline
-            stroke="#e6e6e6"
-            strokeWidth={strokeWidth}
-            fill="none"
-          />
-          {/* Progress Circle */}
-          <Circle
-            cx={svgSize / 2}
-            cy={svgSize / 2}
-            r={radius} // Keep the radius for the pink circle
-            stroke="#FF6B6B"
-            strokeWidth={strokeWidth}
-            strokeDasharray={`${progress} ${circumference}`}
-            strokeLinecap="butt" // Flat edges
-            fill="none"
-          />
-          {/* Outer Border */}
-          <Circle
-            cx={svgSize / 2}
-            cy={svgSize / 2}
-            r={radius + strokeWidth / 2} // Slightly larger radius for the outer border
-            stroke="black"
-            strokeWidth={1} // Thin black border
-            fill="none"
-          />
-          {/* Inner Border */}
-          <Circle
-            cx={svgSize / 2}
-            cy={svgSize / 2}
-            r={radius - strokeWidth / 2 - 1} // Slightly smaller radius for the inner border
-            stroke="black"
-            strokeWidth={1} // Thin black border
-            fill="none"
-          />
-        </G>
-      </Svg>
-      {/* Text in the Center */}
+      <ProgressChart
+        data={data}
+        width={250}
+        height={250}
+        strokeWidth={30}
+        radius={75}
+        chartConfig={{
+          backgroundGradientFrom: '#fff',
+          backgroundGradientTo: '#fff',
+          color: (opacity = 1) => `rgba(255, 107, 107, ${opacity})`,
+        }}
+        hideLegend={true}
+      />
       <View style={styles.donutChartTextContainer}>
         <Text style={styles.donutChartPercentage}>{percentage}</Text>
         <View style={styles.donutChartDivider} />
@@ -69,65 +34,34 @@ const DonutChart = ({ percentage, total }) => {
   );
 };
 
-const LineGraph = ({ PigHappiness }) => {
-  const happinessWidth = `${PigHappiness}%`; // Use PigHappiness directly for the filled portion
-  const overlayWidth = `${100 - PigHappiness}%`; // Calculate the unfilled portion
-
+const ProgressBar = ({ PigHappiness }) => {
   return (
-    <View style={styles.lineGraphContainer}>
-      <View style={styles.lineGraphLabels}>
+    <View style={styles.progressBarContainer}>
+      <View style={styles.progressBarBackground}>
+        <LinearGradient
+          colors={['#E97171', '#C3AE65', '#2ECC71']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={[styles.progressBarFill, { width: `${PigHappiness}%` }]}
+        />
+      </View>
+      <View style={styles.progressBarLabels}>
         <Text style={styles.labelText}>Sad</Text>
         <Text style={styles.labelText}>Worried</Text>
         <Text style={styles.labelText}>Happy</Text>
       </View>
-      <Svg width="100%" height="100%">
-        {/* Background Rectangle */}
-        <Rect
-          x="0"
-          y="10" // Changed from "5%" to a consistent pixel value
-          width="100%" // Full width for the background
-          height="60%"
-          fill="#e6e6e6" // Grey color for the unfilled portion
-          rx="10"
-        />
-        {/* Gradient-Filled Rectangle */}
-        <Defs>
-          <LinearGradient id="gradient" x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0%" stopColor="#E97171" /> {/* Pink color */}
-            <Stop offset="50%" stopColor="#C3AE65" /> {/* Yellow color */}
-            <Stop offset="100%" stopColor="#2ECC71" /> {/* Green color */}
-          </LinearGradient>
-        </Defs>
-        <Rect
-          x="0"
-          y="10" // Changed from "5%" to match the background rectangle
-          width="100%" // Full width for the gradient
-          height="60%"
-          fill="url(#gradient)"
-          rx="10" // Rounded corners on the left side
-        />
-        {/* Grey Overlay Rectangle */}
-        <Rect
-          x={happinessWidth} // Start the overlay where the filled portion ends
-          y="10" // Changed from "5%" to match the other rectangles
-          width={overlayWidth} // Cover the unfilled portion
-          height="60%"
-          fill="#e6e6e6" // Grey color for the overlay
-          rx="0 10 10 0" // Straight edges on the left, rounded corners on the right
-        />
-      </Svg>
     </View>
   );
 };
 
 const PigScreen = () => {
-  const PigHappiness = 80; // Example: Set PigHappiness to 50%
+  const PigHappiness = 50;
 
   return (
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigScreen" />
       <View style={styles.containerMeter}>
-        <LineGraph PigHappiness={PigHappiness} /> {/* Pass PigHappiness directly */}
+        <ProgressBar PigHappiness={PigHappiness} />
       </View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
       <DonutChart percentage={200} total={500} />
@@ -187,20 +121,30 @@ const styles = StyleSheet.create({
   containerMeter: {
     marginTop: '5%',
     width: '90%',
-    height: '8%', 
+    height: '8%',
     backgroundColor: 'transparent',
   },
-  lineGraphContainer: {
+  progressBarContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  lineGraphLabels: {
+  progressBarBackground: {
+    width: '100%',
+    height: 20,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+  },
+  progressBarLabels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     paddingHorizontal: 10,
-    marginBottom: 2, // Restore spacing between labels and graph
+    marginTop: 5,
   },
   labelText: {
     fontSize: 15,
@@ -214,8 +158,8 @@ const styles = StyleSheet.create({
   },
   donutChartContainer: {
     marginTop: '5%',
-    width: 250, // Width of the donut chart
-    height: 250, // Height of the donut chart
+    width: 250,
+    height: 250,
     justifyContent: 'center',
     alignItems: 'center',
   },
