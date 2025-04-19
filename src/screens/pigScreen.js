@@ -12,19 +12,21 @@ const DonutChart = ({ percentage, total }) => {
 
   return (
     <View style={styles.donutChartContainer}>
-      <ProgressChart
-        data={data}
-        width={250}
-        height={250}
-        strokeWidth={30}
-        radius={75}
-        chartConfig={{
-          backgroundGradientFrom: '#fff',
-          backgroundGradientTo: '#fff',
-          color: (opacity = 1) => `rgba(255, 107, 107, ${opacity})`,
-        }}
-        hideLegend={true}
-      />
+      <View style={styles.donutChartWrapper}> {/* Added wrapper for proper sizing */}
+        <ProgressChart
+          data={data}
+          width={200} // Adjusted to fit within wrapper
+          height={200} // Adjusted to fit within wrapper
+          strokeWidth={30}
+          radius={75}
+          chartConfig={{
+            backgroundGradientFrom: '#fff',
+            backgroundGradientTo: '#fff',
+            color: (opacity = 1) => `rgba(255, 107, 107, ${opacity})`,
+          }}
+          hideLegend={true}
+        />
+      </View>
       <View style={styles.donutChartTextContainer}>
         <Text style={styles.donutChartPercentage}>{percentage}</Text>
         <View style={styles.donutChartDivider} />
@@ -35,11 +37,23 @@ const DonutChart = ({ percentage, total }) => {
 };
 
 const ProgressBar = ({ PigHappiness }) => {
+  const getDynamicColors = () => {
+    if (PigHappiness < 25) {
+      return ['#E97171', '#E97171']; // Only Red
+    } else if (PigHappiness <= 50) {
+      return ['#E97171', '#C3AE65']; // Red to Yellow
+    } else if (PigHappiness > 75) {
+      return ['#E97171', '#C3AE65', '#2ECC71']; // Red to Yellow to Green
+    } else {
+      return ['#C3AE65', '#C3AE65']; // Only Yellow (default for 50-75)
+    }
+  };
+ 
   return (
     <View style={styles.progressBarContainer}>
       <View style={styles.progressBarBackground}>
         <LinearGradient
-          colors={['#E97171', '#C3AE65', '#2ECC71']}
+          colors={getDynamicColors()}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={[styles.progressBarFill, { width: `${PigHappiness}%` }]}
@@ -55,7 +69,7 @@ const ProgressBar = ({ PigHappiness }) => {
 };
 
 const PigScreen = () => {
-  const PigHappiness = 50;
+  const PigHappiness = 100;
 
   return (
     <View style={styles.container}>
@@ -131,7 +145,7 @@ const styles = StyleSheet.create({
   },
   progressBarBackground: {
     width: '100%',
-    height: 20,
+    height: 30,
     backgroundColor: '#e0e0e0',
     borderRadius: 10,
     overflow: 'hidden',
@@ -162,6 +176,10 @@ const styles = StyleSheet.create({
     height: 250,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  donutChartWrapper: { // Added wrapper for proper sizing
+    width: 200, // Adjusted to fit within wrapper
+    height: 200, // Adjusted to fit within wrapper
   },
   donutChartTextContainer: {
     position: 'absolute',
