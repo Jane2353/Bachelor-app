@@ -69,7 +69,9 @@ const DonutChart = ({ percentage, total }) => {
   );
 };
 
-const LineGraph = () => {
+const LineGraph = ({ PigHappiness }) => {
+  const happinessWidth = `${PigHappiness}%`; // Calculate the width based on PigHappiness
+
   return (
     <View style={styles.lineGraphContainer}>
       <View style={styles.lineGraphLabels}>
@@ -78,6 +80,16 @@ const LineGraph = () => {
         <Text style={styles.labelText}>Happy</Text>
       </View>
       <Svg width="100%" height="100%"> {/* Restore full height for the graph */}
+        {/* Background Rectangle */}
+        <Rect
+          x="0"
+          y="5%"
+          width="100%" // Full width for the background
+          height="60%"
+          fill="#e6e6e6" // Grey color for the unfilled portion
+          rx="10"
+        />
+        {/* Gradient-Filled Rectangle */}
         <Defs>
           <LinearGradient id="gradient" x1="0" y1="0" x2="1" y2="0">
             <Stop offset="0%" stopColor="#E97171" /> /* Pink color */
@@ -88,8 +100,8 @@ const LineGraph = () => {
         <Rect
           x="0"
           y="5%"
-          width="100%"
-          height="70%"
+          width={happinessWidth} // Dynamically set the width based on PigHappiness
+          height="60%"
           fill="url(#gradient)"
           rx="10"
         />
@@ -99,11 +111,13 @@ const LineGraph = () => {
 };
 
 const PigScreen = () => {
+  const PigHappiness = 50; // Example: Set PigHappiness to 50%
+
   return (
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigScreen" />
       <View style={styles.containerMeter}>
-        <LineGraph />
+        <LineGraph PigHappiness={PigHappiness} /> {/* Pass PigHappiness as a prop */}
       </View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
       <DonutChart percentage={200} total={500} />
