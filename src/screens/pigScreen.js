@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { Circle, G, Svg, Rect, Defs, LinearGradient, Stop } from 'react-native-svg'; // Added Rect, Defs, LinearGradient, Stop
+import { Circle, G, Svg, Rect, Defs, LinearGradient, Stop } from 'react-native-svg'; // Fix: Verify that all these components exist in the installed version of `react-native-svg`.
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 import NavigationButtons from '../components/NavigationButtons';
 
@@ -70,7 +70,8 @@ const DonutChart = ({ percentage, total }) => {
 };
 
 const LineGraph = ({ PigHappiness }) => {
-  const happinessWidth = `${PigHappiness}%`; // Calculate the width based on PigHappiness
+  const happinessWidth = `${PigHappiness}%`; // Use PigHappiness directly for the filled portion
+  const overlayWidth = `${100 - PigHappiness}%`; // Calculate the unfilled portion
 
   return (
     <View style={styles.lineGraphContainer}>
@@ -79,11 +80,11 @@ const LineGraph = ({ PigHappiness }) => {
         <Text style={styles.labelText}>Worried</Text>
         <Text style={styles.labelText}>Happy</Text>
       </View>
-      <Svg width="100%" height="100%"> {/* Restore full height for the graph */}
+      <Svg width="100%" height="100%">
         {/* Background Rectangle */}
         <Rect
           x="0"
-          y="5%"
+          y="10" // Changed from "5%" to a consistent pixel value
           width="100%" // Full width for the background
           height="60%"
           fill="#e6e6e6" // Grey color for the unfilled portion
@@ -92,18 +93,27 @@ const LineGraph = ({ PigHappiness }) => {
         {/* Gradient-Filled Rectangle */}
         <Defs>
           <LinearGradient id="gradient" x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0%" stopColor="#E97171" /> /* Pink color */
-            <Stop offset="50%" stopColor="#C3AE65" /> /* Yellow color */
-            <Stop offset="100%" stopColor="#2ECC71" /> /* Green color */
+            <Stop offset="0%" stopColor="#E97171" /> {/* Pink color */}
+            <Stop offset="50%" stopColor="#C3AE65" /> {/* Yellow color */}
+            <Stop offset="100%" stopColor="#2ECC71" /> {/* Green color */}
           </LinearGradient>
         </Defs>
         <Rect
           x="0"
-          y="5%"
-          width={happinessWidth} // Dynamically set the width based on PigHappiness
+          y="10" // Changed from "5%" to match the background rectangle
+          width="100%" // Full width for the gradient
           height="60%"
           fill="url(#gradient)"
-          rx="10"
+          rx="10" // Rounded corners on the left side
+        />
+        {/* Grey Overlay Rectangle */}
+        <Rect
+          x={happinessWidth} // Start the overlay where the filled portion ends
+          y="10" // Changed from "5%" to match the other rectangles
+          width={overlayWidth} // Cover the unfilled portion
+          height="60%"
+          fill="#e6e6e6" // Grey color for the overlay
+          rx="0 10 10 0" // Straight edges on the left, rounded corners on the right
         />
       </Svg>
     </View>
@@ -111,13 +121,13 @@ const LineGraph = ({ PigHappiness }) => {
 };
 
 const PigScreen = () => {
-  const PigHappiness = 50; // Example: Set PigHappiness to 50%
+  const PigHappiness = 80; // Example: Set PigHappiness to 50%
 
   return (
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigScreen" />
       <View style={styles.containerMeter}>
-        <LineGraph PigHappiness={PigHappiness} /> {/* Pass PigHappiness as a prop */}
+        <LineGraph PigHappiness={PigHappiness} /> {/* Pass PigHappiness directly */}
       </View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
       <DonutChart percentage={200} total={500} />

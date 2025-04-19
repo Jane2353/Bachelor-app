@@ -14,7 +14,8 @@ const NavigationButtons = ({ currentScreen }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        <Text style={styles.pinkText}>Piggy</Text> is happy to see you!
+        <Text style={styles.pinkText}>Piggy</Text>
+        <Text> is happy to see you!</Text>
       </Text>
       <View style={styles.containerButtons}>
         <TouchableOpacity

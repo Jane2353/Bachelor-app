@@ -1,4 +1,5 @@
-import { StyleSheet, View, React, SafeAreaView, } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import OverviewScreen from './src/screens/overviewScreen.js';
