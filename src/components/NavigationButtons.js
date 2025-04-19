@@ -13,7 +13,9 @@ const NavigationButtons = ({ currentScreen }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Piggy is happy to see you!</Text>
+      <Text style={styles.title}>
+        <Text style={styles.pinkText}>Piggy</Text> is happy to see you!
+      </Text>
       <View style={styles.containerButtons}>
         <TouchableOpacity
           style={getButtonStyle('PigScreen')}
@@ -44,15 +46,18 @@ const styles = StyleSheet.create({
     marginTop: '5%',
   },
   title: {
-    fontSize: 32,
+    fontSize: 30,
     marginTop: '10%',
+  },
+  pinkText: {
+    color: '#E97171',
   },
   containerButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: '10%',
-    width: '90%',
+    width: '100%',
   },
   blackButton: {
     flex: 'row',

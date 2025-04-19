@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { Circle, G, Svg } from 'react-native-svg';
+import { Circle, G, Svg, Rect, Defs, LinearGradient, Stop } from 'react-native-svg'; // Added Rect, Defs, LinearGradient, Stop
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 import NavigationButtons from '../components/NavigationButtons';
 
@@ -69,11 +69,42 @@ const DonutChart = ({ percentage, total }) => {
   );
 };
 
+const LineGraph = () => {
+  return (
+    <View style={styles.lineGraphContainer}>
+      <View style={styles.lineGraphLabels}>
+        <Text style={styles.labelText}>Sad</Text>
+        <Text style={styles.labelText}>Worried</Text>
+        <Text style={styles.labelText}>Happy</Text>
+      </View>
+      <Svg width="100%" height="100%"> {/* Restore full height for the graph */}
+        <Defs>
+          <LinearGradient id="gradient" x1="0" y1="0" x2="1" y2="0">
+            <Stop offset="0%" stopColor="#E97171" /> /* Pink color */
+            <Stop offset="50%" stopColor="#C3AE65" /> /* Yellow color */
+            <Stop offset="100%" stopColor="#2ECC71" /> /* Green color */
+          </LinearGradient>
+        </Defs>
+        <Rect
+          x="0"
+          y="5%"
+          width="100%"
+          height="70%"
+          fill="url(#gradient)"
+          rx="10"
+        />
+      </Svg>
+    </View>
+  );
+};
+
 const PigScreen = () => {
   return (
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigScreen" />
-      <View style={styles.containerMeter}></View>
+      <View style={styles.containerMeter}>
+        <LineGraph />
+      </View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
       <DonutChart percentage={200} total={500} />
     </View>
@@ -132,8 +163,24 @@ const styles = StyleSheet.create({
   containerMeter: {
     marginTop: '5%',
     width: '90%',
-    height: '10%',
-    backgroundColor: 'grey',
+    height: '8%', 
+    backgroundColor: 'transparent',
+  },
+  lineGraphContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  lineGraphLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 10,
+    marginBottom: 2, // Restore spacing between labels and graph
+  },
+  labelText: {
+    fontSize: 15,
+    color: 'black',
   },
   pigIcon: {
     marginTop: '10%',
