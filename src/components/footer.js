@@ -10,8 +10,8 @@ const Footer = () => {
           <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <Image style={styles.icon} source={require('../../assets/user.png')} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Pig')}>
-            <Image style={styles.icon} source={require('../../assets/home.png')} />
+          <TouchableOpacity onPress={() => navigation.navigate('PigScreen')}> {/* Corrected navigation target */}
+            <Image style={styles.icon} source={require('../../assets/pigIcon.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Overview')}>
             <Image style={styles.icon} source={require('../../assets/statistics.png')} />
@@ -40,6 +40,7 @@ export const ConditionalFooter = () => {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: 'white',
         height: '10%',
         width: '100%',
         backgroundColor: '#FFB2B2',
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         flexDirection: 'row',
         paddingHorizontal: 50,
+        zIndex: 1,
     },
     text: {
         color: 'black',
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
     icon: {
         width: 40,
         maxWidth: '100%', 
-        height: 40,
+        height: 50,
         resizeMode: 'contain',
         tintColor: 'black',
     }
