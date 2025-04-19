@@ -62,7 +62,8 @@ const DonutChart = ({ percentage, total }) => {
       {/* Text in the Center */}
       <View style={styles.donutChartTextContainer}>
         <Text style={styles.donutChartPercentage}>{percentage}</Text>
-        <Text style={styles.donutChartTotal}>/ {total}</Text>
+        <View style={styles.donutChartDivider} />
+        <Text style={styles.donutChartTotal}>{total}</Text>
       </View>
     </View>
   );
@@ -154,12 +155,17 @@ const styles = StyleSheet.create({
   },
   donutChartPercentage: {
     fontSize: 24,
-    color: '#FF6B6B',
-    fontWeight: 'bold',
+    color: 'black',
+  },
+  donutChartDivider: {
+    width: '100%',
+    height: 1,
+    backgroundColor: 'black',
+    marginVertical: 2,
   },
   donutChartTotal: {
     fontSize: 24,
-    color: 'green',
+    color: 'black',
   },
 });
 
