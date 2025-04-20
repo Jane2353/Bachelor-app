@@ -1,30 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import NavigationButtons from '../components/NavigationButtons';
 
-const ChallengeButton = ({ text, leftIconSource, rightIconSource }) => (
-  <TouchableOpacity style={styles.challengeButton}>
+const ChallengeButton = ({ text, leftIconSource, rightIconSource, points, isClicked, onPress }) => (
+  <TouchableOpacity
+    style={[styles.challengeButton, { backgroundColor: isClicked ? '#E97171' : 'grey' }]}
+    onPress={onPress}
+  >
     <Image style={styles.challengeIcon} source={leftIconSource} />
     <Text style={styles.challengeButtonText}>{text}</Text>
+    <Text style={styles.challengeButtonText}>{points}</Text>
     <Image style={styles.challengeIcon} source={rightIconSource} />
   </TouchableOpacity>
 );
 
 const buttonData = [
-  { text: 'Groceries +20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Fitness +30', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  
+  { text: 'Groceries', points: '+30', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
 ];
 
 const PigChallengeScreen = () => {
+  const [clickedButtons, setClickedButtons] = useState(Array(buttonData.length).fill(false));
+
+  const handleButtonPress = (index) => {
+    const updatedClickedButtons = [...clickedButtons];
+    updatedClickedButtons[index] = !updatedClickedButtons[index];
+    setClickedButtons(updatedClickedButtons);
+  };
+
+  const calculateBaconBucks = () => {
+    return buttonData.reduce((total, button, index) => {
+      if (clickedButtons[index]) {
+        const points = parseInt(button.points.replace('+', ''), 10); // Extract numeric value from points
+        return total + points;
+      }
+      return total;
+    }, 0);
+  };
+
   return (
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigChallengeScreen" />
@@ -37,12 +58,19 @@ const PigChallengeScreen = () => {
             <ChallengeButton
               key={index}
               text={button.text}
+              points={button.points}
               leftIconSource={button.leftIconSource}
               rightIconSource={button.rightIconSource}
+              isClicked={clickedButtons[index]}
+              onPress={() => handleButtonPress(index)}
             />
           ))}
         </ScrollView>
       </View>
+      <Text style={styles.textExplanation}>
+        You have selected {clickedButtons.filter((clicked) => clicked).length} categories.
+        {'\n'}You will receive {calculateBaconBucks()} BaconBucks.
+      </Text>
     </View>
   );
 };
@@ -75,7 +103,6 @@ const styles = StyleSheet.create({
   },
   challengeButton: {
     flexDirection: 'row',
-    backgroundColor: '#E97171',
     width: '80%',
     height: '13%',
     borderRadius: 10,
