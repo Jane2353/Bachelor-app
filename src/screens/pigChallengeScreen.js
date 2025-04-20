@@ -67,10 +67,13 @@ const PigChallengeScreen = () => {
           ))}
         </ScrollView>
       </View>
-      <Text style={styles.textExplanation}>
+      <Text style={styles.textExplanation2}>
         You have selected {clickedButtons.filter((clicked) => clicked).length} categories.
         {'\n'}You will receive {calculateBaconBucks()} BaconBucks.
       </Text>
+      <TouchableOpacity style={styles.confirmButton} onPress={() => alert('Challenge has now been accepted!')}>
+        <Text style={styles.challengeButtonText}>Accept challenge</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -83,7 +86,14 @@ const styles = StyleSheet.create({
   },
   textExplanation: {
     marginTop: '10%',
-    fontSize: 20,
+    fontSize: 18,
+    colour: 'black',
+    width: '90%',
+    textAlign: 'center',
+  },
+  textExplanation2: {
+    marginTop: '5%',
+    fontSize: 18,
     colour: 'black',
     width: '90%',
     textAlign: 'center',
@@ -91,7 +101,7 @@ const styles = StyleSheet.create({
   challengeContainer: {
     marginTop: '5%',
     width: '80%',
-    height: '40%',
+    height: '35%',
     borderWidth: 1,
     borderColor: 'black',
     padding: 10,
@@ -120,6 +130,19 @@ const styles = StyleSheet.create({
     height: 25,
     resizeMode: 'contain',
     tintColor: 'black',
+  },
+  confirmButton: {
+    backgroundColor: '#E97171',
+    borderRadius: 20,
+    marginTop: 10,
+    width: '50%',
+    height: 40,
+    justifyContent: 'center', 
+    alignItems: 'center', 
+  },
+  confirmButtonText: {
+    fontSize: 20,
+    color: 'black',
   },
 });
 
