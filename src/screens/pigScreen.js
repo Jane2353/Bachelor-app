@@ -40,12 +40,10 @@ const ProgressBar = ({ PigHappiness }) => {
   const getDynamicColors = () => {
     if (PigHappiness < 25) {
       return ['#E97171', '#E97171']; // Only Red
-    } else if (PigHappiness <= 50) {
+    } else if (PigHappiness <= 75) {
       return ['#E97171', '#C3AE65']; // Red to Yellow
     } else if (PigHappiness > 75) {
       return ['#E97171', '#C3AE65', '#2ECC71']; // Red to Yellow to Green
-    } else {
-      return ['#C3AE65', '#C3AE65']; // Only Yellow (default for 50-75)
     }
   };
  
