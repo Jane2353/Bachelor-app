@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import NavigationButtons from '../components/NavigationButtons';
 
 const ChallengeButton = ({ text, leftIconSource, rightIconSource }) => (
@@ -14,7 +14,14 @@ const buttonData = [
   { text: 'Groceries +20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
   { text: 'Fitness +30', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
   { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  // Add more buttons as needed
+  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Study +25', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  
 ];
 
 const PigChallengeScreen = () => {
@@ -25,14 +32,16 @@ const PigChallengeScreen = () => {
         Increase the difficulty of your challenge by adding more categories and in turn receieve more BaconBucks!
       </Text>
       <View style={styles.challengeContainer}>
-        {buttonData.map((button, index) => (
-          <ChallengeButton
-            key={index}
-            text={button.text}
-            leftIconSource={button.leftIconSource}
-            rightIconSource={button.rightIconSource}
-          />
-        ))}
+        <ScrollView contentContainerStyle={styles.scrollContent} nestedScrollEnabled={true}>
+          {buttonData.map((button, index) => (
+            <ChallengeButton
+              key={index}
+              text={button.text}
+              leftIconSource={button.leftIconSource}
+              rightIconSource={button.rightIconSource}
+            />
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
@@ -53,13 +62,16 @@ const styles = StyleSheet.create({
   },
   challengeContainer: {
     marginTop: '5%',
-    flexDirection: 'column',
-    alignItems: 'center',
     width: '80%',
     height: '40%',
     borderWidth: 1,
     borderColor: 'black',
     padding: 10,
+    overflow: 'hidden', // Ensures content stays within the container
+  },
+  scrollContent: {
+    flexGrow: 1,
+    alignItems: 'center',
   },
   challengeButton: {
     flexDirection: 'row',
