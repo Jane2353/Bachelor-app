@@ -46,7 +46,7 @@ const ProgressBar = ({ PigHappiness }) => {
       return ['#E97171', '#C3AE65', '#2ECC71']; // Red to Yellow to Green
     }
   };
- 
+
   return (
     <View style={styles.progressBarContainer}>
       <View style={styles.progressBarBackground}>
@@ -58,9 +58,9 @@ const ProgressBar = ({ PigHappiness }) => {
         />
       </View>
       <View style={styles.progressBarLabels}>
-        <Text style={styles.labelText}>Sad</Text>
-        <Text style={styles.labelText}>Worried</Text>
-        <Text style={styles.labelText}>Happy</Text>
+        <Text style={[styles.labelText, { color: 'black', fontWeight: 'medium' }]}>Sad</Text>
+        <Text style={[styles.labelText, { color: 'black', fontWeight: 'medium' }]}>Worried</Text>
+        <Text style={[styles.labelText, { color: 'black', fontWeight: 'medium' }]}>Happy</Text>
       </View>
     </View>
   );
@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontSize: 15,
-    color: 'black',
   },
   pigIcon: {
     marginTop: '10%',
