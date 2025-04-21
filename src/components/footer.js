@@ -1,68 +1,94 @@
-import React, { use } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 const Footer = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
-    return (
-        <View style={styles.container}>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <Image style={styles.icon} source={require('../../assets/user.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('PigScreen')}> {/* Corrected navigation target */}
-            <Image style={styles.icon} source={require('../../assets/pigIcon.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Overview')}>
-            <Image style={styles.icon} source={require('../../assets/statistics.png')} />
-          </TouchableOpacity>
-        </View>
-      );
-    };
+  return (
+    <View style={styles.footerContainer}>
+      {/* Left icon */}
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <Image style={styles.icon} source={require('../../assets/user.png')} />
+      </TouchableOpacity>
+
+      {/* Floating pig icon in diamond */}
+      <View style={styles.centerIconWrapper}>
+        <TouchableOpacity onPress={() => navigation.navigate('PigScreen')}>
+          <View style={styles.diamond}>
+            <Image style={styles.pigIcon} source={require('../../assets/pigIcon.png')} />
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      {/* Right icon */}
+      <TouchableOpacity onPress={() => navigation.navigate('Overview')}>
+        <Image style={styles.icon} source={require('../../assets/statistics.png')} />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 export const ConditionalFooter = () => {
-  const state = useNavigationState(state => state);
-  // uses the useNavigationState hook to get the current state of the navigation stack.
-  // The state object contains the current route and the current index of the navigation stack.
-  if (!state) {
-    return null;
-  }
-  const currentRouteName = state.routes[state.index].name;
-  // The currentRouteName is the name of the current route.
+  const state = useNavigationState((state) => state);
+  if (!state) return null;
 
-  if (currentRouteName === 'Login') {
-    return null;
-  }
-  // If the current route is the Login screen, the footer is not rendered.
+  const currentRouteName = state.routes[state.index].name;
+  if (currentRouteName === 'Login') return null;
 
   return <Footer />;
 };
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-        height: '10%',
-        width: '100%',
-        backgroundColor: '#FFB2B2',
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: 0,
-        flexDirection: 'row',
-        paddingHorizontal: 50,
-        zIndex: 1,
-    },
-    text: {
-        color: 'black',
-        fontSize: 24,
-    },
-    icon: {
-        width: 40,
-        maxWidth: '100%', 
-        height: 50,
-        resizeMode: 'contain',
-        tintColor: 'black',
-    }
+  footerContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: 80,
+    backgroundColor: '#FFB2B2',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+    zIndex: 1,
+    gap: 110,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  icon: {
+    width: 45,
+    height: 45,
+    resizeMode: 'contain',
+    tintColor: 'black',
+  },
+  centerIconWrapper: {
+    position: 'absolute',
+    top: -30,
+    alignSelf: 'center',
+    zIndex: 2,
+  },
+  diamond: {
+    width: 70,   // ← was 60
+    height: 70,  // ← was 60
+    backgroundColor: '#EB9999',
+    transform: [{ rotate: '45deg' }],
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: 'black',
+},
+  pigIcon: {
+    width: 40,   // ← was 30
+    height: 40,  // ← was 30
+    resizeMode: 'contain',
+    tintColor: 'black',
+    transform: [{ rotate: '-45deg' }],
+},
 
 });
 

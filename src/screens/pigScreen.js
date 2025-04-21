@@ -22,7 +22,7 @@ const DonutChart = ({ percentage, total }) => {
           chartConfig={{
             backgroundGradientFrom: '#fff',
             backgroundGradientTo: '#fff',
-            color: (opacity = 1) => `rgba(255, 107, 107, ${opacity})`,
+            color: (opacity = 1) => `rgba(233, 113, 113, ${opacity})`,
           }}
           hideLegend={true}
         />
