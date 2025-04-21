@@ -39,26 +39,25 @@ const styles = StyleSheet.create({
   textShop: {
     marginTop: '10%',
     fontSize: 18,
-    colour: 'black',
+    color: 'black',
     width: '80%',
     marginBottom: '5%',
   },
   itemsContainer: {
     width: '80%',
-    height: '50%',
     flexDirection: 'row',
-    flexWrap: 'wrap', 
-    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
   itemsBox: {
     width: '30%',
-    height: '10%', 
+    aspectRatio: 1, // gør boksen kvadratisk
     borderWidth: 1,
     borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10, 
-  },
+    margin: 5, // lidt luft omkring boksene
+},
 });
 
 export default PigShopScreen;

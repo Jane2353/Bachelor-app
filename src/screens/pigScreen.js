@@ -67,7 +67,7 @@ const ProgressBar = ({ PigHappiness }) => {
 };
 
 const PigScreen = () => {
-  const PigHappiness = 100;
+  const PigHappiness = 30;
 
   return (
     <View style={styles.container}>
@@ -76,7 +76,7 @@ const PigScreen = () => {
         <ProgressBar PigHappiness={PigHappiness} />
       </View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
-      <DonutChart percentage={200} total={500} />
+      <DonutChart percentage={200} total={1000} />
     </View>
   );
 };
