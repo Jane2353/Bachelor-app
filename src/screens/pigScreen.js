@@ -68,12 +68,17 @@ const ProgressBar = ({ PigHappiness }) => {
 
 const PigScreen = () => {
   const PigHappiness = 30;
+  const pigMessage = "I am getting worried! You have uncategorised expenses";
 
   return (
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigScreen" />
       <View style={styles.containerMeter}>
         <ProgressBar PigHappiness={PigHappiness} />
+      </View>
+      <View style={styles.speechBubble}>
+        <Text style={styles.speechBubbleText}>{pigMessage}</Text>
+        <View style={styles.speechBubbleTail} />
       </View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
       <DonutChart percentage={200} total={1000} />
@@ -162,13 +167,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   pigIcon: {
-    marginTop: '10%',
+    marginTop: '25%',
     width: 200,
     height: 200,
     resizeMode: 'contain',
+    alignSelf: 'flex-start',
+    marginLeft: '5%',
   },
   donutChartContainer: {
-    marginTop: '5%',
     width: 250,
     height: 250,
     justifyContent: 'center',
@@ -196,6 +202,40 @@ const styles = StyleSheet.create({
   donutChartTotal: {
     fontSize: 24,
     color: 'black',
+  },
+  speechBubble: {
+    marginTop: '5%',
+    position: 'absolute',
+    top: '30%', 
+    left: '70%',
+    transform: [{ translateX: -100 }],
+    width: 200,
+    padding: 10,
+    backgroundColor: '#f8d7da',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#f5c6cb',
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  speechBubbleText: {
+    color: '#721c24',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  speechBubbleTail: {
+    position: 'absolute',
+    bottom: -10,
+    left: '10%',
+    transform: [{ translateX: -10 }],
+    width: 0,
+    height: 0,
+    borderLeftWidth: 10,
+    borderRightWidth: 10,
+    borderTopWidth: 10,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#f8d7da',
   },
 });
 
