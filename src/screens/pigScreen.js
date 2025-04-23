@@ -22,7 +22,7 @@ const DonutChart = ({ percentage, total }) => {
           chartConfig={{
             backgroundGradientFrom: '#fff',
             backgroundGradientTo: '#fff',
-            color: (opacity = 1) => `rgba(255, 107, 107, ${opacity})`,
+            color: (opacity = 1) => `rgba(233, 113, 113, ${opacity})`,
           }}
           hideLegend={true}
         />
@@ -46,7 +46,7 @@ const ProgressBar = ({ PigHappiness }) => {
       return ['#E97171', '#C3AE65', '#2ECC71']; // Red to Yellow to Green
     }
   };
- 
+
   return (
     <View style={styles.progressBarContainer}>
       <View style={styles.progressBarBackground}>
@@ -58,16 +58,16 @@ const ProgressBar = ({ PigHappiness }) => {
         />
       </View>
       <View style={styles.progressBarLabels}>
-        <Text style={styles.labelText}>Sad</Text>
-        <Text style={styles.labelText}>Worried</Text>
-        <Text style={styles.labelText}>Happy</Text>
+        <Text style={[styles.labelText, { color: 'black', fontWeight: 'medium' }]}>Sad</Text>
+        <Text style={[styles.labelText, { color: 'black', fontWeight: 'medium' }]}>Worried</Text>
+        <Text style={[styles.labelText, { color: 'black', fontWeight: 'medium' }]}>Happy</Text>
       </View>
     </View>
   );
 };
 
 const PigScreen = () => {
-  const PigHappiness = 100;
+  const PigHappiness = 30;
 
   return (
     <View style={styles.container}>
@@ -76,7 +76,7 @@ const PigScreen = () => {
         <ProgressBar PigHappiness={PigHappiness} />
       </View>
       <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
-      <DonutChart percentage={200} total={500} />
+      <DonutChart percentage={200} total={1000} />
     </View>
   );
 };
@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontSize: 15,
-    color: 'black',
   },
   pigIcon: {
     marginTop: '10%',

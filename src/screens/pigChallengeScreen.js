@@ -88,14 +88,13 @@ const styles = StyleSheet.create({
     marginTop: '10%',
     fontSize: 18,
     colour: 'black',
-    width: '90%',
-    textAlign: 'center',
+    width: '80%',
   },
   textExplanation2: {
     marginTop: '5%',
     fontSize: 18,
     colour: 'black',
-    width: '90%',
+    width: '80%',
     textAlign: 'center',
   },
   challengeContainer: {
