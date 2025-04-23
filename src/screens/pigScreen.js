@@ -181,11 +181,11 @@ const styles = StyleSheet.create({
   },
   pigIcon: {
     marginTop: '25%',
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
     alignSelf: 'flex-start',
-    marginLeft: '5%',
+    marginLeft: '12%',
   },
   donutChartContainer: {
     width: 250,
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   speechBubble: {
     marginTop: '5%',
     position: 'absolute',
-    top: '30%', 
+    top: '34%', 
     left: '70%',
     transform: [{ translateX: -100 }],
     width: 200,
