@@ -63,8 +63,9 @@ const styles = StyleSheet.create({
   },
   centerIconWrapper: {
     position: 'absolute',
-    top: -30,
-    alignSelf: 'center',
+    top: -35,
+    left: '50%',
+    transform: [{ translateX: -35 }], // Remove this and it'll work on the phone
     zIndex: 2,
   },
   diamond: {
