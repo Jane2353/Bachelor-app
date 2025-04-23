@@ -39,11 +39,11 @@ const DonutChart = ({ percentage, total }) => {
 const ProgressBar = ({ PigHappiness }) => {
   const getDynamicColors = () => {
     if (PigHappiness < 25) {
-      return ['#E97171', '#E97171']; // Only Red
+      return ['#E97171', '#E97171']; // Only Red: Sad
     } else if (PigHappiness <= 75) {
-      return ['#E97171', '#C3AE65']; // Red to Yellow
-    } else if (PigHappiness > 75) {
-      return ['#E97171', '#C3AE65', '#2ECC71']; // Red to Yellow to Green
+      return ['#E97171', '#C3AE65']; // Red to Yellow: Worried
+    } else {
+      return ['#E97171', '#C3AE65', '#2ECC71']; // Red to Yellow to Green: Happy
     }
   };
 
@@ -67,8 +67,21 @@ const ProgressBar = ({ PigHappiness }) => {
 };
 
 const PigScreen = () => {
-  const PigHappiness = 30;
-  const pigMessage = "I am getting worried! You have uncategorised expenses";
+  const PigHappiness = 10;
+
+  let pigMessage = '';
+  let pigIcon = '';
+
+  if (PigHappiness < 25) {
+    pigMessage = "I am sad, please categorise your expenses as soon as possible!";
+    pigIcon = require('../../assets/Pig/side_sad_transparent.png');
+  } else if (PigHappiness <= 75) {
+    pigMessage = "I am getting worried! You have uncategorised expenses";
+    pigIcon = require('../../assets/Pig/side_worried_transparent.png');
+  } else {
+    pigMessage = "I am happy, you are doing well keeping track of your expenses.";
+    pigIcon = require('../../assets/Pig/side_happy_transparent.png');
+  }
 
   return (
     <View style={styles.container}>
@@ -80,7 +93,7 @@ const PigScreen = () => {
         <Text style={styles.speechBubbleText}>{pigMessage}</Text>
         <View style={styles.speechBubbleTail} />
       </View>
-      <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
+      <Image style={styles.pigIcon} source={pigIcon} />
       <DonutChart percentage={200} total={1000} />
     </View>
   );
