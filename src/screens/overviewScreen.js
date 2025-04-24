@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image, Platform } from "react-native";
 import Popup from '../components/popup';
+import Papa from "papaparse";
 
 const OverviewScreen = () => {
   const [totalBudget, setTotalBudget] = useState(10000);
   const [expenses, setExpenses] = useState([]);
   const [newExpense, setNewExpense] = useState({ date: "", store: "", amount: "" });
 
-  // Load from localStorage on mount
   useEffect(() => {
     const storedExpenses = JSON.parse(localStorage.getItem("expenses"));
     const storedBudget = JSON.parse(localStorage.getItem("totalBudget"));
@@ -16,7 +16,6 @@ const OverviewScreen = () => {
     if (storedBudget) setTotalBudget(storedBudget);
   }, []);
 
-  // Save to localStorage on changes
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
     localStorage.setItem("totalBudget", JSON.stringify(totalBudget));
@@ -31,17 +30,55 @@ const OverviewScreen = () => {
 
   const addExpense = () => {
     if (newExpense.date && newExpense.store && newExpense.amount) {
-      setExpenses([...expenses, { ...newExpense, amount: parseFloat(newExpense.amount) }]);
+      setExpenses([{ ...newExpense, amount: parseFloat(newExpense.amount) }, ...expenses]);
       setNewExpense({ date: "", store: "", amount: "" });
     }
   };
 
+  const handleCSVUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        if (!results.data || results.data.length === 0) {
+          window.alert("CSV is empty or could not be read.");
+          return;
+        }
+  
+        const parsedExpenses = results.data.map((row, idx) => {
+          const date = row.date || row.Date || "";
+          const store = row.store || row.Store || "";
+          const amount = parseFloat(row.amount || row.Amount || 0);
+  
+          return { date, store, amount };
+        }).filter(exp => exp.date && exp.store && !isNaN(exp.amount));
+  
+        if (parsedExpenses.length === 0) {
+          window.alert("CSV does not contain valid expense entries. Make sure it has 'date', 'store', and 'amount' columns.");
+          return;
+        }
+  
+        // ✅ Replace expenses if valid
+        setExpenses(parsedExpenses);
+        window.alert("Expenses successfully loaded!");
+      },
+      error: (err) => {
+        console.error("CSV parse error:", err);
+        window.alert("Failed to parse CSV. Please try again.");
+      }
+    });
+  };
+  
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image
-  source={require("../../assets/Pig/front_smile.png")}
-  style={styles.pigImage}
-/>
+        source={require("../../assets/Pig/front_smile.png")}
+        style={styles.pigImage}
+      />
 
       <Text style={styles.title}>Overview</Text>
       <Text style={styles.subtitle}>You spent {totalSpent} kr. out of {totalBudget} kr.</Text>
@@ -58,11 +95,20 @@ const OverviewScreen = () => {
         onChangeText={(text) => setTotalBudget(Number(text))}
       />
 
+      {Platform.OS === "web" && (
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleCSVUpload}
+          style={{ marginVertical: 10 }}
+        />
+      )}
+
       <View style={styles.expensesContainer}>
         <Text style={styles.sectionTitle}>Add Expense</Text>
         <TextInput
           style={styles.input}
-          placeholder="Date (MM-DD)"
+          placeholder="Date (DD-MM)"
           value={newExpense.date}
           onChangeText={(text) => handleNewExpenseChange("date", text)}
         />
@@ -102,8 +148,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: "#fff",
-    flexGrow: 1,
     alignItems: "center",
+    flexGrow: 1,
   },
   title: {
     fontSize: 26,
@@ -169,7 +215,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     resizeMode: "contain",
   },
-  
 });
 
 export default OverviewScreen;
