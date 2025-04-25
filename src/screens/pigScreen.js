@@ -39,11 +39,11 @@ const DonutChart = ({ percentage, total }) => {
 const ProgressBar = ({ PigHappiness }) => {
   const getDynamicColors = () => {
     if (PigHappiness < 25) {
-      return ['#E97171', '#E97171']; // Only Red
+      return ['#E97171', '#E97171']; // Only Red: Sad
     } else if (PigHappiness <= 75) {
-      return ['#E97171', '#C3AE65']; // Red to Yellow
-    } else if (PigHappiness > 75) {
-      return ['#E97171', '#C3AE65', '#2ECC71']; // Red to Yellow to Green
+      return ['#E97171', '#C3AE65']; // Red to Yellow: Worried
+    } else {
+      return ['#E97171', '#C3AE65', '#2ECC71']; // Red to Yellow to Green: Happy
     }
   };
 
@@ -67,7 +67,21 @@ const ProgressBar = ({ PigHappiness }) => {
 };
 
 const PigScreen = () => {
-  const PigHappiness = 30;
+  const PigHappiness = 10;
+
+  let pigMessage = '';
+  let pigIcon = '';
+
+  if (PigHappiness < 25) {
+    pigMessage = "I am sad, please categorise your expenses as soon as possible!";
+    pigIcon = require('../../assets/Pig/side_sad_transparent.png');
+  } else if (PigHappiness <= 75) {
+    pigMessage = "I am getting worried! You have uncategorised expenses";
+    pigIcon = require('../../assets/Pig/side_worried_transparent.png');
+  } else {
+    pigMessage = "I am happy, you are doing well keeping track of your expenses.";
+    pigIcon = require('../../assets/Pig/side_happy_transparent.png');
+  }
 
   return (
     <View style={styles.container}>
@@ -75,7 +89,11 @@ const PigScreen = () => {
       <View style={styles.containerMeter}>
         <ProgressBar PigHappiness={PigHappiness} />
       </View>
-      <Image style={styles.pigIcon} source={require('../../assets/Pig/side_happy.png')} />
+      <View style={styles.speechBubble}>
+        <Text style={styles.speechBubbleText}>{pigMessage}</Text>
+        <View style={styles.speechBubbleTail} />
+      </View>
+      <Image style={styles.pigIcon} source={pigIcon} />
       <DonutChart percentage={200} total={1000} />
     </View>
   );
@@ -162,13 +180,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   pigIcon: {
-    marginTop: '10%',
-    width: 200,
-    height: 200,
+    marginTop: '25%',
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
+    alignSelf: 'flex-start',
+    marginLeft: '12%',
   },
   donutChartContainer: {
-    marginTop: '5%',
     width: 250,
     height: 250,
     justifyContent: 'center',
@@ -196,6 +215,40 @@ const styles = StyleSheet.create({
   donutChartTotal: {
     fontSize: 24,
     color: 'black',
+  },
+  speechBubble: {
+    marginTop: '5%',
+    position: 'absolute',
+    top: '34%', 
+    left: '70%',
+    transform: [{ translateX: -100 }],
+    width: 200,
+    padding: 10,
+    backgroundColor: '#f8d7da',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#f5c6cb',
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  speechBubbleText: {
+    color: '#721c24',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  speechBubbleTail: {
+    position: 'absolute',
+    bottom: -10,
+    left: '10%',
+    transform: [{ translateX: -10 }],
+    width: 0,
+    height: 0,
+    borderLeftWidth: 10,
+    borderRightWidth: 10,
+    borderTopWidth: 10,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#f8d7da',
   },
 });
 
