@@ -58,12 +58,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: '10%',
-    width: '100%',
+    width: '90%',
   },
   blackButton: {
     flex: 'row',
     backgroundColor: 'black',
-    width: '32%',
+    width: '30%',
     height: 50,
     borderRadius: 10,
     justifyContent: 'center',
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   blackButtonUnclicked: {
     flex: 'row',
     backgroundColor: 'white',
-    width: '32%',
+    width: '30%',
     height: 50,
     borderRadius: 10,
     justifyContent: 'center',
