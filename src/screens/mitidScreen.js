@@ -1,40 +1,33 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import NextButtonWithDots from '../components/NextButtonWithDots';
 
 const MitidScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      {/* Icon and Title */}
-      <Image 
-        style={styles.icon} 
-        source={require('../../assets/Pig/front_smile_transparent.png')} 
-      />
-      <Text style={styles.title}>
-        The Piggy <Text style={styles.highlight}>Bank</Text>
-      </Text>
+      <View style={styles.content}>
+        {/* Icon and Title */}
+        <Image 
+          style={styles.icon} 
+          source={require('../../assets/Pig/front_smile_transparent.png')} 
+        />
+        <Text style={styles.title}>
+          The Piggy <Text style={styles.highlight}>Bank</Text>
+        </Text>
 
-      {/* Description */}
-      <Text style={styles.description}>
-        Enter the financial world of the piggy bank.
-      </Text>
-      <Text style={styles.subDescription}>
-        Welcome to the piggy bank application, with the implementation of gamification you can manage and improve your finances.
-      </Text>
-
-      {/* Pagination Dots */}
-      <View style={styles.pagination}>
-        <View style={[styles.dot, styles.activeDot]} />
-        <View style={styles.dot} />
-        <View style={styles.dot} />
+        {/* Description */}
+        <Text style={styles.description}>
+          Enter the financial world of the piggy bank.
+        </Text>
+        <Text style={styles.subDescription}>
+          Welcome to the piggy bank application, with the implementation of gamification you can manage and improve your finances.
+        </Text>
       </View>
-
-      {/* Next Button */}
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={() => navigation.navigate("choosePigScreen")} // Updated navigation target
-      >
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableOpacity>
+      <NextButtonWithDots
+        navigation={navigation}
+        nextScreen="choosePigScreen"
+        activeDotIndex={0}
+      />
     </View>
   );
 };
@@ -43,8 +36,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
+    justifyContent: 'space-between', // Ensures consistent spacing
     paddingHorizontal: 20,
+  },
+  content: {
+    alignItems: 'center',
   },
   icon: {
     width: 180,
@@ -60,11 +56,11 @@ const styles = StyleSheet.create({
     marginBottom: '20%',
   },
   highlight: {
-    color: '#2ECC71', // Green color for "Bank"
+    color: '#2ECC71', 
   },
   description: {
     fontSize: 25,
-    color: '#E97171', // Red color for the main description
+    color: '#E97171',
     marginTop: 20,
     fontWeight: 'bold',
     paddingHorizontal: '5%',
@@ -75,34 +71,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     lineHeight: 25,
     paddingHorizontal: '5%',
-  },
-  pagination: {
-    flexDirection: 'row',
-    marginTop: '20%',
-  },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: '#A8E6CF',
-    marginHorizontal: 5,
-  },
-  activeDot: {
-    backgroundColor: '#2ECC71', // Green color for the active dot
-  },
-  button: {
-    backgroundColor: '#2ECC71', // Green button
-    paddingVertical: 15,
-    paddingHorizontal: 110,
-    borderRadius: 25,
-    position: 'absolute', // Use absolute positioning
-    bottom: 50, // Place the button 50 pixels from the bottom
-    alignSelf: 'center', // Center horizontally
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16, // Match font size with choosePigScreen
-    fontWeight: 'bold',
   },
 });
 

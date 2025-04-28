@@ -10,6 +10,7 @@ import ProfileScreen from './src/screens/profileScreen.js';
 import { ConditionalFooter } from './src/components/footer.js';
 import MitidScreen from './src/screens/mitidScreen.js';
 import ChoosePigScreen from './src/screens/choosePigScreen.js';
+import ExpensesScreen from './src/screens/expensesScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -18,12 +19,13 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={MitidScreen} />
-        <Stack.Screen name="choosePigScreen" component={ChoosePigScreen} screenOptions= {{ headerShown: false}} />
+        <Stack.Screen name="choosePigScreen" component={ChoosePigScreen} />
+        <Stack.Screen name="ExpensesScreen" component={ExpensesScreen} />
         <Stack.Screen name="PigScreen" component={PigScreen} />
-        <Stack.Screen name="PigShopScreen" component={PigShopScreen} />
         <Stack.Screen name="PigChallengeScreen" component={PigChallengeScreen} />
-        <Stack.Screen name="Overview" component={OverviewScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="PigShopScreen" component={PigShopScreen} /> 
+        <Stack.Screen name="Overview" component={OverviewScreen} /> 
+        <Stack.Screen name="Profile" component={ProfileScreen} /> 
       </Stack.Navigator>
       <ConditionalFooter />
     </NavigationContainer>
