@@ -6,7 +6,7 @@ import Papa from "papaparse";
 const OverviewScreen = () => {
   const [totalBudget, setTotalBudget] = useState(10000);
   const [expenses, setExpenses] = useState([]);
-  const [newExpense, setNewExpense] = useState({ date: "", store: "", amount: "" });
+
 
   useEffect(() => {
     const storedExpenses = JSON.parse(localStorage.getItem("expenses"));
@@ -24,16 +24,7 @@ const OverviewScreen = () => {
   const totalSpent = expenses.reduce((sum, e) => sum + parseFloat(e.amount), 0);
   const progress = Math.min((totalSpent / totalBudget) * 100, 100).toFixed(1);
 
-  const handleNewExpenseChange = (field, value) => {
-    setNewExpense({ ...newExpense, [field]: value });
-  };
-
-  const addExpense = () => {
-    if (newExpense.date && newExpense.store && newExpense.amount) {
-      setExpenses([{ ...newExpense, amount: parseFloat(newExpense.amount) }, ...expenses]);
-      setNewExpense({ date: "", store: "", amount: "" });
-    }
-  };
+  
 
   const handleCSVUpload = (event) => {
     const file = event.target.files[0];
@@ -104,31 +95,7 @@ const OverviewScreen = () => {
         />
       )}
 
-      <View style={styles.expensesContainer}>
-        <Text style={styles.sectionTitle}>Add Expense</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Date (DD-MM)"
-          value={newExpense.date}
-          onChangeText={(text) => handleNewExpenseChange("date", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Store / Name"
-          value={newExpense.store}
-          onChangeText={(text) => handleNewExpenseChange("store", text)}
-        />
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          placeholder="Amount (kr.)"
-          value={newExpense.amount.toString()}
-          onChangeText={(text) => handleNewExpenseChange("amount", text)}
-        />
-        <TouchableOpacity style={styles.addButton} onPress={addExpense}>
-          <Text style={styles.addButtonText}>Add Expense</Text>
-        </TouchableOpacity>
-      </View>
+      
 
       <View style={styles.expensesContainer}>
         <Text style={styles.sectionTitle}>Expenses</Text>
