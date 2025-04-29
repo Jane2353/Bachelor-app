@@ -86,6 +86,7 @@ const PigScreen = () => {
   return (
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigScreen" />
+      <View style={styles.topLine} />
       <View style={styles.containerMeter}>
         <ProgressBar PigHappiness={PigHappiness} />
       </View>
@@ -94,6 +95,7 @@ const PigScreen = () => {
         <View style={styles.speechBubbleTail} />
       </View>
       <Image style={styles.pigIcon} source={pigIcon} />
+      <View style={styles.bottomLine} /> 
       <DonutChart percentage={200} total={1000} />
     </View>
   );
@@ -249,6 +251,19 @@ const styles = StyleSheet.create({
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
     borderTopColor: '#f8d7da',
+  },
+  topLine: {
+    width: '90%',
+    height: 1,
+    backgroundColor: 'black',
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  bottomLine: {
+    width: '90%',
+    height: 1,
+    backgroundColor: 'black',
+    alignSelf: 'center',
   },
 });
 
