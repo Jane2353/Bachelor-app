@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'; // Added TouchableOpacity for click handling
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import { ProgressChart } from 'react-native-chart-kit';
 import { useNavigation } from '@react-navigation/native';
 import NavigationButtons from '../components/NavigationButtons';
@@ -12,11 +13,11 @@ const DonutChart = ({ percentage, total }) => {
 
   return (
     <View style={styles.donutChartContainer}>
-      <View style={styles.donutChartWrapper}> {/* Added wrapper for proper sizing */}
+      <View style={styles.donutChartWrapper}>
         <ProgressChart
           data={data}
-          width={200} // Adjusted to fit within wrapper
-          height={200} // Adjusted to fit within wrapper
+          width={200}
+          height={200}
           strokeWidth={30}
           radius={75}
           chartConfig={{
@@ -39,11 +40,11 @@ const DonutChart = ({ percentage, total }) => {
 const ProgressBar = ({ PigHappiness }) => {
   const getDynamicColors = () => {
     if (PigHappiness < 25) {
-      return ['#E97171', '#E97171']; // Only Red: Sad
+      return ['#E97171', '#E97171'];
     } else if (PigHappiness <= 75) {
-      return ['#E97171', '#C3AE65']; // Red to Yellow: Worried
+      return ['#E97171', '#C3AE65'];
     } else {
-      return ['#E97171', '#C3AE65', '#2ECC71']; // Red to Yellow to Green: Happy
+      return ['#E97171', '#C3AE65', '#2ECC71'];
     }
   };
 
@@ -67,12 +68,29 @@ const ProgressBar = ({ PigHappiness }) => {
 };
 
 const PigScreen = () => {
-  const navigation = useNavigation(); // Added navigation hook
+  const navigation = useNavigation();
+  const [isPigClicked, setIsPigClicked] = useState(false); // State to track pig click
   const PigHappiness = 80;
+
+  useEffect(() => {
+    const checkPigClicked = async () => {
+      const clicked = await AsyncStorage.getItem('isPigClicked');
+      if (clicked === 'true') {
+        setIsPigClicked(true);
+      }
+    };
+    checkPigClicked();
+  }, []);
+
+  const handlePigClick = async () => {
+    setIsPigClicked(true); // Update state
+    await AsyncStorage.setItem('isPigClicked', 'true'); // Persist state
+    navigation.navigate('PigCategorise'); // Navigate to PigCategorise screen
+  };
 
   let pigMessage = '';
   let pigIcon = '';
-  let clickIcon = require('../../assets/Pig/click_transparent.png'); // Added click_transparent image
+  let clickIcon = require('../../assets/Pig/click_transparent.png');
 
   if (PigHappiness < 25) {
     pigMessage = "I am sad, please categorise your expenses as soon as possible!";
@@ -96,14 +114,16 @@ const PigScreen = () => {
         <Text style={styles.speechBubbleText}>{pigMessage}</Text>
         <View style={styles.speechBubbleTail} />
       </View>
-      <Image style={styles.clickIcon} source={clickIcon} />
+      {!isPigClicked && (
+        <Image style={styles.clickIcon} source={clickIcon} />
+      )}
       <TouchableOpacity 
-        onPress={() => navigation.navigate('PigCategorise')} 
-        style={styles.pigTouchable} // Added style to maintain pig's position
+        onPress={handlePigClick} 
+        style={styles.pigTouchable}
       >
         <Image style={styles.pigIcon} source={pigIcon} />
       </TouchableOpacity>
-      <View style={styles.bottomLine} /> 
+      <View style={styles.bottomLine} />
       <DonutChart percentage={200} total={1000} />
     </View>
   );
@@ -186,17 +206,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginTop: 5,
   },
-  labelText: {
-    fontSize: 15,
+  label: {
+    marginTop: '25%',
+    alignSelf: 'flex-start',
+    marginLeft: '12%',
   },
   clickIcon: {
     position: 'absolute',
     top: '35%',
-    left: '10%', 
+    left: '10%',
     width: 90,
     height: 90,
     resizeMode: 'contain',
-    zIndex: 3, 
+    zIndex: 3,
   },
   pigTouchable: {
     marginTop: '25%',
@@ -214,9 +236,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  donutChartWrapper: { // Added wrapper for proper sizing
-    width: 200, // Adjusted to fit within wrapper
-    height: 200, // Adjusted to fit within wrapper
+  donutChartWrapper: {
+    width: 200,
+    height: 200,
   },
   donutChartTextContainer: {
     position: 'absolute',
@@ -240,7 +262,7 @@ const styles = StyleSheet.create({
   speechBubble: {
     marginTop: '5%',
     position: 'absolute',
-    top: '34%', 
+    top: '34%',
     left: '70%',
     transform: [{ translateX: -100 }],
     width: 200,

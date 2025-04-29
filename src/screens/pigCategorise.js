@@ -58,7 +58,7 @@ const PigCategorise = () => {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backArrow}
-          onPress={() => navigation.navigate('PigScreen')} // Navigate back to PigScreen
+          onPress={() => navigation.navigate('PigScreen')} // Explicitly navigate to PigScreen
         >
           <Image
             style={styles.arrowIcon}
