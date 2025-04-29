@@ -11,6 +11,8 @@ import { ConditionalFooter } from './src/components/footer.js';
 import MitidScreen from './src/screens/mitidScreen.js';
 import ChoosePigScreen from './src/screens/choosePigScreen.js';
 import ExpensesScreen from './src/screens/expensesScreen.js';
+import PigCategorise from './src/screens/pigCategorise.js';
+
 
 const Stack = createStackNavigator();
 
@@ -26,6 +28,7 @@ export default function App() {
         <Stack.Screen name="PigShopScreen" component={PigShopScreen} /> 
         <Stack.Screen name="Overview" component={OverviewScreen} /> 
         <Stack.Screen name="Profile" component={ProfileScreen} /> 
+        <Stack.Screen name="PigCategorise" component={PigCategorise} />
       </Stack.Navigator>
       <ConditionalFooter />
     </NavigationContainer>

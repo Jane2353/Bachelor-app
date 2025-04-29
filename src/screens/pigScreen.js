@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'; // Added TouchableOpacity for click handling
 import { ProgressChart } from 'react-native-chart-kit';
 import { useNavigation } from '@react-navigation/native';
 import NavigationButtons from '../components/NavigationButtons';
@@ -67,6 +67,7 @@ const ProgressBar = ({ PigHappiness }) => {
 };
 
 const PigScreen = () => {
+  const navigation = useNavigation(); // Added navigation hook
   const PigHappiness = 80;
 
   let pigMessage = '';
@@ -96,7 +97,12 @@ const PigScreen = () => {
         <View style={styles.speechBubbleTail} />
       </View>
       <Image style={styles.clickIcon} source={clickIcon} />
-      <Image style={styles.pigIcon} source={pigIcon} />
+      <TouchableOpacity 
+        onPress={() => navigation.navigate('PigCategorise')} 
+        style={styles.pigTouchable} // Added style to maintain pig's position
+      >
+        <Image style={styles.pigIcon} source={pigIcon} />
+      </TouchableOpacity>
       <View style={styles.bottomLine} /> 
       <DonutChart percentage={200} total={1000} />
     </View>
@@ -192,13 +198,15 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     zIndex: 3, 
   },
-  pigIcon: {
+  pigTouchable: {
     marginTop: '25%',
+    alignSelf: 'flex-start',
+    marginLeft: '12%',
+  },
+  pigIcon: {
     width: 150,
     height: 150,
     resizeMode: 'contain',
-    alignSelf: 'flex-start',
-    marginLeft: '12%',
   },
   donutChartContainer: {
     width: 250,
