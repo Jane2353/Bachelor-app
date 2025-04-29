@@ -67,10 +67,11 @@ const ProgressBar = ({ PigHappiness }) => {
 };
 
 const PigScreen = () => {
-  const PigHappiness = 10;
+  const PigHappiness = 80;
 
   let pigMessage = '';
   let pigIcon = '';
+  let clickIcon = require('../../assets/Pig/click_transparent.png'); // Added click_transparent image
 
   if (PigHappiness < 25) {
     pigMessage = "I am sad, please categorise your expenses as soon as possible!";
@@ -94,6 +95,7 @@ const PigScreen = () => {
         <Text style={styles.speechBubbleText}>{pigMessage}</Text>
         <View style={styles.speechBubbleTail} />
       </View>
+      <Image style={styles.clickIcon} source={clickIcon} />
       <Image style={styles.pigIcon} source={pigIcon} />
       <View style={styles.bottomLine} /> 
       <DonutChart percentage={200} total={1000} />
@@ -181,6 +183,15 @@ const styles = StyleSheet.create({
   labelText: {
     fontSize: 15,
   },
+  clickIcon: {
+    position: 'absolute',
+    top: '35%',
+    left: '10%', 
+    width: 90,
+    height: 90,
+    resizeMode: 'contain',
+    zIndex: 3, 
+  },
   pigIcon: {
     marginTop: '25%',
     width: 150,
@@ -226,15 +237,15 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -100 }],
     width: 200,
     padding: 10,
-    backgroundColor: '#f8d7da',
+    backgroundColor: '#FE9894',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#f5c6cb',
+    borderColor: '#FE9894',
     alignItems: 'center',
     zIndex: 2,
   },
   speechBubbleText: {
-    color: '#721c24',
+    color: 'black',
     fontSize: 14,
     textAlign: 'center',
   },
@@ -250,7 +261,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 10,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderTopColor: '#f8d7da',
+    borderTopColor: '#FE9894',
   },
   topLine: {
     width: '90%',
