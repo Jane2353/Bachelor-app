@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import { ProgressChart } from 'react-native-chart-kit';
 import { useNavigation } from '@react-navigation/native';
 import NavigationButtons from '../components/NavigationButtons';
@@ -69,24 +68,7 @@ const ProgressBar = ({ PigHappiness }) => {
 
 const PigScreen = () => {
   const navigation = useNavigation();
-  const [isPigClicked, setIsPigClicked] = useState(false); // State to track pig click
   const PigHappiness = 80;
-
-  useEffect(() => {
-    const checkPigClicked = async () => {
-      const clicked = await AsyncStorage.getItem('isPigClicked');
-      if (clicked === 'true') {
-        setIsPigClicked(true);
-      }
-    };
-    checkPigClicked();
-  }, []);
-
-  const handlePigClick = async () => {
-    setIsPigClicked(true); // Update state
-    await AsyncStorage.setItem('isPigClicked', 'true'); // Persist state
-    navigation.navigate('PigCategorise'); // Navigate to PigCategorise screen
-  };
 
   let pigMessage = '';
   let pigIcon = '';
@@ -103,6 +85,10 @@ const PigScreen = () => {
     pigIcon = require('../../assets/Pig/side_happy_transparent.png');
   }
 
+  const handlePigClick = () => {
+    navigation.navigate('PigCategorise'); // Navigate to PigCategorise screen
+  };
+
   return (
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigScreen" />
@@ -114,9 +100,7 @@ const PigScreen = () => {
         <Text style={styles.speechBubbleText}>{pigMessage}</Text>
         <View style={styles.speechBubbleTail} />
       </View>
-      {!isPigClicked && (
-        <Image style={styles.clickIcon} source={clickIcon} />
-      )}
+      <Image style={styles.clickIcon} source={clickIcon} />
       <TouchableOpacity 
         onPress={handlePigClick} 
         style={styles.pigTouchable}
