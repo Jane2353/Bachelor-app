@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image, Platform,LayoutAnimation } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image, Platform, LayoutAnimation } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons"; // Import the icon library
 import Popup from '../components/popup';
 import Papa from "papaparse";
-
-
 
 // Category colors
 const categoryColors = [
@@ -21,8 +20,7 @@ const getCategoryColor = (index) => {
   return categoryColors[index % categoryColors.length];
 };
 
-
-const OverviewScreen = () => {
+const OverviewScreen = ({ navigation }) => {
   const [totalBudget, setTotalBudget] = useState(10000);
   const [expenses, setExpenses] = useState([]);
   const [newExpense, setNewExpense] = useState({ date: "", store: "", amount: "", category: "", recurring: false });
@@ -51,7 +49,7 @@ const OverviewScreen = () => {
   }, [expenses, totalBudget]);
 
   const totalSpent = expenses.reduce((sum, e) => sum + parseFloat(e.amount), 0);
-  const progress = Math.min((totalSpent / totalBudget) * 100, 100).toFixed(1);
+  const progress = ((totalSpent / totalBudget) * 100).toFixed(1);
 
   const handleCSVUpload = (e) => {
     const file = e.target.files[0];
@@ -96,21 +94,36 @@ const OverviewScreen = () => {
     ...Array.from(new Set(expenses.map(exp => exp.category).filter(Boolean))),
     "Uncategorized",
   ];
-  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Back Arrow */}
+      <TouchableOpacity
+        style={styles.backArrow}
+        onPress={() => navigation.navigate('allExpensesOverview')} // Navigate back to the previous screen
+      >
+        <Icon name="arrow-back" size={24} color="#000" />
+      </TouchableOpacity>
+
       <Image
         source={require("../../assets/Pig/front_smile.png")}
         style={styles.pigImage}
       />
 
       <Text style={styles.title}>Overview</Text>
-      <Text style={styles.subtitle}>You spent {totalSpent.toFixed(2)} kr. out of {totalBudget} kr.</Text>
+      <Text style={styles.subtitle}>
+        You spent {totalSpent.toFixed(2)} kr. out of {totalBudget} kr.
+      </Text>
 
+      {/* Progress Bar */}
       <View style={styles.progressBarContainer}>
         <View style={[styles.progressBar, { width: `${progress}%` }]} />
       </View>
+
+      {/* Percentage Spent */}
+      <Text style={styles.percentageText}>
+        {progress}% of your budget spent
+      </Text>
 
       <TextInput
         style={styles.input}
@@ -129,64 +142,61 @@ const OverviewScreen = () => {
         />
       )}
 
-
-
       {/* Category Buttons */}
       <View style={styles.categoriesContainer}>
-  <ScrollView
-    contentContainerStyle={styles.scrollContent} // Ensures proper alignment
-    nestedScrollEnabled={true} // Enables nested scrolling
-    showsVerticalScrollIndicator={true} // Displays a vertical scroll indicator
-  >
-    {categories.map((cat, index) => {
-      const color = getCategoryColor(index);
-      const isExpanded = selectedCategory === cat;
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          nestedScrollEnabled={true}
+          showsVerticalScrollIndicator={true}
+        >
+          {categories.map((cat, index) => {
+            const color = getCategoryColor(index);
+            const isExpanded = selectedCategory === cat;
 
-      return (
-        <View key={index}>
-          <TouchableOpacity
-            style={[styles.categoryCard, { backgroundColor: "#e0e0e0" }]}
-            onPress={() => {
-              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-              setSelectedCategory(isExpanded ? null : cat);
-            }}
-          >
-            <View style={[styles.categoryCircle, { backgroundColor: color }]} />
-            <Text style={styles.categoryCardText}>{cat}</Text>
-            <Text style={styles.categoryCardAmount}>
-              {expenses
-                .filter(e => (cat === "Uncategorized" ? !e.category : e.category === cat))
-                .reduce((sum, e) => sum + parseFloat(e.amount), 0)
-                .toFixed(2)}{" "}
-              kr.
-            </Text>
-          </TouchableOpacity>
+            return (
+              <View key={index}>
+                <TouchableOpacity
+                  style={[styles.categoryCard, { backgroundColor: "#e0e0e0" }]}
+                  onPress={() => {
+                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                    setSelectedCategory(isExpanded ? null : cat);
+                  }}
+                >
+                  <View style={[styles.categoryCircle, { backgroundColor: color }]} />
+                  <Text style={styles.categoryCardText}>{cat}</Text>
+                  <Text style={styles.categoryCardAmount}>
+                    {expenses
+                      .filter(e => (cat === "Uncategorized" ? !e.category : e.category === cat))
+                      .reduce((sum, e) => sum + parseFloat(e.amount), 0)
+                      .toFixed(2)}{" "}
+                    kr.
+                  </Text>
+                </TouchableOpacity>
 
-          {isExpanded && (
-            <View style={styles.expensesList}>
-              {expenses.filter(e =>
-                cat === "Uncategorized" ? !e.category : e.category === cat
-              ).length === 0 ? (
-                <Text style={styles.noExpensesText}>No expenses yet in this category.</Text>
-              ) : (
-                expenses
-                  .filter(e => cat === "Uncategorized" ? !e.category : e.category === cat)
-                  .map((exp, idx) => (
-                    <View key={idx} style={styles.expenseItem}>
-                      <Text style={styles.expenseItemDate}>{exp.date}</Text> {/* Display the date first */}
-                      <Text style={styles.expenseItemText}>{exp.store || "Unknown Store"}</Text> {/* Display the store name */}
-                      <Text style={styles.expenseItemAmount}>{parseFloat(exp.amount).toFixed(2)} kr.</Text> {/* Display the amount */}
-                    </View>
-                  ))
-              )}
-            </View>
-          )}
-        </View>
-      );
-    })}
-  </ScrollView>
-</View>
-      
+                {isExpanded && (
+                  <View style={styles.expensesList}>
+                    {expenses.filter(e =>
+                      cat === "Uncategorized" ? !e.category : e.category === cat
+                    ).length === 0 ? (
+                      <Text style={styles.noExpensesText}>No expenses yet in this category.</Text>
+                    ) : (
+                      expenses
+                        .filter(e => cat === "Uncategorized" ? !e.category : e.category === cat)
+                        .map((exp, idx) => (
+                          <View key={idx} style={styles.expenseItem}>
+                            <Text style={styles.expenseItemDate}>{exp.date}</Text>
+                            <Text style={styles.expenseItemText}>{exp.store || "Unknown Store"}</Text>
+                            <Text style={styles.expenseItemAmount}>{parseFloat(exp.amount).toFixed(2)} kr.</Text>
+                          </View>
+                        ))
+                    )}
+                  </View>
+                )}
+              </View>
+            );
+          })}
+        </ScrollView>
+      </View>
     </ScrollView>
   );
 };
@@ -219,6 +229,11 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#f99",
     borderRadius: 10,
+  },
+  percentageText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
   input: {
     width: "100%",
@@ -284,28 +299,22 @@ const styles = StyleSheet.create({
     color: "#999",
     marginTop: 20,
   },
-  expensesList: {
-    marginTop: 20,
-  },
-  expenseItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  expenseItemText: {
-    fontSize: 16,
-  },
-  expenseItemAmount: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   expenseName: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 4, // Add spacing below the name
+  },
+  backArrow: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 10,
+  },
+  pigImage: {
+    marginTop: 50,
+    marginBottom: 20,
+    width: 100,
+    height: 100,
   },
 });
 
