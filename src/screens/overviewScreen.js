@@ -1,12 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image, Platform } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image, Platform,LayoutAnimation } from "react-native";
 import Popup from '../components/popup';
 import Papa from "papaparse";
+
+
+
+// Category colors
+const categoryColors = [
+  "#FFB3B3", // Light Red
+  "#FFCC99", // Light Orange
+  "#FFFF99", // Light Yellow
+  "#B3FFB3", // Light Green
+  "#B3E5FF", // Light Blue
+  "#D1B3FF", // Light Purple
+  "#FFB3E6", // Light Pink
+];
+
+// Helper to get color based on index
+const getCategoryColor = (index) => {
+  return categoryColors[index % categoryColors.length];
+};
+
 
 const OverviewScreen = () => {
   const [totalBudget, setTotalBudget] = useState(10000);
   const [expenses, setExpenses] = useState([]);
   const [newExpense, setNewExpense] = useState({ date: "", store: "", amount: "", category: "", recurring: false });
+
+  const addExpense = () => {
+    if (newExpense.date && newExpense.store && newExpense.amount) {
+      setExpenses([...expenses, { ...newExpense, category: newExpense.category || "Uncategorized" }]);
+      setNewExpense({ date: "", store: "", amount: "", category: "", recurring: false });
+    }
+  };
+
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   // Load from localStorage on mount
@@ -35,10 +62,10 @@ const OverviewScreen = () => {
         complete: (results) => {
           const parsedExpenses = results.data.map(row => ({
             date: row.date || "",
-            store: row.store || "",
+            store: row.store || "Unknown Store",
             amount: parseFloat(row.amount) || 0,
-            category: row.category || "",
-            recurring: row.recurring === "true" // handle boolean as text
+            category: row.category || "Uncategorized", // Default to "Uncategorized" if missing
+            recurring: row.recurring === "true"
           }));
 
           // Simple validation
@@ -65,7 +92,11 @@ const OverviewScreen = () => {
     : expenses.filter(exp => exp.category === selectedCategory);
 
   // Get all unique categories dynamically
-  const categories = ["All", ...Array.from(new Set(expenses.map(exp => exp.category).filter(Boolean)))];
+  const categories = [
+    ...Array.from(new Set(expenses.map(exp => exp.category).filter(Boolean))),
+    "Uncategorized",
+  ];
+  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -75,7 +106,7 @@ const OverviewScreen = () => {
       />
 
       <Text style={styles.title}>Overview</Text>
-      <Text style={styles.subtitle}>You spent {totalSpent} kr. out of {totalBudget} kr.</Text>
+      <Text style={styles.subtitle}>You spent {totalSpent.toFixed(2)} kr. out of {totalBudget} kr.</Text>
 
       <View style={styles.progressBarContainer}>
         <View style={[styles.progressBar, { width: `${progress}%` }]} />
@@ -98,50 +129,64 @@ const OverviewScreen = () => {
         />
       )}
 
+
+
       {/* Category Buttons */}
       <View style={styles.categoriesContainer}>
-        {categories.map((cat, index) => (
+  <ScrollView
+    contentContainerStyle={styles.scrollContent} // Ensures proper alignment
+    nestedScrollEnabled={true} // Enables nested scrolling
+    showsVerticalScrollIndicator={true} // Displays a vertical scroll indicator
+  >
+    {categories.map((cat, index) => {
+      const color = getCategoryColor(index);
+      const isExpanded = selectedCategory === cat;
+
+      return (
+        <View key={index}>
           <TouchableOpacity
-            key={index}
-            style={[
-              styles.categoryButton,
-              selectedCategory === cat && styles.selectedCategoryButton
-            ]}
-            onPress={() => setSelectedCategory(cat)}
+            style={[styles.categoryCard, { backgroundColor: "#e0e0e0" }]}
+            onPress={() => {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+              setSelectedCategory(isExpanded ? null : cat);
+            }}
           >
-            <Text style={[
-              styles.categoryButtonText,
-              selectedCategory === cat && styles.selectedCategoryButtonText
-            ]}>
-              {cat}
+            <View style={[styles.categoryCircle, { backgroundColor: color }]} />
+            <Text style={styles.categoryCardText}>{cat}</Text>
+            <Text style={styles.categoryCardAmount}>
+              {expenses
+                .filter(e => (cat === "Uncategorized" ? !e.category : e.category === cat))
+                .reduce((sum, e) => sum + parseFloat(e.amount), 0)
+                .toFixed(2)}{" "}
+              kr.
             </Text>
           </TouchableOpacity>
-        ))}
-      </View>
 
-      {/* Expenses List */}
-      <View style={styles.expensesContainer}>
-        <Text style={styles.sectionTitle}>
-          {selectedCategory === "All" ? "All Expenses" : `${selectedCategory} Expenses`}
-        </Text>
-        {filteredExpenses.length === 0 ? (
-          <Text style={{ marginTop: 10 }}>No expenses in this category.</Text>
-        ) : (
-          <ScrollView
-            style={styles.expensesScrollView} // Add a specific style for the scrollable area
-            showsVerticalScrollIndicator={true} // Show a vertical scroll indicator
-          >
-            {filteredExpenses.map((item, index) => (
-              <View key={index} style={styles.expenseRow}>
-              <Text style={styles.expenseDate}>{item.date}</Text>
-              <Text style={styles.expenseStore}>{item.store}</Text>
-              <Text style={styles.expenseAmount}>{item.amount.toFixed(2)} kr.</Text>
-              <Text style={styles.expenseRecurring}>{item.recurring ? "Recurring" : ""}</Text>
-            </View>            
-            ))}
-          </ScrollView>
-        )}
-      </View>
+          {isExpanded && (
+            <View style={styles.expensesList}>
+              {expenses.filter(e =>
+                cat === "Uncategorized" ? !e.category : e.category === cat
+              ).length === 0 ? (
+                <Text style={styles.noExpensesText}>No expenses yet in this category.</Text>
+              ) : (
+                expenses
+                  .filter(e => cat === "Uncategorized" ? !e.category : e.category === cat)
+                  .map((exp, idx) => (
+                    <View key={idx} style={styles.expenseItem}>
+                      <Text style={styles.expenseItemDate}>{exp.date}</Text> {/* Display the date first */}
+                      <Text style={styles.expenseItemText}>{exp.store || "Unknown Store"}</Text> {/* Display the store name */}
+                      <Text style={styles.expenseItemAmount}>{parseFloat(exp.amount).toFixed(2)} kr.</Text> {/* Display the amount */}
+                    </View>
+                  ))
+              )}
+            </View>
+          )}
+        </View>
+      );
+    })}
+  </ScrollView>
+</View>
+      
     </ScrollView>
   );
 };
@@ -184,82 +229,84 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   categoriesContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginVertical: 10,
-    justifyContent: "center",
-  },
-  categoryButton: {
-    backgroundColor: "#eee",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    margin: 4,
-  },
-  selectedCategoryButton: {
-    backgroundColor: "#f88",
-  },
-  categoryButtonText: {
-    color: "#333",
-  },
-  selectedCategoryButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  expensesContainer: {
     width: "100%",
-    backgroundColor: "#ffe5e5",
-    padding: 16,
-    borderRadius: 12,
-    marginTop: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  expensesScrollView: {
-    maxHeight: 300, // Set a maximum height for the scrollable area
     marginTop: 10,
+    height: 300, // Set a fixed height for the scrollable area
   },
-  expenseRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 4,
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 10, // Adds spacing at the bottom
   },
-  pigImage: {
-    width: 120,
-    height: 120,
-    marginBottom: 10,
-    resizeMode: "contain",
-  },
-  expenseRow: {
+  categoryCard: {
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#e0e0e0",
+    borderRadius: 40,
+    padding: 10,
     marginVertical: 6,
+    paddingHorizontal: 16,
   },
-  expenseDate: {
-    width: 60,
-    fontSize: 14,
+  categoryCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    marginRight: 12,
   },
-  expenseStore: {
+  categoryCardText: {
     flex: 1,
-    fontSize: 14,
-    marginLeft: 10,
+    fontSize: 16,
   },
-  expenseAmount: {
-    width: 80,
-    fontSize: 14,
-    textAlign: "right",
+  categoryCardAmount: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
-  expenseRecurring: {
-    width: 70,
-    fontSize: 10,
-    color: "#555",
-    textAlign: "right",
-    marginLeft: 5,
+  expensesList: {
+    marginTop: 20,
   },
-  
+  expenseItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  expenseItemText: {
+    fontSize: 16,
+  },
+  expenseItemAmount: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  noExpensesText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "#999",
+    marginTop: 20,
+  },
+  expensesList: {
+    marginTop: 20,
+  },
+  expenseItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  expenseItemText: {
+    fontSize: 16,
+  },
+  expenseItemAmount: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  expenseName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 4, // Add spacing below the name
+  },
 });
 
 export default OverviewScreen;
