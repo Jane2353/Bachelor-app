@@ -54,6 +54,19 @@ const OverviewScreen = ({ navigation }) => {
     if (storedBudget) setTotalBudget(storedBudget);
   }, []);
 
+  useEffect(() => {
+    // Load totalBudget from localStorage on mount
+    const storedBudget = localStorage.getItem("totalBudget");
+    if (storedBudget) {
+      setTotalBudget(parseFloat(storedBudget));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save totalBudget to localStorage whenever it changes
+    localStorage.setItem("totalBudget", totalBudget);
+  }, [totalBudget]);
+
   // Save to localStorage on changes
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
@@ -160,13 +173,7 @@ const OverviewScreen = ({ navigation }) => {
         {progress}% of your budget spent
       </Text>
 
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Enter total budget (kr.)"
-        value={totalBudget.toString()}
-        onChangeText={(text) => setTotalBudget(Number(text))}
-      />
+      
 
       {Platform.OS === "web" && (
         <input
@@ -269,18 +276,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
   },
-  input: {
-    width: "100%",
-    borderColor: "#ccc",
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
   categoriesContainer: {
     width: "100%",
     marginTop: 10,
-    height: 300, // Set a fixed height for the scrollable area
+    height: 350, // Set a fixed height for the scrollable area
   },
   scrollContent: {
     flexGrow: 1,
