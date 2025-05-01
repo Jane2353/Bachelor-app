@@ -107,6 +107,18 @@ const OverviewScreen = ({ navigation }) => {
     "Uncategorized",
   ];
 
+  // Calculate the percentage spent for each category
+  const categoryPercentages = categories.map((cat) => {
+    const categorySpent = expenses
+      .filter((e) => (cat === "Uncategorized" ? !e.category : e.category === cat))
+      .reduce((sum, e) => sum + parseFloat(e.amount), 0);
+    return {
+      category: cat,
+      percentage: ((categorySpent / totalBudget) * 100).toFixed(1), // Calculate percentage
+      color: getCategoryColor(categories.indexOf(cat)), // Assign a color
+    };
+  });
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Back Arrow */}
@@ -127,9 +139,20 @@ const OverviewScreen = ({ navigation }) => {
         You spent {totalSpent.toFixed(2)} kr. out of {totalBudget} kr.
       </Text>
 
-      {/* Progress Bar */}
+      {/* Stacked Progress Bar */}
       <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: `${progress}%` }]} />
+        {categoryPercentages.map((cat, index) => (
+          <View
+            key={index}
+            style={[
+              styles.progressBarSegment,
+              {
+                width: `${cat.percentage}%`, // Set width based on percentage
+                backgroundColor: cat.color, // Set color for the category
+              },
+            ]}
+          />
+        ))}
       </View>
 
       {/* Percentage Spent */}
@@ -232,15 +255,14 @@ const styles = StyleSheet.create({
   progressBarContainer: {
     width: "100%",
     height: 20,
-    backgroundColor: "#ccc",
+    backgroundColor: "#ccc", // Background for unused budget
     borderRadius: 10,
+    flexDirection: "row", // Stack segments horizontally
     overflow: "hidden",
     marginBottom: 20,
   },
-  progressBar: {
+  progressBarSegment: {
     height: "100%",
-    backgroundColor: "#f99",
-    borderRadius: 10,
   },
   percentageText: {
     fontSize: 16,
