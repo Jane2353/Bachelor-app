@@ -137,7 +137,7 @@ const OverviewScreen = ({ navigation }) => {
       {/* Back Arrow */}
       <TouchableOpacity
         style={styles.backArrow}
-        onPress={() => navigation.navigate('allExpensesOverview')} // Navigate back to the previous screen
+        onPress={() => navigation.navigate('AllExpensesOverview')} // Navigate back to the previous screen
       >
         <Icon name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
