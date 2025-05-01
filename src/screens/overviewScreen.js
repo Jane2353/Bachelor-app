@@ -38,7 +38,19 @@ const OverviewScreen = ({ navigation }) => {
   useEffect(() => {
     const storedExpenses = JSON.parse(localStorage.getItem("expenses"));
     const storedBudget = JSON.parse(localStorage.getItem("totalBudget"));
-    if (storedExpenses) setExpenses(storedExpenses);
+    
+    if (storedExpenses) {
+      // Sort expenses by date in descending order
+      const sortedExpenses = storedExpenses.sort((a, b) => {
+        const [dayA, monthA] = a.date.split('-').map(Number); // Parse dd-mm
+        const [dayB, monthB] = b.date.split('-').map(Number); // Parse dd-mm
+        const dateA = new Date(2025, monthA - 1, dayA); // Create Date object (year is arbitrary)
+        const dateB = new Date(2025, monthB - 1, dayB); // Create Date object (year is arbitrary)
+        return dateB - dateA; // Sort descending
+      });
+      setExpenses(sortedExpenses);
+    }
+    
     if (storedBudget) setTotalBudget(storedBudget);
   }, []);
 

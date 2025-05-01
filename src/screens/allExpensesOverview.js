@@ -13,7 +13,16 @@ const allExpensesOverviewScreen = () => {
         const data = localStorage.getItem('expenses');
         if (data) {
           const parsed = JSON.parse(data);
-          const sorted = parsed.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+          // Sort expenses by date (most recent first)
+          const sorted = parsed.sort((a, b) => {
+            const [dayA, monthA] = a.date.split('-').map(Number); // Parse dd-mm
+            const [dayB, monthB] = b.date.split('-').map(Number); // Parse dd-mm
+            const dateA = new Date(2025, monthA - 1, dayA); // Create Date object (year is arbitrary)
+            const dateB = new Date(2025, monthB - 1, dayB); // Create Date object (year is arbitrary)
+            return dateB - dateA; // Sort descending
+          });
+
           setExpenses(sorted);
         }
       } catch (error) {
@@ -68,10 +77,8 @@ const allExpensesOverviewScreen = () => {
 };
 
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  return `${day}/${month}`;
+  // Assuming the date is already in dd-mm format
+  return dateString;
 };
 
 const styles = StyleSheet.create({
