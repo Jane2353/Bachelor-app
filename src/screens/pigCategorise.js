@@ -1,38 +1,80 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Picker } from 'react-native'; // Use Picker from react-native instead of @react-native-picker/picker
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
+import { Picker } from '@react-native-picker/picker'; // Brug korrekt Picker
+import Papa from 'papaparse';
+import * as FileSystem from 'expo-file-system';
 
-const PigCategorise = () => {
-  const [selectedCategories, setSelectedCategories] = useState({}); // State to track selected categories
-  const [expenses, setExpenses] = useState([ // State to track expenses
-    { id: 1, date: '16/04', description: 'AAU', amount: '15,-' },
-    { id: 2, date: '16/04', description: 'AAU', amount: '200,-' },
-    { id: 3, date: '16/04', description: 'H&M', amount: '520,-' },
-  ]);
+const PigCategorise = ({ navigation }) => {
+  const [selectedCategories, setSelectedCategories] = useState({});
+  const [expenses, setExpenses] = useState([]);
+
+  useEffect(() => {
+    const loadCSV = async () => {
+      try {
+        const csvPath = `${FileSystem.documentDirectory}expenses.csv`;
+        const csvContent = await FileSystem.readAsStringAsync(csvPath);
+
+        Papa.parse(csvContent, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            const uncategorized = results.data
+              .map((row, index) => ({
+                id: row.id || index.toString(),
+                date: row.date,
+                store: row.store,
+                amount: row.amount,
+                category: row.category,
+              }))
+              .filter(
+                (row) =>
+                  !row.category ||
+                  String(row.category).trim() === '' ||
+                  row.category === 'NaN' || // extra fallback
+                  typeof row.category !== 'string'
+              );
+            setExpenses(uncategorized);
+          },
+        });
+      } catch (error) {
+        console.error('Error loading CSV:', error);
+      }
+    };
+
+    loadCSV();
+  }, []);
 
   const categories = [
     'Food', 'Transport', 'Clothing', 'Entertainment', 'Health',
     'Education', 'Utilities', 'Travel', 'Savings', 'Other',
   ];
 
-  const handleConfirm = () => {
-    setExpenses((prevExpenses) =>
-      prevExpenses.filter((expense) => !selectedCategories[expense.id]) // Keep only uncategorised expenses
-    );
+  const handleConfirm = async () => {
+    const updatedExpenses = expenses.map((expense) => ({
+      ...expense,
+      category: selectedCategories[expense.id] || expense.category,
+    }));
+
+    const csvContent = Papa.unparse(updatedExpenses);
+    const csvPath = `${FileSystem.documentDirectory}expenses.csv`;
+    await FileSystem.writeAsStringAsync(csvPath, csvContent);
+
+    setExpenses(updatedExpenses.filter((expense) => !expense.category || String(expense.category).trim() === ''));
   };
 
   const renderExpense = ({ item }) => {
-    const isCategorised = !!selectedCategories[item.id]; // Check if a category is selected
+    const isCategorised = !!selectedCategories[item.id];
 
     return (
       <View
         style={[
           styles.expenseRow,
-          isCategorised && styles.expenseRowCategorised, // Apply green background if categorised
+          isCategorised && styles.expenseRowCategorised,
         ]}
       >
         <View style={styles.expenseData}>
           <Text style={styles.expenseText}>{item.date}</Text>
-          <Text style={styles.expenseText}>{item.description}</Text>
+          <Text style={styles.expenseText}>{item.store}</Text>
           <Text style={styles.expenseText}>{item.amount}</Text>
         </View>
         <View style={styles.dropdownContainer}>
@@ -58,11 +100,11 @@ const PigCategorise = () => {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backArrow}
-          onPress={() => navigation.navigate('PigScreen')} // Explicitly navigate to PigScreen
+          onPress={() => navigation.navigate('PigScreen')}
         >
           <Image
             style={styles.arrowIcon}
-            source={require('../../assets/left_arrow.png')} // Left arrow icon
+            source={require('../../assets/left_arrow.png')}
           />
         </TouchableOpacity>
         <Image
@@ -76,18 +118,27 @@ const PigCategorise = () => {
           <View style={styles.speechBubbleTail} />
         </View>
       </View>
+
       <Text style={styles.instructionText}>
         Click on the expenses in order to categorise them
       </Text>
+
       <View style={styles.expensesContainer}>
-        <FlatList
-          data={expenses}
-          renderItem={renderExpense}
-          keyExtractor={(item) => item.id.toString()}
-          style={styles.expensesList}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        />
+        {expenses.length === 0 ? (
+          <Text style={{ textAlign: 'center', marginTop: 20 }}>
+            No uncategorized expenses found.
+          </Text>
+        ) : (
+          <FlatList
+            data={expenses}
+            renderItem={renderExpense}
+            keyExtractor={(item) => item.id.toString()}
+            style={styles.expensesList}
+            contentContainerStyle={{ paddingBottom: 20 }}
+          />
+        )}
       </View>
+
       <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
         <Text style={styles.confirmButtonText}>Confirm</Text>
       </TouchableOpacity>
@@ -96,36 +147,16 @@ const PigCategorise = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  topLine: {
-    width: '90%',
-    height: 1,
-    backgroundColor: 'black',
-    alignSelf: 'center',
-    marginVertical: 10,
-  },
+  container: { flex: 1, backgroundColor: 'white' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 20,
     marginTop: '10%',
   },
-  backArrow: {
-    marginRight: 10, 
-  },
-  arrowIcon: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
-  },
-  pigIcon: {
-    width: 95,
-    height: 95,
-    resizeMode: 'contain',
-  },
+  backArrow: { marginRight: 10 },
+  arrowIcon: { width: 40, height: 40, resizeMode: 'contain' },
+  pigIcon: { width: 95, height: 95, resizeMode: 'contain' },
   speechBubble: {
     marginLeft: 10,
     padding: 10,
@@ -136,16 +167,8 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
   },
-  speechBubbleText: {
-    color: 'black',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  instructionText: {
-    textAlign: 'center',
-    fontSize: 16,
-    marginVertical: 10,
-  },
+  speechBubbleText: { color: 'black', fontSize: 14, textAlign: 'center' },
+  instructionText: { textAlign: 'center', fontSize: 16, marginVertical: 10 },
   expensesList: {
     flex: 1,
     width: '90%',
@@ -154,27 +177,24 @@ const styles = StyleSheet.create({
   expenseRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE9894', 
+    backgroundColor: '#FE9894',
     marginVertical: 5,
     borderRadius: 10,
     overflow: 'hidden',
     paddingHorizontal: 10,
   },
   expenseRowCategorised: {
-    backgroundColor: '#2ECC71', 
+    backgroundColor: '#2ECC71',
   },
   expenseData: {
-    flex: 2, 
+    flex: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
   },
-  expenseText: {
-    fontSize: 14,
-    color: 'black',
-  },
+  expenseText: { fontSize: 14, color: 'black' },
   dropdownContainer: {
-    flex: 1.5, 
+    flex: 1.5,
     backgroundColor: '#E0E0E0',
     borderRadius: 10,
     justifyContent: 'center',
@@ -182,18 +202,18 @@ const styles = StyleSheet.create({
     height: 50,
   },
   picker: {
-    height: 50, 
+    height: 50,
     width: '100%',
   },
   expensesContainer: {
     width: '90%',
-    height: '50%', 
-    borderWidth: 1, 
+    height: '50%',
+    borderWidth: 1,
     borderColor: 'black',
     borderRadius: 10,
     alignSelf: 'center',
-    marginBottom: 20, 
-    padding: 10, 
+    marginBottom: 20,
+    padding: 10,
   },
   confirmButton: {
     backgroundColor: '#2ECC71',
@@ -202,7 +222,7 @@ const styles = StyleSheet.create({
     height: '5%',
     alignSelf: 'center',
     justifyContent: 'center',
-    alignItems: 'center', 
+    alignItems: 'center',
     marginBottom: 20,
   },
   confirmButtonText: {
