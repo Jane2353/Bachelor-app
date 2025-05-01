@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // Brug korrekt Picker
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import Papa from 'papaparse';
 import * as FileSystem from 'expo-file-system';
 
@@ -12,12 +20,14 @@ const PigCategorise = ({ navigation }) => {
     const loadCSV = async () => {
       try {
         const csvPath = `${FileSystem.documentDirectory}expenses.csv`;
-        const csvContent = await FileSystem.readAsStringAsync(csvPath);
+        const response = await fetch(csvPath);
+        const csvContent = await response.text();
 
         Papa.parse(csvContent, {
           header: true,
           skipEmptyLines: true,
           complete: (results) => {
+            console.log('Parsed Results:', results.data);
             const uncategorized = results.data
               .map((row, index) => ({
                 id: row.id || index.toString(),
@@ -28,16 +38,18 @@ const PigCategorise = ({ navigation }) => {
               }))
               .filter(
                 (row) =>
-                  !row.category ||
-                  String(row.category).trim() === '' ||
-                  row.category === 'NaN' || // extra fallback
-                  typeof row.category !== 'string'
+                  row.date?.trim() &&
+                  row.store?.trim() &&
+                  row.amount?.trim() &&
+                  (!row.category || String(row.category).trim() === '')
               );
             setExpenses(uncategorized);
+            console.log('Uncategorized Expenses:', uncategorized);
           },
         });
       } catch (error) {
         console.error('Error loading CSV:', error);
+        Alert.alert('Error', 'Failed to load expenses.csv');
       }
     };
 
@@ -45,8 +57,16 @@ const PigCategorise = ({ navigation }) => {
   }, []);
 
   const categories = [
-    'Food', 'Transport', 'Clothing', 'Entertainment', 'Health',
-    'Education', 'Utilities', 'Travel', 'Savings', 'Other',
+    'Food',
+    'Transport',
+    'Clothing',
+    'Entertainment',
+    'Health',
+    'Education',
+    'Utilities',
+    'Travel',
+    'Savings',
+    'Other',
   ];
 
   const handleConfirm = async () => {
@@ -59,7 +79,15 @@ const PigCategorise = ({ navigation }) => {
     const csvPath = `${FileSystem.documentDirectory}expenses.csv`;
     await FileSystem.writeAsStringAsync(csvPath, csvContent);
 
-    setExpenses(updatedExpenses.filter((expense) => !expense.category || String(expense.category).trim() === ''));
+    const remainingUncategorized = updatedExpenses.filter(
+      (row) =>
+        row.date?.trim() &&
+        row.store?.trim() &&
+        row.amount?.trim() &&
+        (!row.category || String(row.category).trim() === '')
+    );
+
+    setExpenses(remainingUncategorized);
   };
 
   const renderExpense = ({ item }) => {
@@ -133,7 +161,6 @@ const PigCategorise = ({ navigation }) => {
             data={expenses}
             renderItem={renderExpense}
             keyExtractor={(item) => item.id.toString()}
-            style={styles.expensesList}
             contentContainerStyle={{ paddingBottom: 20 }}
           />
         )}
@@ -169,10 +196,15 @@ const styles = StyleSheet.create({
   },
   speechBubbleText: { color: 'black', fontSize: 14, textAlign: 'center' },
   instructionText: { textAlign: 'center', fontSize: 16, marginVertical: 10 },
-  expensesList: {
-    flex: 1,
+  expensesContainer: {
     width: '90%',
+    height: '50%',
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 10,
     alignSelf: 'center',
+    marginBottom: 20,
+    padding: 10,
   },
   expenseRow: {
     flexDirection: 'row',
@@ -204,16 +236,6 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     width: '100%',
-  },
-  expensesContainer: {
-    width: '90%',
-    height: '50%',
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 10,
-    alignSelf: 'center',
-    marginBottom: 20,
-    padding: 10,
   },
   confirmButton: {
     backgroundColor: '#2ECC71',
