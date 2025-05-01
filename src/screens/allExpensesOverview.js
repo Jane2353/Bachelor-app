@@ -1,41 +1,85 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const allExpensesOverviewScreen = () => {
+const AllExpensesOverviewScreen = () => {
   const [expenses, setExpenses] = useState([]);
+  const [totalBudget, setTotalBudget] = useState(10000); // Default budget
   const navigation = useNavigation();
 
   useEffect(() => {
-    // Fetch expenses from localStorage on mount
-    const fetchExpenses = () => {
+// Fetch expenses and budget from localStorage on mount
+    const fetchExpensesAndBudget = () => {
       try {
         const data = localStorage.getItem('expenses');
+        const storedBudget = localStorage.getItem('totalBudget');
+
         if (data) {
           const parsed = JSON.parse(data);
-          const sorted = parsed.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+          // Sort expenses by date (most recent first)
+          const sorted = parsed.sort((a, b) => {
+            const [dayA, monthA] = a.date.split('-').map(Number); // Parse dd-mm
+            const [dayB, monthB] = b.date.split('-').map(Number); // Parse dd-mm
+            const dateA = new Date(2025, monthA - 1, dayA); // Create Date object (year is arbitrary)
+            const dateB = new Date(2025, monthB - 1, dayB); // Create Date object (year is arbitrary)
+            return dateB - dateA; // Sort descending
+          });
+
           setExpenses(sorted);
         }
+
+        if (storedBudget) {
+          setTotalBudget(parseFloat(storedBudget)); // Load budget from localStorage
+        }
       } catch (error) {
-        console.error('Error fetching expenses:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchExpenses();
+    fetchExpensesAndBudget();
   }, []);
 
+  useEffect(() => {
+// Save totalBudget to localStorage whenever it changes
+    localStorage.setItem('totalBudget', totalBudget);
+  }, [totalBudget]);
+
+  const totalSpent = expenses.reduce((sum, e) => sum + parseFloat(e.amount), 0); // Calculate total spent
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView 
+    contentContainerStyle={styles.container}>
       <Image source={require('../../assets/Pig/front_smile.png')} style={styles.piggyImage} />
 
-      {/* Placeholder for the Pie Chart */}
-      <View style={styles.pieChartPlaceholder}>
-        <Text>PieChartPlaceholder</Text>
+      {/* Progress Bar for Shown Expenses */}
+      <View style={styles.progressBarContainer}>
+        <View
+          style={[
+            styles.progressBar,
+            { width: `${(totalSpent / totalBudget) * 100}%` }, // Allow progress to exceed 100%
+          ]}
+        />
       </View>
+      <Text style={styles.percentageText}>
+        {((totalSpent / totalBudget) * 100).toFixed(1)}% of your budget spent
+      </Text>
+
+      {/* Input to Update Total Budget */}
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Enter total budget"
+        value={totalBudget.toString()}
+        onChangeText={(text) => setTotalBudget(Number(text))}
+      />
 
       {/* Category and Expenses buttons */}
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.categoryButton}>
+        <TouchableOpacity 
+          style={styles.categoryButton}
+          onPress={() => navigation.navigate('Uncategorised')}
+        >
           <Text style={styles.categoryButtonText}>Category</Text>
         </TouchableOpacity>
 
@@ -50,7 +94,7 @@ const allExpensesOverviewScreen = () => {
       {/* Expenses list */}
       <View style={styles.expensesListContainer}>
         <ScrollView
-          contentContainerStyle={styles.expensesListContent}
+          contentContainerStyle={styles.scrollContent}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={true}
         >
@@ -68,17 +112,15 @@ const allExpensesOverviewScreen = () => {
 };
 
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  return `${day}/${month}`;
+  return dateString; // Assuming the date is already in dd-mm format
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: "#fff",
     flexGrow: 1,
+    alignItems: "center",
   },
   piggyImage: {
     width: 100,
@@ -86,11 +128,31 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 10,
   },
-  pieChartPlaceholder: {
-    height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
+  progressBarContainer: {
+    width: "100%",
+    height: 20,
+    backgroundColor: "#ccc",
+    borderRadius: 10,
+    overflow: "hidden",
+    marginBottom: 10,
+  },
+  progressBar: {
+    height: "100%",
+    backgroundColor: "#4caf50",
+  },
+  percentageText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   buttonRow: {
     flexDirection: 'row',
@@ -120,13 +182,13 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   expensesListContainer: {
-    width: '100%',
-    height: 300, // Set a fixed height for the scrollable area
+    width: "100%",
     marginTop: 10,
+    height: 400, // Set a fixed height for the scrollable area
   },
-  expensesListContent: {
+  scrollContent: {
     flexGrow: 1,
-    paddingBottom: 20, // Add padding at the bottom for better spacing
+    paddingBottom: 10, // Adds spacing at the bottom
   },
   expenseRow: {
     flexDirection: 'row',
@@ -142,7 +204,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   expenseName: {
-    flex:2,
+    flex: 2,
     textAlign: 'center',
   },
   expenseAmount: {
@@ -152,6 +214,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default allExpensesOverviewScreen;
+export default AllExpensesOverviewScreen;
 
 

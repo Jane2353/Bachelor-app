@@ -1,7 +1,35 @@
 import {StyleSheet, View, Image, Text, TouchableOpacity, TextInput} from 'react-native';
+import React, { useState, useEffect } from 'react';
 import NextButtonWithDots from '../components/NextButtonWithDots';
 
 const ChoosePigScreen = ({ navigation }) => {
+  const [pigName, setPigName] = useState('');
+  const [selectedPig, setSelectedPig] = useState(null); // Track the selected pig
+
+  // Load the pig's name and selected pig from localStorage on mount
+  useEffect(() => {
+    const storedPigName = localStorage.getItem('pigName');
+    const storedSelectedPig = localStorage.getItem('selectedPig');
+    if (storedPigName) {
+      setPigName(storedPigName);
+    }
+    if (storedSelectedPig) {
+      setSelectedPig(parseInt(storedSelectedPig, 10)); // Parse the stored index
+    }
+  }, []);
+
+  // Save the pig's name to localStorage whenever it changes
+  const handlePigNameChange = (name) => {
+    setPigName(name);
+    localStorage.setItem('pigName', name);
+  };
+
+  // Save the selected pig to localStorage
+  const handlePigSelect = (index) => {
+    setSelectedPig(index);
+    localStorage.setItem('selectedPig', index);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -20,8 +48,21 @@ const ChoosePigScreen = ({ navigation }) => {
                 source={require('../../assets/Pig/side_happy_transparent.png')}
                 style={styles.pigImage}
               />
-              <TouchableOpacity style={styles.selectButton}>
-                <Text style={styles.selectButtonText}>Select</Text>
+              <TouchableOpacity
+                style={[
+                  styles.selectButton,
+                  selectedPig === index && styles.selectedButton, // Highlight selected pig
+                ]}
+                onPress={() => handlePigSelect(index)} // Save selected pig
+              >
+                <Text
+                  style={[
+                    styles.selectButtonText,
+                    selectedPig === index && styles.selectedButtonText, // Change text color for selected pig
+                  ]}
+                >
+                  {selectedPig === index ? 'Selected' : 'Select'}
+                </Text>
               </TouchableOpacity>
             </View>
           ))}
@@ -29,7 +70,12 @@ const ChoosePigScreen = ({ navigation }) => {
         <Text style={styles.inputLabel}>
           What is the name of <Text style={styles.highlight}>your</Text> pig?
         </Text>
-        <TextInput style={styles.input} placeholder="Enter name" />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter name"
+          value={pigName}
+          onChangeText={handlePigNameChange} // Save the name to localStorage on change
+        />
       </View>
       <NextButtonWithDots
         navigation={navigation}
@@ -44,7 +90,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'space-between', // Ensures consistent spacing
+    justifyContent: 'space-between',
     padding: 20,
   },
   content: {
@@ -82,23 +128,29 @@ const styles = StyleSheet.create({
   },
   pigItem: {
     alignItems: 'center',
-    marginBottom: 20, 
+    marginBottom: 20,
   },
   pigImage: {
     width: 120,
     height: 120,
-    marginBottom: 10, 
+    marginBottom: 10,
   },
   selectButton: {
-    backgroundColor: '#2ECC71', 
+    backgroundColor: '#2ECC71',
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
   },
+  selectedButton: {
+    backgroundColor: '#FFD700', // Highlight selected pig button
+  },
   selectButtonText: {
     color: '#fff',
     fontSize: 14,
+  },
+  selectedButtonText: {
+    color: '#000', // Change text color to black for selected pig
   },
   inputLabel: {
     fontSize: 16,
