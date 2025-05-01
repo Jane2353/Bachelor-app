@@ -76,7 +76,10 @@ const AllExpensesOverviewScreen = () => {
 
       {/* Category and Expenses buttons */}
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.categoryButton}>
+        <TouchableOpacity 
+          style={styles.categoryButton}
+          onPress={() => navigation.navigate('Uncategorised')}
+        >
           <Text style={styles.categoryButtonText}>Category</Text>
         </TouchableOpacity>
 
