@@ -1,112 +1,244 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image, Platform } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image, Platform, LayoutAnimation } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons"; // Import the icon library
 import Popup from '../components/popup';
 import Papa from "papaparse";
 
-const OverviewScreen = () => {
+// Category colors
+const categoryColors = [
+  "#FFB3B3", // Light Red
+  "#FFCC99", // Light Orange
+  "#FFFF99", // Light Yellow
+  "#B3FFB3", // Light Green
+  "#B3E5FF", // Light Blue
+  "#D1B3FF", // Light Purple
+  "#FFB3E6", // Light Pink
+];
+
+// Helper to get color based on index
+const getCategoryColor = (index) => {
+  return categoryColors[index % categoryColors.length];
+};
+
+const OverviewScreen = ({ navigation }) => {
   const [totalBudget, setTotalBudget] = useState(10000);
   const [expenses, setExpenses] = useState([]);
+  const [newExpense, setNewExpense] = useState({ date: "", store: "", amount: "", category: "", recurring: false });
 
+  const addExpense = () => {
+    if (newExpense.date && newExpense.store && newExpense.amount) {
+      setExpenses([...expenses, { ...newExpense, category: newExpense.category || "Uncategorized" }]);
+      setNewExpense({ date: "", store: "", amount: "", category: "", recurring: false });
+    }
+  };
 
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  // Load from localStorage on mount
   useEffect(() => {
     const storedExpenses = JSON.parse(localStorage.getItem("expenses"));
     const storedBudget = JSON.parse(localStorage.getItem("totalBudget"));
-
-    if (storedExpenses) setExpenses(storedExpenses);
+    
+    if (storedExpenses) {
+      // Sort expenses by date in descending order
+      const sortedExpenses = storedExpenses.sort((a, b) => {
+        const [dayA, monthA] = a.date.split('-').map(Number); // Parse dd-mm
+        const [dayB, monthB] = b.date.split('-').map(Number); // Parse dd-mm
+        const dateA = new Date(2025, monthA - 1, dayA); // Create Date object (year is arbitrary)
+        const dateB = new Date(2025, monthB - 1, dayB); // Create Date object (year is arbitrary)
+        return dateB - dateA; // Sort descending
+      });
+      setExpenses(sortedExpenses);
+    }
+    
     if (storedBudget) setTotalBudget(storedBudget);
   }, []);
 
+  useEffect(() => {
+    // Load totalBudget from localStorage on mount
+    const storedBudget = localStorage.getItem("totalBudget");
+    if (storedBudget) {
+      setTotalBudget(parseFloat(storedBudget));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save totalBudget to localStorage whenever it changes
+    localStorage.setItem("totalBudget", totalBudget);
+  }, [totalBudget]);
+
+  // Save to localStorage on changes
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
     localStorage.setItem("totalBudget", JSON.stringify(totalBudget));
   }, [expenses, totalBudget]);
 
   const totalSpent = expenses.reduce((sum, e) => sum + parseFloat(e.amount), 0);
-  const progress = Math.min((totalSpent / totalBudget) * 100, 100).toFixed(1);
 
-  
+  const progress = ((totalSpent / totalBudget) * 100).toFixed(1);
 
-  const handleCSVUpload = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-  
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        if (!results.data || results.data.length === 0) {
-          window.alert("CSV is empty or could not be read.");
-          return;
+  const handleCSVUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          const parsedExpenses = results.data.map(row => ({
+            date: row.date || "",
+            store: row.store || "Unknown Store",
+            amount: parseFloat(row.amount) || 0,
+            category: row.category || "Uncategorized", // Default to "Uncategorized" if missing
+            recurring: row.recurring === "true"
+          }));
+
+          // Simple validation
+          const invalidRows = parsedExpenses.filter(
+            e => !e.date || !e.store || isNaN(e.amount)
+          );
+          if (invalidRows.length > 0) {
+            alert("CSV upload failed: Some rows have missing required fields.");
+            return;
+          }
+
+          setExpenses(parsedExpenses);
+        },
+        error: (error) => {
+          alert("Failed to parse CSV file.");
+          console.error(error);
         }
-  
-        const parsedExpenses = results.data.map((row, idx) => {
-          const date = row.date || row.Date || "";
-          const store = row.store || row.Store || "";
-          const amount = parseFloat(row.amount || row.Amount || 0);
-          const category = row.category || row.Category || null; // Include category field
-  
-          return { date, store, amount, category };
-        }).filter(exp => exp.date && exp.store && !isNaN(exp.amount));
-  
-        if (parsedExpenses.length === 0) {
-          window.alert("CSV does not contain valid expense entries. Make sure it has 'date', 'store', 'amount', and optionally 'category' columns.");
-          return;
-        }
-  
-        // ✅ Replace expenses if valid
-        setExpenses(parsedExpenses);
-        window.alert("Expenses successfully loaded!");
-      },
-      error: (err) => {
-        console.error("CSV parse error:", err);
-        window.alert("Failed to parse CSV. Please try again.");
-      }
-    });
+      });
+    }
   };
-  
+
+  const filteredExpenses = selectedCategory === "All"
+    ? expenses
+    : expenses.filter(exp => exp.category === selectedCategory);
+
+  // Get all unique categories dynamically
+  const categories = [
+    ...Array.from(new Set(expenses.map(exp => exp.category).filter(Boolean))),
+    "Uncategorized",
+  ];
+
+  // Calculate the percentage spent for each category
+  const categoryPercentages = categories.map((cat) => {
+    const categorySpent = expenses
+      .filter((e) => (cat === "Uncategorized" ? !e.category : e.category === cat))
+      .reduce((sum, e) => sum + parseFloat(e.amount), 0);
+    return {
+      category: cat,
+      percentage: ((categorySpent / totalBudget) * 100).toFixed(1), // Calculate percentage
+      color: getCategoryColor(categories.indexOf(cat)), // Assign a color
+    };
+  });
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Back Arrow */}
+      <TouchableOpacity
+        style={styles.backArrow}
+        onPress={() => navigation.navigate('AllExpensesOverview')} // Navigate back to the previous screen
+      >
+        <Icon name="arrow-back" size={24} color="#000" />
+      </TouchableOpacity>
+
       <Image
         source={require("../../assets/Pig/front_smile.png")}
         style={styles.pigImage}
       />
 
       <Text style={styles.title}>Overview</Text>
-      <Text style={styles.subtitle}>You spent {totalSpent} kr. out of {totalBudget} kr.</Text>
+      <Text style={styles.subtitle}>
+        You spent {totalSpent.toFixed(2)} kr. out of {totalBudget} kr.
+      </Text>
 
+      {/* Stacked Progress Bar */}
       <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: `${progress}%` }]} />
+        {categoryPercentages.map((cat, index) => (
+          <View
+            key={index}
+            style={[
+              styles.progressBarSegment,
+              {
+                width: `${cat.percentage}%`, // Set width based on percentage
+                backgroundColor: cat.color, // Set color for the category
+              },
+            ]}
+          />
+        ))}
       </View>
 
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Enter total budget (kr.)"
-        value={totalBudget.toString()}
-        onChangeText={(text) => setTotalBudget(Number(text))}
-      />
+      {/* Percentage Spent */}
+      <Text style={styles.percentageText}>
+        {progress}% of your budget spent
+      </Text>
+
+      
 
       {Platform.OS === "web" && (
         <input
           type="file"
           accept=".csv"
-          onChange={handleCSVUpload}
+          onChange={(e) => handleCSVUpload(e)}
           style={{ marginVertical: 10 }}
         />
       )}
 
-      
+      {/* Category Buttons */}
+      <View style={styles.categoriesContainer}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          nestedScrollEnabled={true}
+          showsVerticalScrollIndicator={true}
+        >
+          {categories.map((cat, index) => {
+            const color = getCategoryColor(index);
+            const isExpanded = selectedCategory === cat;
 
-      <View style={styles.expensesContainer}>
-        <Text style={styles.sectionTitle}>Expenses</Text>
-        {expenses.map((expense, index) => (
-          <View key={index} style={styles.expenseRow}>
-            <Text>{expense.date}</Text>
-            <Text>{expense.store}</Text>
-            <Text>{expense.amount} kr.</Text>
-          </View>
-        ))}
+            return (
+              <View key={index}>
+                <TouchableOpacity
+                  style={[styles.categoryCard, { backgroundColor: "#e0e0e0" }]}
+                  onPress={() => {
+                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                    setSelectedCategory(isExpanded ? null : cat);
+                  }}
+                >
+                  <View style={[styles.categoryCircle, { backgroundColor: color }]} />
+                  <Text style={styles.categoryCardText}>{cat}</Text>
+                  <Text style={styles.categoryCardAmount}>
+                    {expenses
+                      .filter(e => (cat === "Uncategorized" ? !e.category : e.category === cat))
+                      .reduce((sum, e) => sum + parseFloat(e.amount), 0)
+                      .toFixed(2)}{" "}
+                    kr.
+                  </Text>
+                </TouchableOpacity>
+
+                {isExpanded && (
+                  <View style={styles.expensesList}>
+                    {expenses.filter(e =>
+                      cat === "Uncategorized" ? !e.category : e.category === cat
+                    ).length === 0 ? (
+                      <Text style={styles.noExpensesText}>No expenses yet in this category.</Text>
+                    ) : (
+                      expenses
+                        .filter(e => cat === "Uncategorized" ? !e.category : e.category === cat)
+                        .map((exp, idx) => (
+                          <View key={idx} style={styles.expenseItem}>
+                            <Text style={styles.expenseItemDate}>{exp.date}</Text>
+                            <Text style={styles.expenseItemText}>{exp.store || "Unknown Store"}</Text>
+                            <Text style={styles.expenseItemAmount}>{parseFloat(exp.amount).toFixed(2)} kr.</Text>
+                          </View>
+                        ))
+                    )}
+                  </View>
+                )}
+              </View>
+            );
+          })}
+        </ScrollView>
       </View>
     </ScrollView>
   );
@@ -116,8 +248,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: "#fff",
-    alignItems: "center",
     flexGrow: 1,
+    alignItems: "center",
   },
   title: {
     fontSize: 26,
@@ -131,57 +263,92 @@ const styles = StyleSheet.create({
   progressBarContainer: {
     width: "100%",
     height: 20,
-    backgroundColor: "#ccc",
+    backgroundColor: "#ccc", // Background for unused budget
     borderRadius: 10,
+    flexDirection: "row", // Stack segments horizontally
     overflow: "hidden",
     marginBottom: 20,
   },
-  progressBar: {
+  progressBarSegment: {
     height: "100%",
-    backgroundColor: "#f99",
-    borderRadius: 10,
   },
-  input: {
-    width: "100%",
-    borderColor: "#ccc",
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 8,
+  percentageText: {
+    fontSize: 16,
+    fontWeight: "bold",
     marginBottom: 10,
   },
-  expensesContainer: {
+  categoriesContainer: {
     width: "100%",
-    backgroundColor: "#ffe5e5",
-    padding: 16,
-    borderRadius: 12,
+    marginTop: 10,
+    height: 350, // Set a fixed height for the scrollable area
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 10, // Adds spacing at the bottom
+  },
+  categoryCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#e0e0e0",
+    borderRadius: 40,
+    padding: 10,
+    marginVertical: 6,
+    paddingHorizontal: 16,
+  },
+  categoryCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    marginRight: 12,
+  },
+  categoryCardText: {
+    flex: 1,
+    fontSize: 16,
+  },
+  categoryCardAmount: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  expensesList: {
     marginTop: 20,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  expenseRow: {
+  expenseItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
   },
-  addButton: {
-    backgroundColor: "#f88",
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
+  expenseItemText: {
+    fontSize: 16,
   },
-  addButtonText: {
-    color: "#fff",
+  expenseItemAmount: {
+    fontSize: 16,
     fontWeight: "bold",
   },
+  noExpensesText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "#999",
+    marginTop: 20,
+  },
+  expenseName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 4, // Add spacing below the name
+  },
+  backArrow: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 10,
+  },
   pigImage: {
-    width: 120,
-    height: 120,
-    marginBottom: 10,
-    resizeMode: "contain",
+    marginTop: 50,
+    marginBottom: 20,
+    width: 100,
+    height: 100,
   },
 });
 

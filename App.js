@@ -12,7 +12,8 @@ import MitidScreen from './src/screens/mitidScreen.js';
 import ChoosePigScreen from './src/screens/choosePigScreen.js';
 import ExpensesScreen from './src/screens/expensesScreen.js';
 import PigCategorise from './src/screens/pigCategorise.js';
-
+import AllExpensesOverviewScreen from './src/screens/AllExpensesOverview.js';
+import UncategorisedScreen from './src/screens/UncategorisedScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,8 @@ export default function App() {
         <Stack.Screen name="Overview" component={OverviewScreen} /> 
         <Stack.Screen name="Profile" component={ProfileScreen} /> 
         <Stack.Screen name="PigCategorise" component={PigCategorise} />
+        <Stack.Screen name="AllExpensesOverview" component={AllExpensesOverviewScreen} />
+        <Stack.Screen name="Uncategorised" component={UncategorisedScreen} />
       </Stack.Navigator>
       <ConditionalFooter />
     </NavigationContainer>
