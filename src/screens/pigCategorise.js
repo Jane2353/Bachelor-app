@@ -22,14 +22,10 @@ const PigCategorise = ({ navigation }) => {
         const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
         const uncategorized = storedExpenses.filter(
           (row) =>
-            row.date?.trim() &&
-            row.store?.trim() &&
-            row.amount !== undefined &&
-            row.amount !== null &&
-            (!row.category || String(row.category).trim() === "")
+            !row.category || String(row.category).trim() === ""        
         );
         setExpenses(uncategorized);
-        console.log("Uncategorized Expenses:", uncategorized);
+        console.log("Filtered Uncategorized Expenses:", uncategorized);
       } catch (error) {
         console.error("Error loading expenses from localStorage:", error);
         Alert.alert("Error", "Failed to load expenses.");

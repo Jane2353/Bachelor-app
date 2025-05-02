@@ -43,12 +43,13 @@ const OverviewScreen = () => {
           const date = row.date || row.Date || "";
           const store = row.store || row.Store || "";
           const amount = parseFloat(row.amount || row.Amount || 0);
+          const category = row.category || row.Category || null; // Include category field
   
-          return { date, store, amount };
+          return { date, store, amount, category };
         }).filter(exp => exp.date && exp.store && !isNaN(exp.amount));
   
         if (parsedExpenses.length === 0) {
-          window.alert("CSV does not contain valid expense entries. Make sure it has 'date', 'store', and 'amount' columns.");
+          window.alert("CSV does not contain valid expense entries. Make sure it has 'date', 'store', 'amount', and optionally 'category' columns.");
           return;
         }
   
