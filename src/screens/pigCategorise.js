@@ -17,39 +17,22 @@ const PigCategorise = ({ navigation }) => {
   const [expenses, setExpenses] = useState([]);
 
   useEffect(() => {
-    const loadCSV = async () => {
+    const loadCSV = () => {
       try {
-        const csvPath = `${FileSystem.documentDirectory}expenses.csv`;
-        const response = await fetch(csvPath);
-        const csvContent = await response.text();
-
-        Papa.parse(csvContent, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => {
-            console.log('Parsed Results:', results.data);
-            const uncategorized = results.data
-              .map((row, index) => ({
-                id: row.id || index.toString(),
-                date: row.date,
-                store: row.store,
-                amount: row.amount,
-                category: row.category,
-              }))
-              .filter(
-                (row) =>
-                  row.date?.trim() &&
-                  row.store?.trim() &&
-                  row.amount?.trim() &&
-                  (!row.category || String(row.category).trim() === '')
-              );
-            setExpenses(uncategorized);
-            console.log('Uncategorized Expenses:', uncategorized);
-          },
-        });
+        const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+        const uncategorized = storedExpenses.filter(
+          (row) =>
+            row.date?.trim() &&
+            row.store?.trim() &&
+            row.amount !== undefined &&
+            row.amount !== null &&
+            (!row.category || String(row.category).trim() === "")
+        );
+        setExpenses(uncategorized);
+        console.log("Uncategorized Expenses:", uncategorized);
       } catch (error) {
-        console.error('Error loading CSV:', error);
-        Alert.alert('Error', 'Failed to load expenses.csv');
+        console.error("Error loading expenses from localStorage:", error);
+        Alert.alert("Error", "Failed to load expenses.");
       }
     };
 
@@ -69,22 +52,29 @@ const PigCategorise = ({ navigation }) => {
     'Other',
   ];
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
     const updatedExpenses = expenses.map((expense) => ({
       ...expense,
       category: selectedCategories[expense.id] || expense.category,
     }));
 
-    const csvContent = Papa.unparse(updatedExpenses);
-    const csvPath = `${FileSystem.documentDirectory}expenses.csv`;
-    await FileSystem.writeAsStringAsync(csvPath, csvContent);
+    const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    const mergedExpenses = storedExpenses.map((storedExpense) => {
+      const updatedExpense = updatedExpenses.find(
+        (expense) => expense.id === storedExpense.id
+      );
+      return updatedExpense || storedExpense;
+    });
+
+    localStorage.setItem("expenses", JSON.stringify(mergedExpenses));
 
     const remainingUncategorized = updatedExpenses.filter(
       (row) =>
         row.date?.trim() &&
         row.store?.trim() &&
-        row.amount?.trim() &&
-        (!row.category || String(row.category).trim() === '')
+        row.amount !== undefined &&
+        row.amount !== null &&
+        (!row.category || String(row.category).trim() === "")
     );
 
     setExpenses(remainingUncategorized);
@@ -160,7 +150,7 @@ const PigCategorise = ({ navigation }) => {
           <FlatList
             data={expenses}
             renderItem={renderExpense}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
             contentContainerStyle={{ paddingBottom: 20 }}
           />
         )}
