@@ -12,7 +12,7 @@ import MitidScreen from './src/screens/mitidScreen.js';
 import ChoosePigScreen from './src/screens/choosePigScreen.js';
 import ExpensesScreen from './src/screens/expensesScreen.js';
 import PigCategorise from './src/screens/pigCategorise.js';
-import AllExpensesOverviewScreen from './src/screens/AllExpensesOverview.js';
+import AllExpensesOverviewScreen from './src/screens/allExpensesOverview.js';
 import UncategorisedScreen from './src/screens/UncategorisedScreen.js';
 
 const Stack = createStackNavigator();
