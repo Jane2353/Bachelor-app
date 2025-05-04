@@ -7,8 +7,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getUncategorizedCount, subscribeToUncategorizedCount } from '../utils/globalState';
 
 const DonutChart = ({ percentage, total }) => {
+  const remaining = total - percentage; // Calculate remaining amount
   const data = {
-    data: [percentage / total],
+    data: [remaining / total], // Calculate remaining percentage
   };
 
   return (
@@ -29,9 +30,9 @@ const DonutChart = ({ percentage, total }) => {
         />
       </View>
       <View style={styles.donutChartTextContainer}>
-        <Text style={styles.donutChartPercentage}>{percentage}</Text>
+        <Text style={styles.donutChartPercentage}>{remaining}</Text> {/* Display remaining amount */}
         <View style={styles.donutChartDivider} />
-        <Text style={styles.donutChartTotal}>{total}</Text>
+        <Text style={styles.donutChartTotal}>{total}</Text> {/* Display total */}
       </View>
     </View>
   );
@@ -124,7 +125,7 @@ const PigScreen = () => {
         <Image style={styles.pigIcon} source={pigIcon} />
       </TouchableOpacity>
       <View style={styles.bottomLine} />
-      <DonutChart percentage={PigHappiness} total={100} />
+      <DonutChart percentage={100} total={500} />
     </View>
   );
 };
