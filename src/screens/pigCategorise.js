@@ -9,6 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { setUncategorizedCount } from '../utils/globalState';
 
 // Utility to assign unique IDs
 const generateId = (prefix = 'row', index) => `${prefix}-${index}`;
@@ -32,7 +33,8 @@ const PigCategorise = ({ navigation }) => {
           );
 
         setExpenses(uncategorized);
-        console.log('Filtered Uncategorized Expenses:', uncategorized);
+        setUncategorizedCount(uncategorized.length); // Update global state
+        console.log('Loaded Uncategorized Expenses:', uncategorized.length);
       } catch (error) {
         console.error('Error loading expenses from localStorage:', error);
         Alert.alert('Error', 'Failed to load expenses.');
@@ -81,6 +83,8 @@ const PigCategorise = ({ navigation }) => {
     );
 
     setExpenses(remainingUncategorized);
+    setUncategorizedCount(remainingUncategorized.length); // Update global state
+    console.log('Remaining Uncategorized Expenses:', remainingUncategorized.length);
   };
 
   const renderExpense = ({ item }) => {

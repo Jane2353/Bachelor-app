@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { ProgressChart } from 'react-native-chart-kit';
 import { useNavigation } from '@react-navigation/native';
 import NavigationButtons from '../components/NavigationButtons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { getUncategorizedCount, subscribeToUncategorizedCount } from '../utils/globalState';
 
 const DonutChart = ({ percentage, total }) => {
   const data = {
@@ -68,7 +69,22 @@ const ProgressBar = ({ PigHappiness }) => {
 
 const PigScreen = () => {
   const navigation = useNavigation();
-  const PigHappiness = 80;
+  const [PigHappiness, setPigHappiness] = useState(100); // Track happiness
+
+  useEffect(() => {
+    const updateHappiness = (count) => {
+      const newHappiness = Math.max(0, 100 - count * 10);
+      setPigHappiness(newHappiness);
+      console.log(`Updated PigHappiness: ${newHappiness}, Uncategorized Count: ${count}`);
+    };
+
+    // Initialize happiness based on current uncategorized count
+    updateHappiness(getUncategorizedCount());
+
+    // Subscribe to changes in uncategorized count
+    const unsubscribe = subscribeToUncategorizedCount(updateHappiness);
+    return unsubscribe;
+  }, []);
 
   let pigMessage = '';
   let pigIcon = '';
@@ -86,7 +102,7 @@ const PigScreen = () => {
   }
 
   const handlePigClick = () => {
-    navigation.navigate('PigCategorise'); // Navigate to PigCategorise screen
+    navigation.navigate('PigCategorise'); // Navigate to categorization screen
   };
 
   return (
@@ -108,7 +124,7 @@ const PigScreen = () => {
         <Image style={styles.pigIcon} source={pigIcon} />
       </TouchableOpacity>
       <View style={styles.bottomLine} />
-      <DonutChart percentage={200} total={1000} />
+      <DonutChart percentage={PigHappiness} total={100} />
     </View>
   );
 };

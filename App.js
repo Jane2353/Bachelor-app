@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -14,10 +14,28 @@ import ExpensesScreen from './src/screens/expensesScreen.js';
 import PigCategorise from './src/screens/pigCategorise.js';
 import AllExpensesOverviewScreen from './src/screens/allExpensesOverview.js';
 import UncategorisedScreen from './src/screens/UncategorisedScreen.js';
+import { setUncategorizedCount } from './src/utils/globalState';
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  useEffect(() => {
+    const initializeUncategorizedCount = () => {
+      try {
+        const storedExpenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        const uncategorized = storedExpenses.filter(
+          (row) => !row.category || String(row.category).trim() === ''
+        );
+        setUncategorizedCount(uncategorized.length); // Initialize global state
+        console.log('Initialized Uncategorized Expenses:', uncategorized.length);
+      } catch (error) {
+        console.error('Error initializing uncategorized count:', error);
+      }
+    };
+
+    initializeUncategorizedCount();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
