@@ -9,30 +9,39 @@ import {
   Alert,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import Papa from 'papaparse';
-import * as FileSystem from 'expo-file-system';
+import { setUncategorizedCount } from '../utils/globalState';
+
+// Utility to assign unique IDs
+const generateId = (prefix = 'row', index) => `${prefix}-${index}`;
 
 const PigCategorise = ({ navigation }) => {
   const [selectedCategories, setSelectedCategories] = useState({});
   const [expenses, setExpenses] = useState([]);
 
   useEffect(() => {
-    const loadCSV = () => {
+    const loadExpenses = () => {
       try {
-        const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
-        const uncategorized = storedExpenses.filter(
-          (row) =>
-            !row.category || String(row.category).trim() === ""        
-        );
+        const storedExpenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+        const uncategorized = storedExpenses
+          .map((row, index) => ({
+            ...row,
+            id: row.id || generateId('row', index), // ensure unique id
+          }))
+          .filter(
+            (row) => !row.category || String(row.category).trim() === ''
+          );
+
         setExpenses(uncategorized);
-        console.log("Filtered Uncategorized Expenses:", uncategorized);
+        setUncategorizedCount(uncategorized.length); // Update global state
+        console.log('Loaded Uncategorized Expenses:', uncategorized.length);
       } catch (error) {
-        console.error("Error loading expenses from localStorage:", error);
-        Alert.alert("Error", "Failed to load expenses.");
+        console.error('Error loading expenses from localStorage:', error);
+        Alert.alert('Error', 'Failed to load expenses.');
       }
     };
 
-    loadCSV();
+    loadExpenses();
   }, []);
 
   const categories = [
@@ -54,15 +63,15 @@ const PigCategorise = ({ navigation }) => {
       category: selectedCategories[expense.id] || expense.category,
     }));
 
-    const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
-    const mergedExpenses = storedExpenses.map((storedExpense) => {
-      const updatedExpense = updatedExpenses.find(
-        (expense) => expense.id === storedExpense.id
-      );
+    const storedExpenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+    const mergedExpenses = storedExpenses.map((storedExpense, index) => {
+      const id = storedExpense.id || generateId('row', index);
+      const updatedExpense = updatedExpenses.find((e) => e.id === id);
       return updatedExpense || storedExpense;
     });
 
-    localStorage.setItem("expenses", JSON.stringify(mergedExpenses));
+    localStorage.setItem('expenses', JSON.stringify(mergedExpenses));
 
     const remainingUncategorized = updatedExpenses.filter(
       (row) =>
@@ -70,10 +79,12 @@ const PigCategorise = ({ navigation }) => {
         row.store?.trim() &&
         row.amount !== undefined &&
         row.amount !== null &&
-        (!row.category || String(row.category).trim() === "")
+        (!row.category || String(row.category).trim() === '')
     );
 
     setExpenses(remainingUncategorized);
+    setUncategorizedCount(remainingUncategorized.length); // Update global state
+    console.log('Remaining Uncategorized Expenses:', remainingUncategorized.length);
   };
 
   const renderExpense = ({ item }) => {
@@ -95,7 +106,10 @@ const PigCategorise = ({ navigation }) => {
           <Picker
             selectedValue={selectedCategories[item.id] || ''}
             onValueChange={(value) =>
-              setSelectedCategories((prev) => ({ ...prev, [item.id]: value }))
+              setSelectedCategories((prev) => ({
+                ...prev,
+                [item.id]: value,
+              }))
             }
             style={styles.picker}
           >
@@ -146,7 +160,7 @@ const PigCategorise = ({ navigation }) => {
           <FlatList
             data={expenses}
             renderItem={renderExpense}
-            keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
+            keyExtractor={(item) => item.id.toString()}
             contentContainerStyle={{ paddingBottom: 20 }}
           />
         )}
