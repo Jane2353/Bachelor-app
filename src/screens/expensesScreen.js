@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Image } from "react-native";
 import NextButtonWithDots from "../components/NextButtonWithDots";
 
 const ExpensesScreen = ({ navigation }) => {
@@ -28,11 +28,33 @@ const ExpensesScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      
+      {/* Pig Icon */}
+      <Image
+        source={require('../../assets/Pig/front_smile_transparent.png')}
+        style={styles.pigIcon}
+      />
+      {/* Current Expenses Section */}
+      <Text style={styles.sectionTitle}>
+        Firstly, we need to get an idea of your expenses. By logging in with your bank, we are able to view your transactions and can help identify where and how you spend your money. Please correct the amount, if it is incorrect.
+      </Text>
+            {/* Login to the Bank Section */}
+        <TouchableOpacity style={styles.bankButton} onPress={() => {}}>
+        <Text style={styles.bankButtonText}>Login to the bank</Text>
+      </TouchableOpacity>
+      <View style={styles.currentExpensesContainer}>
+        <ScrollView style={styles.expensesList} nestedScrollEnabled={true}>
+          {expenses.map((expense, index) => (
+            <View key={index} style={styles.expenseRow}>
+              <Text>{expense.store}</Text>
+              <Text>{expense.amount},-</Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
 
       {/* Add Expense Section */}
       <View style={styles.expensesContainer}>
-        <Text style={styles.sectionTitle}>Add Expense</Text>
+        <Text style={styles.expenseTitle}>Add Expense</Text>
         <TextInput
           style={styles.input}
           placeholder="Date (DD-MM)"
@@ -57,8 +79,6 @@ const ExpensesScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      
-
       <NextButtonWithDots
         navigation={navigation}
         nextScreen="PigScreen"
@@ -82,18 +102,33 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
   expensesContainer: {
-    width: "100%",
+    width: "90%",
     backgroundColor: "#ffe5e5",
     padding: 16,
     borderRadius: 12,
-    marginTop: 20,
+    alignSelf: "center",
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
+    color: '#000',
+    lineHeight: 25,
+    paddingHorizontal: '5%',
+    marginBottom: 10,
+  },
+  sectionTitleTwo: {
+    fontSize: 16,
+    color: '#000',
+    marginTop: 8,
+    lineHeight: 25,
+    paddingHorizontal: '5%',
+    marginBottom: 10,
+  },
+  expenseTitle: {
+    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
   },
@@ -116,10 +151,43 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
+  bankButton: {
+    backgroundColor: "#2ECC71",
+    padding: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+    width: '80%',
+    height: '5%',
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  bankButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  currentExpensesContainer: {
+    width: "90%",
+    backgroundColor: "#ffe5e5",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 20,
+    alignSelf: "center",
+  },
+  expensesList: {
+    maxHeight: 100, // Limit the height of the scrollable list
+  },
   expenseRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 4,
+    width: '80%',
+  },
+  pigIcon: {
+    width: 100,
+    height: 100,
+    alignSelf: "center",
+    marginBottom: 10,
   },
 });
 
