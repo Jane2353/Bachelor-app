@@ -33,24 +33,13 @@ const PigShopScreen = () => {
       </Text>
         <View style={styles.line} />
       <View style={styles.itemsContainer}>
-        <ItemBox label="Item 1" onPress={handleItemPress} />
-        <ItemBox label="Item 2" onPress={handleItemPress} icon={require('../../assets/user.png')} />
-        <ItemBox label="Item 3" onPress={handleItemPress} />
-        <ItemBox label="Item 4" onPress={handleItemPress} />
-        <ItemBox label="Item 5" onPress={handleItemPress} />
-        <ItemBox label="Item 6" onPress={handleItemPress} />
-        <ItemBox label="Item 7" onPress={handleItemPress} />
-        <ItemBox label="Item 8" onPress={handleItemPress} />
-        <ItemBox label="Item 9" onPress={handleItemPress} />
-        <ItemBox label="Item 10" onPress={handleItemPress} />
-        <ItemBox label="Item 11" onPress={handleItemPress} />
-        <ItemBox label="Item 12" onPress={handleItemPress} />
+        <ItemBox label="Summer hat" onPress={handleItemPress} icon={require('../../assets/Pig/pigHat.png')} />
       </View>
       <Popup
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        title="Item Selected"
-        message={selectedLabel}
+        title="Summer hat"
+        message="This is a summer hat for your pig. It costs 100 BaconBucks."
         imageSource={selectedIcon}
       />
     </View>
@@ -92,9 +81,10 @@ const styles = StyleSheet.create({
     margin: 5, // lidt luft omkring boksene
   },
   icon: {
-    width: 30,
-    height: 30,
+    width: 100,
+    height: 50,
     marginBottom: 5,
+    resizeMode: 'contain',
   },
   line: {
     width: '80%', 

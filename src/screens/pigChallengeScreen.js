@@ -15,20 +15,16 @@ const ChallengeButton = ({ text, leftIconSource, rightIconSource, points, isClic
 );
 
 const buttonData = [
-  { text: 'Groceries', points: '+30', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+30', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
+  { text: 'Shopping', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
+  { text: 'Hobby', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
+  { text: 'Leisure', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
+  { text: 'Health', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
 ];
 
 const PigChallengeScreen = () => {
   const [clickedButtons, setClickedButtons] = useState(Array(buttonData.length).fill(false));
+  const [isChallengeAccepted, setIsChallengeAccepted] = useState(false); // New state
 
   const handleButtonPress = (index) => {
     const updatedClickedButtons = [...clickedButtons];
@@ -46,34 +42,60 @@ const PigChallengeScreen = () => {
     }, 0);
   };
 
+  const handleAcceptChallenge = () => {
+    setIsChallengeAccepted(true); // Mark challenge as accepted
+    alert('Challenge has now been accepted!');
+  };
+
   return (
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigChallengeScreen" />
       <Text style={styles.textExplanation}>
         Increase the difficulty of your challenge by adding more categories and in turn receieve more BaconBucks!
+        Complete the challenge by spending no money in the selected categorie for a certain time period.
       </Text>
       <View style={styles.challengeContainer}>
-        <ScrollView contentContainerStyle={styles.scrollContent} nestedScrollEnabled={true}>
-          {buttonData.map((button, index) => (
-            <ChallengeButton
-              key={index}
-              text={button.text}
-              points={button.points}
-              leftIconSource={button.leftIconSource}
-              rightIconSource={button.rightIconSource}
-              isClicked={clickedButtons[index]}
-              onPress={() => handleButtonPress(index)}
-            />
-          ))}
-        </ScrollView>
+        {isChallengeAccepted ? (
+          <>
+            <Text style={styles.textAfterAccept}>
+              You have already accepted a challenge: Spend no money on{' '}
+              {buttonData
+                .filter((_, index) => clickedButtons[index])
+                .map((button) => button.text)
+                .join(', ')}.
+            </Text>
+            <Text style={styles.textAfterAccept}>
+              You will receive {calculateBaconBucks()} BaconBucks.
+            </Text>
+            
+          </>
+        ) : (
+          <ScrollView contentContainerStyle={styles.scrollContent} nestedScrollEnabled={true}>
+            {buttonData.map((button, index) => (
+              <ChallengeButton
+                key={index}
+                text={button.text}
+                points={button.points}
+                leftIconSource={button.leftIconSource}
+                rightIconSource={button.rightIconSource}
+                isClicked={clickedButtons[index]}
+                onPress={() => handleButtonPress(index)}
+              />
+            ))}
+          </ScrollView>
+        )}
       </View>
-      <Text style={styles.textExplanation2}>
-        You have selected {clickedButtons.filter((clicked) => clicked).length} categories.
-        {'\n'}You will receive {calculateBaconBucks()} BaconBucks.
-      </Text>
-      <TouchableOpacity style={styles.confirmButton} onPress={() => alert('Challenge has now been accepted!')}>
-        <Text style={styles.challengeButtonText}>Accept challenge</Text>
-      </TouchableOpacity>
+      {!isChallengeAccepted && (
+        <>
+          <Text style={styles.textExplanation2}>
+            You have selected {clickedButtons.filter((clicked) => clicked).length} categories.
+            {'\n'}You will receive {calculateBaconBucks()} BaconBucks.
+          </Text>
+          <TouchableOpacity style={styles.confirmButton} onPress={handleAcceptChallenge}>
+            <Text style={styles.challengeButtonText}>Accept challenge</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -85,17 +107,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   textExplanation: {
-    marginTop: '10%',
-    fontSize: 18,
+    marginTop: '5%',
+    fontSize: 16,
     colour: 'black',
     width: '80%',
   },
   textExplanation2: {
     marginTop: '5%',
-    fontSize: 18,
+    fontSize: 16,
     colour: 'black',
     width: '80%',
     textAlign: 'center',
+  },
+  textAfterAccept: {
+    marginTop: '5%',
+    fontSize: 16,
+    colour: 'black',
+    width: '80%',
+    textAlign: 'center',
+    alignSelf: 'center',
   },
   challengeContainer: {
     marginTop: '5%',
@@ -128,7 +158,6 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     resizeMode: 'contain',
-    tintColor: 'black',
   },
   confirmButton: {
     backgroundColor: '#E97171',

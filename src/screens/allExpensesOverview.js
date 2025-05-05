@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image, TextInput, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const AllExpensesOverviewScreen = () => {
@@ -8,7 +8,7 @@ const AllExpensesOverviewScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-// Fetch expenses and budget from localStorage on mount
+    // Fetch expenses and budget from localStorage on mount
     const fetchExpensesAndBudget = () => {
       try {
         const data = localStorage.getItem('expenses');
@@ -41,7 +41,7 @@ const AllExpensesOverviewScreen = () => {
   }, []);
 
   useEffect(() => {
-// Save totalBudget to localStorage whenever it changes
+    // Save totalBudget to localStorage whenever it changes
     localStorage.setItem('totalBudget', totalBudget);
   }, [totalBudget]);
 
@@ -51,6 +51,12 @@ const AllExpensesOverviewScreen = () => {
     <ScrollView 
     contentContainerStyle={styles.container}>
       <Image source={require('../../assets/Pig/front_smile.png')} style={styles.piggyImage} />
+
+      {/* Title and Subtitle */}
+      <Text style={styles.title}>Overview</Text>
+      <Text style={styles.subtitle}>
+        You spent {totalSpent.toFixed(2)} kr. out of {totalBudget} kr.
+      </Text>
 
       {/* Progress Bar for Shown Expenses */}
       <View style={styles.progressBarContainer}>
@@ -66,28 +72,38 @@ const AllExpensesOverviewScreen = () => {
       </Text>
 
       {/* Input to Update Total Budget */}
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Enter total budget"
-        value={totalBudget.toString()}
-        onChangeText={(text) => setTotalBudget(Number(text))}
-      />
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          placeholder="Enter total budget"
+          value={totalBudget.toString()}
+          onChangeText={(text) => setTotalBudget(Number(text))}
+        />
+        {Platform.OS === "web" && (
+          <input
+            type="file"
+            accept=".csv"
+            onChange={(e) => handleCSVUpload(e)}
+            style={styles.fileInput} // Style for positioning
+          />
+        )}
+      </View>
 
       {/* Category and Expenses buttons */}
       <View style={styles.buttonRow}>
-        <TouchableOpacity 
-          style={styles.categoryButton}
-          onPress={() => navigation.navigate('Uncategorised')}
-        >
-          <Text style={styles.categoryButtonText}>Category</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity 
           style={styles.expensesButton}
           onPress={() => navigation.navigate('Overview')}
         >
           <Text style={styles.expensesButtonText}>Expenses</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.categoryButton}
+          onPress={() => navigation.navigate('Overview')} 
+        >
+          <Text style={styles.categoryButtonText}>Category</Text>
         </TouchableOpacity>
       </View>
 
@@ -126,15 +142,25 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     alignSelf: 'center',
-    marginBottom: 10,
+    marginTop: 50,
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+  subtitle: {
+    fontSize: 16,
+    marginBottom: 20,
   },
   progressBarContainer: {
     width: "100%",
-    height: 20,
+    height: 30, // Increased height of the progress bar
     backgroundColor: "#ccc",
     borderRadius: 10,
     overflow: "hidden",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   progressBar: {
     height: "100%",
@@ -146,13 +172,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center', // Center the inputs
+    marginBottom: 20,
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    padding: 10,
-    marginBottom: 20,
+    padding: 8, // Reduced padding for smaller size
     textAlign: 'center',
+    width: 100, // Smaller width
+    marginRight: 10, // Space between TextInput and file input
+  },
+  fileInput: {
+    fontSize: 12, // Smaller font size
   },
   buttonRow: {
     flexDirection: 'row',
@@ -165,7 +201,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 20,
-    marginRight: 10,
+    marginLeft: 10, 
   },
   categoryButtonText: {
     fontWeight: 'bold',

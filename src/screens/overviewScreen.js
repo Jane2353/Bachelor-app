@@ -6,11 +6,11 @@ import Papa from "papaparse";
 
 // Category colors
 const categoryColors = [
-  "#FFB3B3", // Light Red
-  "#FFCC99", // Light Orange
-  "#FFFF99", // Light Yellow
-  "#B3FFB3", // Light Green
-  "#B3E5FF", // Light Blue
+  "#E97171", // Light Red
+  "#FFE895", // Light Orange
+  "#2ECC71", // Light Yellow
+  "#FFB2B2", // Light Green
+  "#AFDD87", // Light Blue
   "#D1B3FF", // Light Purple
   "#FFB3E6", // Light Pink
 ];
@@ -174,16 +174,24 @@ const OverviewScreen = ({ navigation }) => {
         {progress}% of your budget spent
       </Text>
 
-      
+      <View style={styles.buttonSpacing} /> {/* Add space above the buttons */}
 
-      {Platform.OS === "web" && (
-        <input
-          type="file"
-          accept=".csv"
-          onChange={(e) => handleCSVUpload(e)}
-          style={{ marginVertical: 10 }}
-        />
-      )}
+      {/* Add Expenses and Category buttons */}
+      <View style={styles.buttonRow}>
+        <TouchableOpacity 
+          style={styles.categoryButton}
+          onPress={() => navigation.navigate('AllExpensesOverview')}
+        >
+          <Text style={styles.expensesButtonText}>Expenses</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.expensesButton}
+          onPress={() => navigation.navigate('Overview')}
+        >
+          <Text style={styles.categoryButtonText}>Category</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Category Buttons */}
       <View style={styles.categoriesContainer}>
@@ -262,12 +270,12 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     width: "100%",
-    height: 20,
+    height: 30, // Increased height of the progress bar
     backgroundColor: "#ccc", // Background for unused budget
     borderRadius: 10,
     flexDirection: "row", // Stack segments horizontally
     overflow: "hidden",
-    marginBottom: 20,
+    marginBottom: 15,
   },
   progressBarSegment: {
     height: "100%",
@@ -349,6 +357,37 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: 100,
     height: 100,
+  },
+  buttonSpacing: {
+    marginTop: 20, // Space above the buttons
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  categoryButton: {
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 20,
+    marginLeft: 10,
+    marginRight: 10, 
+  },
+  categoryButtonText: {
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  expensesButton: {
+    backgroundColor: 'black',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 20,
+  },
+  expensesButtonText: {
+    fontWeight: 'bold',
+    color: 'black',
   },
 });
 

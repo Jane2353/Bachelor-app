@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import { ProgressChart } from 'react-native-chart-kit';
 import { useNavigation } from '@react-navigation/native';
 import NavigationButtons from '../components/NavigationButtons';
@@ -71,11 +71,14 @@ const ProgressBar = ({ PigHappiness }) => {
 const PigScreen = () => {
   const navigation = useNavigation();
   const [PigHappiness, setPigHappiness] = useState(100); // Track happiness
+  const [hasUncategorizedExpenses, setHasUncategorizedExpenses] = useState(false); // Track uncategorized expenses
+  const animation = useRef(new Animated.Value(1)).current; // Initialize animation value
 
   useEffect(() => {
     const updateHappiness = (count) => {
       const newHappiness = Math.max(0, 100 - count * 10);
       setPigHappiness(newHappiness);
+      setHasUncategorizedExpenses(count > 0); // Update state based on uncategorized count
       console.log(`Updated PigHappiness: ${newHappiness}, Uncategorized Count: ${count}`);
     };
 
@@ -86,6 +89,29 @@ const PigScreen = () => {
     const unsubscribe = subscribeToUncategorizedCount(updateHappiness);
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (hasUncategorizedExpenses) {
+      const startPulsating = () => {
+        Animated.loop(
+          Animated.sequence([
+            Animated.timing(animation, {
+              toValue: 1.2, // Scale up
+              duration: 500,
+              useNativeDriver: true,
+            }),
+            Animated.timing(animation, {
+              toValue: 1, // Scale back down
+              duration: 500,
+              useNativeDriver: true,
+            }),
+          ])
+        ).start();
+      };
+
+      startPulsating();
+    }
+  }, [animation, hasUncategorizedExpenses]);
 
   let pigMessage = '';
   let pigIcon = '';
@@ -117,7 +143,12 @@ const PigScreen = () => {
         <Text style={styles.speechBubbleText}>{pigMessage}</Text>
         <View style={styles.speechBubbleTail} />
       </View>
-      <Image style={styles.clickIcon} source={clickIcon} />
+      {hasUncategorizedExpenses && ( // Conditionally render clickIcon
+        <Animated.Image
+          style={[styles.clickIcon, { transform: [{ scale: animation }] }]} // Apply animation
+          source={clickIcon}
+        />
+      )}
       <TouchableOpacity 
         onPress={handlePigClick} 
         style={styles.pigTouchable}
