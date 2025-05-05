@@ -175,20 +175,20 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center', // Center the inputs
     marginBottom: 20,
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    padding: 10,
-    marginBottom: 20,
+    padding: 8, // Reduced padding for smaller size
     textAlign: 'center',
-    flex: 1, // Allow TextInput to grow
+    width: 100, // Smaller width
+    marginRight: 10, // Space between TextInput and file input
   },
   fileInput: {
-    marginLeft: 10, // Space between the textbox and file input
+    fontSize: 12, // Smaller font size
   },
   buttonRow: {
     flexDirection: 'row',
