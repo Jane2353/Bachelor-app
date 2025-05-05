@@ -15,16 +15,11 @@ const ChallengeButton = ({ text, leftIconSource, rightIconSource, points, isClic
 );
 
 const buttonData = [
-  { text: 'Groceries', points: '+30', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
-  { text: 'Groceries', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/user.png') },
+  { text: 'Groceries', points: '+30', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
+  { text: 'Shopping', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
+  { text: 'Hobby', points: '+10', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
+  { text: 'Leisure', points: '+20', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
+  { text: 'Health', points: '+50', leftIconSource: require('../../assets/user.png'), rightIconSource: require('../../assets/bacon.png') },
 ];
 
 const PigChallengeScreen = () => {
@@ -128,7 +123,6 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     resizeMode: 'contain',
-    tintColor: 'black',
   },
   confirmButton: {
     backgroundColor: '#E97171',
