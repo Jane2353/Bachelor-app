@@ -6,7 +6,7 @@ const NextButtonWithDots = ({ navigation, nextScreen, activeDotIndex }) => {
     <View style={styles.container}>
       {/* Pagination Dots */}
       <View style={styles.pagination}>
-        {[0, 1, 2].map((index) => (
+        {[0, 1, 2, 3].map((index) => (
           <View
             key={index}
             style={[
