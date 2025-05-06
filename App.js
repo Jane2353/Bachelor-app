@@ -13,6 +13,11 @@ import ChoosePigScreen from './src/screens/choosePigScreen.js';
 import ExpensesScreen from './src/screens/expensesScreen.js';
 import AllExpensesOverviewScreen from './src/screens/AllExpensesOverview.js';
 import UncategorisedScreen from './src/screens/UncategorisedScreen.js';
+<<<<<<< Updated upstream
+=======
+import { setUncategorizedCount } from './src/utils/globalState';
+import DisposableIncome from './src/screens/MonthlyDisposableIncome.js';
+>>>>>>> Stashed changes
 
 const Stack = createStackNavigator();
 
@@ -22,6 +27,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={MitidScreen} />
         <Stack.Screen name="choosePigScreen" component={ChoosePigScreen} />
+        <Stack.Screen name="MonthlyDisposableIncome" component={DisposableIncome} />
         <Stack.Screen name="ExpensesScreen" component={ExpensesScreen} />
         <Stack.Screen name="PigScreen" component={PigScreen} />
         <Stack.Screen name="PigChallengeScreen" component={PigChallengeScreen} />
