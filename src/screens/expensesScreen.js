@@ -81,7 +81,7 @@ const ExpensesScreen = ({ navigation }) => {
 
       <NextButtonWithDots
         navigation={navigation}
-        nextScreen="PigScreen"
+        nextScreen="MonthlyDisposableIncome"
         activeDotIndex={2}
       />
     </ScrollView>

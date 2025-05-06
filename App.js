@@ -15,6 +15,7 @@ import PigCategorise from './src/screens/pigCategorise.js';
 import AllExpensesOverviewScreen from './src/screens/allExpensesOverview.js';
 import UncategorisedScreen from './src/screens/UncategorisedScreen.js';
 import { setUncategorizedCount } from './src/utils/globalState';
+import DisposableIncome from './src/screens/MonthlyDisposableIncome.js';
 
 const Stack = createStackNavigator();
 
@@ -42,6 +43,7 @@ export default function App() {
         <Stack.Screen name="Login" component={MitidScreen} />
         <Stack.Screen name="choosePigScreen" component={ChoosePigScreen} />
         <Stack.Screen name="ExpensesScreen" component={ExpensesScreen} />
+        <Stack.Screen name="MonthlyDisposableIncome" component={DisposableIncome} />
         <Stack.Screen name="PigScreen" component={PigScreen} />
         <Stack.Screen name="PigChallengeScreen" component={PigChallengeScreen} />
         <Stack.Screen name="PigShopScreen" component={PigShopScreen} /> 

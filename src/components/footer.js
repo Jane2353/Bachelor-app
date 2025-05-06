@@ -34,7 +34,7 @@ export const ConditionalFooter = () => {
   if (!state) return null;
 
   const currentRouteName = state.routes[state.index].name;
-  if (currentRouteName === 'Login' || currentRouteName === 'choosePigScreen' || currentRouteName === 'ExpensesScreen') return null; 
+  if (currentRouteName === 'Login' || currentRouteName === 'choosePigScreen' || currentRouteName === 'ExpensesScreen' || currentRouteName === 'MonthlyDisposableIncome') return null; 
 
   return <Footer />;
 };

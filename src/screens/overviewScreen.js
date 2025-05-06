@@ -55,17 +55,13 @@ const OverviewScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    // Load totalBudget from localStorage on mount
-    const storedBudget = localStorage.getItem("totalBudget");
+    const storedBudget = localStorage.getItem('totalBudget'); // Retrieve totalBudget
     if (storedBudget) {
-      setTotalBudget(parseFloat(storedBudget));
+      setTotalBudget(parseFloat(storedBudget)); // Set totalBudget from localStorage
     }
   }, []);
 
-  useEffect(() => {
-    // Save totalBudget to localStorage whenever it changes
-    localStorage.setItem("totalBudget", totalBudget);
-  }, [totalBudget]);
+ 
 
   // Save to localStorage on changes
   useEffect(() => {
