@@ -8,6 +8,13 @@ const AllExpensesOverviewScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    const storedBudget = localStorage.getItem('totalBudget'); // Retrieve totalBudget
+    if (storedBudget) {
+      setTotalBudget(parseFloat(storedBudget)); // Set totalBudget from localStorage
+    }
+  }, []);
+
+  useEffect(() => {
     // Fetch expenses and budget from localStorage on mount
     const fetchExpensesAndBudget = () => {
       try {
@@ -71,24 +78,7 @@ const AllExpensesOverviewScreen = () => {
         {((totalSpent / totalBudget) * 100).toFixed(1)}% of your budget spent
       </Text>
 
-      {/* Input to Update Total Budget */}
-      <View style={styles.inputRow}>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          placeholder="Enter total budget"
-          value={totalBudget.toString()}
-          onChangeText={(text) => setTotalBudget(Number(text))}
-        />
-        {Platform.OS === "web" && (
-          <input
-            type="file"
-            accept=".csv"
-            onChange={(e) => handleCSVUpload(e)}
-            style={styles.fileInput} // Style for positioning
-          />
-        )}
-      </View>
+    
 
       {/* Category and Expenses buttons */}
       <View style={styles.buttonRow}>

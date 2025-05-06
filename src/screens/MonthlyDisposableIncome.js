@@ -75,8 +75,9 @@ const DisposableIncome = ({ navigation }) => {
   const disposableIncome = totalIncome - totalFixed;
 
   useEffect(() => {
-    const disposableIncome = totalIncome - totalFixed; // Replace with your calculation logic
+    const disposableIncome = totalIncome - totalFixed; // Calculate disposable income
     localStorage.setItem('disposableIncome', disposableIncome.toString());
+    localStorage.setItem('totalBudget', disposableIncome.toString()); // Save as totalBudget
   }, [totalIncome, totalFixed]); // Update whenever income or expenses change
 
   return (
