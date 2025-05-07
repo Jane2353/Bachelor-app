@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Image } from "react-native";
+import Papa from "papaparse"; // Import PapaParse for CSV parsing
 import NextButtonWithDots from "../components/NextButtonWithDots";
 
 const ExpensesScreen = ({ navigation }) => {
@@ -26,6 +27,39 @@ const ExpensesScreen = ({ navigation }) => {
     }
   };
 
+  const handleCSVUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          const parsedExpenses = results.data.map(row => ({
+            date: row.date || "",
+            store: row.store || "Unknown Store",
+            amount: parseFloat(row.amount) || 0,
+            category: row.category || "Uncategorized", // Default to "Uncategorized" if missing
+          }));
+
+          // Simple validation
+          const invalidRows = parsedExpenses.filter(
+            e => !e.date || !e.store || isNaN(e.amount)
+          );
+          if (invalidRows.length > 0) {
+            alert("CSV upload failed: Some rows have missing required fields.");
+            return;
+          }
+
+          setExpenses([...parsedExpenses, ...expenses]);
+        },
+        error: (error) => {
+          alert("Failed to parse CSV file.");
+          console.error(error);
+        }
+      });
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Pig Icon */}
@@ -37,10 +71,22 @@ const ExpensesScreen = ({ navigation }) => {
       <Text style={styles.sectionTitle}>
         Firstly, we need to get an idea of your expenses. By logging in with your bank, we are able to view your transactions and can help identify where and how you spend your money. Please correct the amount, if it is incorrect.
       </Text>
-            {/* Login to the Bank Section */}
-        <TouchableOpacity style={styles.bankButton} onPress={() => {}}>
+      {/* Login to the Bank Section */}
+      <TouchableOpacity style={styles.bankButton} onPress={() => {}}>
         <Text style={styles.bankButtonText}>Login to the bank</Text>
       </TouchableOpacity>
+
+      {/* CSV Upload Button */}
+      <TouchableOpacity style={styles.csvButton}>
+        <input
+          type="file"
+          accept=".csv"
+          style={styles.csvInput}
+          onChange={handleCSVUpload}
+        />
+        <Text style={styles.csvButtonText}>Upload CSV</Text>
+      </TouchableOpacity>
+
       <View style={styles.currentExpensesContainer}>
         <ScrollView style={styles.expensesList} nestedScrollEnabled={true}>
           {expenses.map((expense, index) => (
@@ -119,14 +165,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
     marginBottom: 10,
   },
-  sectionTitleTwo: {
-    fontSize: 16,
-    color: '#000',
-    marginTop: 8,
-    lineHeight: 25,
-    paddingHorizontal: '5%',
-    marginBottom: 10,
-  },
   expenseTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -164,6 +202,22 @@ const styles = StyleSheet.create({
   },
   bankButtonText: {
     color: 'white',
+    fontSize: 16,
+  },
+  csvButton: {
+    backgroundColor: "#4CAF50",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+    width: '80%',
+    alignSelf: 'center',
+  },
+  csvInput: {
+    display: "none", // Hide the input element
+  },
+  csvButtonText: {
+    color: "white",
     fontSize: 16,
   },
   currentExpensesContainer: {
