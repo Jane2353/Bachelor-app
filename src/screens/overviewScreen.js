@@ -73,39 +73,7 @@ const OverviewScreen = ({ navigation }) => {
 
   const progress = ((totalSpent / totalBudget) * 100).toFixed(1);
 
-  const handleCSVUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          const parsedExpenses = results.data.map(row => ({
-            date: row.date || "",
-            store: row.store || "Unknown Store",
-            amount: parseFloat(row.amount) || 0,
-            category: row.category || "Uncategorized", // Default to "Uncategorized" if missing
-            recurring: row.recurring === "true"
-          }));
-
-          // Simple validation
-          const invalidRows = parsedExpenses.filter(
-            e => !e.date || !e.store || isNaN(e.amount)
-          );
-          if (invalidRows.length > 0) {
-            alert("CSV upload failed: Some rows have missing required fields.");
-            return;
-          }
-
-          setExpenses(parsedExpenses);
-        },
-        error: (error) => {
-          alert("Failed to parse CSV file.");
-          console.error(error);
-        }
-      });
-    }
-  };
+  
 
   const filteredExpenses = selectedCategory === "All"
     ? expenses
