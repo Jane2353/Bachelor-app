@@ -30,8 +30,12 @@ const NextButtonWithDots = ({ navigation, nextScreen, activeDotIndex }) => {
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    bottom: 30, 
+    left: 0,
+    right: 0,
     alignItems: 'center',
-    marginBottom: 30, // Consistent spacing from the bottom
+    justifyContent: 'flex-end',
   },
   pagination: {
     flexDirection: 'row',
