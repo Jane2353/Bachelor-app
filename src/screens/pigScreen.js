@@ -72,7 +72,16 @@ const PigScreen = () => {
   const navigation = useNavigation();
   const [PigHappiness, setPigHappiness] = useState(100); // Track happiness
   const [hasUncategorizedExpenses, setHasUncategorizedExpenses] = useState(false); // Track uncategorized expenses
+  const [totalBudget, setTotalBudget] = useState(0); // Track totalBudget
   const animation = useRef(new Animated.Value(1)).current; // Initialize animation value
+
+  useEffect(() => {
+    // Retrieve totalBudget from localStorage
+    const storedBudget = localStorage.getItem('totalBudget');
+    if (storedBudget) {
+      setTotalBudget(parseFloat(storedBudget));
+    }
+  }, []);
 
   useEffect(() => {
     const updateHappiness = (count) => {
@@ -156,7 +165,7 @@ const PigScreen = () => {
         <Image style={styles.pigIcon} source={pigIcon} />
       </TouchableOpacity>
       <View style={styles.bottomLine} />
-      <DonutChart percentage={100} total={500} />
+      <DonutChart percentage={100} total={totalBudget} /> {/* Pass totalBudget */}
     </View>
   );
 };
