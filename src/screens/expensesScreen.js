@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Image } from "react-native";
 import Papa from "papaparse"; // Import PapaParse for CSV parsing
 import NextButtonWithDots from "../components/NextButtonWithDots";
@@ -6,6 +6,7 @@ import NextButtonWithDots from "../components/NextButtonWithDots";
 const ExpensesScreen = ({ navigation }) => {
   const [expenses, setExpenses] = useState([]);
   const [newExpense, setNewExpense] = useState({ date: "", store: "", amount: "" });
+  const fileInputRef = useRef(null); // Create a ref for the file input
 
   useEffect(() => {
     const storedExpenses = JSON.parse(localStorage.getItem("expenses"));
@@ -34,7 +35,7 @@ const ExpensesScreen = ({ navigation }) => {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-          const parsedExpenses = results.data.map(row => ({
+          const parsedExpenses = results.data.map((row) => ({
             date: row.date || "",
             store: row.store || "Unknown Store",
             amount: parseFloat(row.amount) || 0,
@@ -43,19 +44,26 @@ const ExpensesScreen = ({ navigation }) => {
 
           // Simple validation
           const invalidRows = parsedExpenses.filter(
-            e => !e.date || !e.store || isNaN(e.amount)
+            (e) => !e.date || !e.store || isNaN(e.amount)
           );
           if (invalidRows.length > 0) {
             alert("CSV upload failed: Some rows have missing required fields.");
             return;
           }
 
-          setExpenses([...parsedExpenses, ...expenses]);
+          // Clear previous data in localStorage
+          localStorage.removeItem("expenses");
+
+          // Save the new data to localStorage
+          localStorage.setItem("expenses", JSON.stringify(parsedExpenses));
+
+          // Update the state with the new expenses
+          setExpenses(parsedExpenses);
         },
         error: (error) => {
           alert("Failed to parse CSV file.");
           console.error(error);
-        }
+        },
       });
     }
   };
@@ -77,15 +85,19 @@ const ExpensesScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       {/* CSV Upload Button */}
-      <TouchableOpacity style={styles.csvButton}>
-        <input
-          type="file"
-          accept=".csv"
-          style={styles.csvInput}
-          onChange={handleCSVUpload}
-        />
+      <TouchableOpacity
+        style={styles.csvButton}
+        onPress={() => fileInputRef.current.click()} // Trigger the file input
+      >
         <Text style={styles.csvButtonText}>Upload CSV</Text>
       </TouchableOpacity>
+      <input
+        ref={fileInputRef} // Attach the ref to the input
+        type="file"
+        accept=".csv"
+        style={styles.csvInput} // Keep it hidden
+        onChange={handleCSVUpload}
+      />
 
       <View style={styles.currentExpensesContainer}>
         <ScrollView style={styles.expensesList} nestedScrollEnabled={true}>
@@ -214,7 +226,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   csvInput: {
-    display: "none", // Hide the input element
+    display: "none", // Keep the input hidden
   },
   csvButtonText: {
     color: "white",
