@@ -81,89 +81,93 @@ const DisposableIncome = ({ navigation }) => {
   }, [totalIncome, totalFixed]); // Update whenever income or expenses change
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require("../../assets/Pig/front_smile.png")} style={styles.piggy} />
+    <View style={styles.wrapper}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Image source={require("../../assets/Pig/front_smile.png")} style={styles.piggy} />
 
-      <Text style={styles.message}>
-        We have located your monthly income {""}
-        and fixed expenses. Please correct {""}
-        them if they are wrong.
-      </Text>
+        <Text style={styles.message}>
+          We have located your monthly income {""}
+          and fixed expenses. Please correct {""}
+          them if they are wrong.
+        </Text>
 
-      <View style={styles.sectionGreen}>
-        <Text style={styles.sectionTitle}>Income</Text>
-        {incomeItems.map((item, index) => (
-          <View key={index} style={styles.row}>
-            <TextInput
-              value={item.name}
-              onChangeText={(text) => handleIncomeChange(index, "name", text)}
-              style={styles.inputName}
-            />
-            <TextInput
-              value={item.amount.toString()}
-              onChangeText={(text) => handleIncomeChange(index, "amount", text)}
-              keyboardType="numeric"
-              style={styles.inputAmount}
-            />
-            <TouchableOpacity onPress={() => removeIncome(index)}>
-              <Text style={styles.remove}>✕</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-        <TouchableOpacity onPress={addIncome} style={styles.addButton}>
-          <Text style={styles.addText}>+ Add Income</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.sectionGreen}>
+          <Text style={styles.sectionTitle}>Income</Text>
+          {incomeItems.map((item, index) => (
+            <View key={index} style={styles.row}>
+              <TextInput
+                value={item.name}
+                onChangeText={(text) => handleIncomeChange(index, "name", text)}
+                style={styles.inputName}
+              />
+              <TextInput
+                value={item.amount.toString()}
+                onChangeText={(text) => handleIncomeChange(index, "amount", text)}
+                keyboardType="numeric"
+                style={styles.inputAmount}
+              />
+              <TouchableOpacity onPress={() => removeIncome(index)}>
+                <Text style={styles.remove}>✕</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+          <TouchableOpacity onPress={addIncome} style={styles.addButton}>
+            <Text style={styles.addText}>+ Add Income</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.sectionRed}>
-        <Text style={styles.sectionTitle}>Fixed expenses</Text>
-        {fixedExpenses.map((item, index) => (
-          <View key={index} style={styles.row}>
-            <TextInput
-              value={item.name}
-              onChangeText={(text) => handleExpenseChange(index, "name", text)}
-              style={styles.inputName}
-            />
-            <TextInput
-              value={item.amount.toString()}
-              onChangeText={(text) => handleExpenseChange(index, "amount", text)}
-              keyboardType="numeric"
-              style={styles.inputAmount}
-            />
-            <TouchableOpacity onPress={() => removeExpense(index)}>
-              <Text style={styles.remove}>✕</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-        <TouchableOpacity onPress={addExpense} style={styles.addButton}>
-          <Text style={styles.addText}>+ Add Expense</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.sectionRed}>
+          <Text style={styles.sectionTitle}>Fixed expenses</Text>
+          {fixedExpenses.map((item, index) => (
+            <View key={index} style={styles.row}>
+              <TextInput
+                value={item.name}
+                onChangeText={(text) => handleExpenseChange(index, "name", text)}
+                style={styles.inputName}
+              />
+              <TextInput
+                value={item.amount.toString()}
+                onChangeText={(text) => handleExpenseChange(index, "amount", text)}
+                keyboardType="numeric"
+                style={styles.inputAmount}
+              />
+              <TouchableOpacity onPress={() => removeExpense(index)}>
+                <Text style={styles.remove}>✕</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+          <TouchableOpacity onPress={addExpense} style={styles.addButton}>
+            <Text style={styles.addText}>+ Add Expense</Text>
+          </TouchableOpacity>
+        </View>
 
-      <Text style={styles.summaryText}>
-        Through calculations we can see that {""}
-        your average monthly disposable income is as {""}
-        follows:
-      </Text>
-      <TextInput
-        style={styles.readonlyField}
-        value={disposableIncome.toString()}
-        editable={false}
-      />
-
-          
+        <Text style={styles.summaryText}>
+          Through calculations we can see that {""}
+          your average monthly disposable income is as {""}
+          follows:
+        </Text>
+        <TextInput
+          style={styles.readonlyField}
+          value={disposableIncome.toString()}
+          editable={false}
+        />
+      </ScrollView>
 
       <NextButtonWithDots
         navigation={navigation}
         nextScreen="PigScreen"
         activeDotIndex={3}
       />
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   container: {
+    flexGrow: 1,
     alignItems: "center",
     padding: 20,
     backgroundColor: "#fff",
