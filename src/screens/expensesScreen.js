@@ -69,7 +69,7 @@ const ExpensesScreen = ({ navigation }) => {
       />
       {/* Current Expenses Section */}
       <Text style={styles.sectionTitle}>
-        Firstly, we need to get an idea of your expenses. By logging in with your bank, we are able to view your transactions and can help identify where and how you spend your money. Please correct the amount, if it is incorrect.
+        Firstly, we need to get an idea of your expenses. By logging in with your bank, we are able to view your transactions and can help identify where and how you spend your money. 
       </Text>
       {/* Login to the Bank Section */}
       <TouchableOpacity style={styles.bankButton} onPress={() => {}}>
@@ -86,17 +86,6 @@ const ExpensesScreen = ({ navigation }) => {
         />
         <Text style={styles.csvButtonText}>Upload CSV</Text>
       </TouchableOpacity>
-
-      <View style={styles.currentExpensesContainer}>
-        <ScrollView style={styles.expensesList} nestedScrollEnabled={true}>
-          {expenses.map((expense, index) => (
-            <View key={index} style={styles.expenseRow}>
-              <Text>{expense.store}</Text>
-              <Text>{expense.amount},-</Text>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
 
       {/* Add Expense Section */}
       <View style={styles.expensesContainer}>
@@ -138,7 +127,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: "#fff",
-    justifyContent: "space-between",
     padding: 20,
   },
   content: {
@@ -195,6 +183,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginBottom: 20,
+    marginTop: 10,
     width: '80%',
     height: '5%',
     alignSelf: 'center',
