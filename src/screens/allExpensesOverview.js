@@ -10,6 +10,7 @@ import {
   Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import ExpensesNavigation from "../components/expensesNavigation";
 
 const AllExpensesOverviewScreen = () => {
   const [expenses, setExpenses] = useState([]);
@@ -89,22 +90,8 @@ const AllExpensesOverviewScreen = () => {
         {((totalSpent / totalBudget) * 100).toFixed(1)}% of your budget spent
       </Text>
 
-      {/* Category and Expenses buttons */}
-      <View style={styles.buttonRow}>
-        <TouchableOpacity
-          style={styles.expensesButton}
-          onPress={() => navigation.navigate("Overview")}
-        >
-          <Text style={styles.expensesButtonText}>Expenses</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.categoryButton}
-          onPress={() => navigation.navigate("Overview")}
-        >
-          <Text style={styles.categoryButtonText}>Category</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Navigation Component */}
+      <ExpensesNavigation activeScreen="AllExpensesOverview" />
 
       {/* Expenses list */}
       <View style={styles.expensesListContainer}>
@@ -197,14 +184,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 10,
+    alignItems: "center",
+    gap: 10,
   },
   categoryButton: {
     borderColor: "black",
     borderWidth: 1,
     borderRadius: 20,
     paddingVertical: 6,
-    paddingHorizontal: 20,
     marginLeft: 10,
+    marginRight: 10,
+    alignItems: "center",
+    width: 120,
+    position: "relative",
   },
   categoryButtonText: {
     fontWeight: "bold",
@@ -214,7 +206,9 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     borderRadius: 20,
     paddingVertical: 6,
-    paddingHorizontal: 20,
+    width: 120,
+    alignItems: "center",
+    position: "relative",
   },
   expensesButtonText: {
     fontWeight: "bold",

@@ -13,6 +13,7 @@ import {
 import Icon from "react-native-vector-icons/Ionicons"; // Import the icon library
 import Popup from "../components/popup";
 import Papa from "papaparse";
+import ExpensesNavigation from "../components/expensesNavigation";
 
 // Category colors
 const categoryColors = [
@@ -123,13 +124,6 @@ const OverviewScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Back Arrow */}
-      <TouchableOpacity
-        style={styles.backArrow}
-        onPress={() => navigation.navigate("AllExpensesOverview")} // Navigate back to the previous screen
-      >
-        <Icon name="arrow-back" size={24} color="#000" />
-      </TouchableOpacity>
       <Image
         source={require("../../assets/Pig/front_smile.png")}
         style={styles.pigImage}
@@ -156,22 +150,7 @@ const OverviewScreen = ({ navigation }) => {
       <Text style={styles.percentageText}>
         {progress}% of your budget spent
       </Text>
-      <View style={styles.buttonSpacing} />
-      <View style={styles.buttonRow}>
-        <TouchableOpacity
-          style={styles.categoryButton}
-          onPress={() => navigation.navigate("AllExpensesOverview")}
-        >
-          <Text style={styles.expensesButtonText}>Expenses</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.expensesButton}
-          onPress={() => navigation.navigate("Overview")}
-        >
-          <Text style={styles.categoryButtonText}>Category</Text>
-        </TouchableOpacity>
-      </View>
+      <ExpensesNavigation activeScreen="Overview" />
       {/* Category Buttons */}
       <View style={styles.categoriesContainer}>
         <ScrollView
@@ -282,7 +261,8 @@ const styles = StyleSheet.create({
   percentageText: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 10,
+    textAlign: "center",
+    marginBottom: 20,
   },
   categoriesContainer: {
     width: "100%",
@@ -345,34 +325,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 4,
   },
-  backArrow: {
-    position: "absolute",
-    top: 20,
-    left: 20,
-    zIndex: 10,
-  },
   pigImage: {
     marginTop: 50,
     marginBottom: 20,
     width: 100,
     height: 100,
   },
-  buttonSpacing: {
-    marginTop: 20, 
-  },
   buttonRow: {
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 10,
+    alignItems: "center",
+    gap: 10,
   },
   categoryButton: {
     borderColor: "black",
     borderWidth: 1,
     borderRadius: 20,
     paddingVertical: 6,
-    paddingHorizontal: 20,
     marginLeft: 10,
     marginRight: 10,
+    alignItems: "center",
+    width: 120,
+    position: "relative",
   },
   categoryButtonText: {
     fontWeight: "bold",
@@ -382,7 +357,9 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     borderRadius: 20,
     paddingVertical: 6,
-    paddingHorizontal: 20,
+    width: 120,
+    alignItems: "center",
+    position: "relative",
   },
   expensesButtonText: {
     fontWeight: "bold",
