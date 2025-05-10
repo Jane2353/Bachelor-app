@@ -1,11 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from "react-native";
 import Papa from "papaparse"; // Import PapaParse for CSV parsing
 import NextButtonWithDots from "../components/NextButtonWithDots";
 
 const ExpensesScreen = ({ navigation }) => {
   const [expenses, setExpenses] = useState([]);
-  const [newExpense, setNewExpense] = useState({ date: "", store: "", amount: "" });
+  const [newExpense, setNewExpense] = useState({
+    date: "",
+    store: "",
+    amount: "",
+  });
   const fileInputRef = useRef(null); // Create a ref for the file input
 
   useEffect(() => {
@@ -23,7 +35,10 @@ const ExpensesScreen = ({ navigation }) => {
 
   const addExpense = () => {
     if (newExpense.date && newExpense.store && newExpense.amount) {
-      setExpenses([{ ...newExpense, amount: parseFloat(newExpense.amount) }, ...expenses]);
+      setExpenses([
+        { ...newExpense, amount: parseFloat(newExpense.amount) },
+        ...expenses,
+      ]);
       setNewExpense({ date: "", store: "", amount: "" });
     }
   };
@@ -72,12 +87,14 @@ const ExpensesScreen = ({ navigation }) => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Pig Icon */}
       <Image
-        source={require('../../assets/Pig/front_smile_transparent.png')}
+        source={require("../../assets/Pig/front_smile_transparent.png")}
         style={styles.pigIcon}
       />
       {/* Current Expenses Section */}
       <Text style={styles.sectionTitle}>
-        Firstly, we need to get an idea of your expenses. By logging in with your bank, we are able to view your transactions and can help identify where and how you spend your money. 
+        Firstly, we need to get an idea of your expenses. By logging in with
+        your bank, we are able to view your transactions and can help identify
+        where and how you spend your money.
       </Text>
       {/* Login to the Bank Section */}
       <TouchableOpacity style={styles.bankButton} onPress={() => {}}>
@@ -160,9 +177,9 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    color: '#000',
+    color: "#000",
     lineHeight: 25,
-    paddingHorizontal: '5%',
+    paddingHorizontal: "5%",
     marginBottom: 10,
   },
   expenseTitle: {
@@ -196,13 +213,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
     marginTop: 10,
-    width: '80%',
-    height: '5%',
-    alignSelf: 'center',
-    justifyContent: 'center',
+    width: "80%",
+    height: "5%",
+    alignSelf: "center",
+    justifyContent: "center",
   },
   bankButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
   },
   csvButton: {
@@ -211,8 +228,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginBottom: 20,
-    width: '80%',
-    alignSelf: 'center',
+    width: "80%",
+    alignSelf: "center",
   },
   csvInput: {
     display: "none", // Keep the input hidden
@@ -236,7 +253,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 4,
-    width: '80%',
+    width: "80%",
   },
   pigIcon: {
     width: 100,

@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 
 const NextButtonWithDots = ({ navigation, nextScreen, activeDotIndex }) => {
   return (
@@ -30,37 +30,37 @@ const NextButtonWithDots = ({ navigation, nextScreen, activeDotIndex }) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    bottom: 30, 
+    position: "absolute",
+    bottom: 30,
     left: 0,
     right: 0,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
   pagination: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 20,
   },
   dot: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#A8E6CF',
+    backgroundColor: "#A8E6CF",
     marginHorizontal: 5,
   },
   activeDot: {
-    backgroundColor: '#2ECC71',
+    backgroundColor: "#2ECC71",
   },
   button: {
-    backgroundColor: '#2ECC71',
+    backgroundColor: "#2ECC71",
     paddingVertical: 15,
     paddingHorizontal: 110,
     borderRadius: 25,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 

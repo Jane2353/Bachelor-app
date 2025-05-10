@@ -1,6 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image, TextInput, Platform } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Image,
+  TextInput,
+  Platform,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const AllExpensesOverviewScreen = () => {
   const [expenses, setExpenses] = useState([]);
@@ -8,7 +17,7 @@ const AllExpensesOverviewScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const storedBudget = localStorage.getItem('totalBudget'); // Retrieve totalBudget
+    const storedBudget = localStorage.getItem("totalBudget"); // Retrieve totalBudget
     if (storedBudget) {
       setTotalBudget(parseFloat(storedBudget)); // Set totalBudget from localStorage
     }
@@ -18,16 +27,16 @@ const AllExpensesOverviewScreen = () => {
     // Fetch expenses and budget from localStorage on mount
     const fetchExpensesAndBudget = () => {
       try {
-        const data = localStorage.getItem('expenses');
-        const storedBudget = localStorage.getItem('totalBudget');
+        const data = localStorage.getItem("expenses");
+        const storedBudget = localStorage.getItem("totalBudget");
 
         if (data) {
           const parsed = JSON.parse(data);
 
           // Sort expenses by date (most recent first)
           const sorted = parsed.sort((a, b) => {
-            const [dayA, monthA] = a.date.split('-').map(Number); // Parse dd-mm
-            const [dayB, monthB] = b.date.split('-').map(Number); // Parse dd-mm
+            const [dayA, monthA] = a.date.split("-").map(Number); // Parse dd-mm
+            const [dayB, monthB] = b.date.split("-").map(Number); // Parse dd-mm
             const dateA = new Date(2025, monthA - 1, dayA); // Create Date object (year is arbitrary)
             const dateB = new Date(2025, monthB - 1, dayB); // Create Date object (year is arbitrary)
             return dateB - dateA; // Sort descending
@@ -40,7 +49,7 @@ const AllExpensesOverviewScreen = () => {
           setTotalBudget(parseFloat(storedBudget)); // Load budget from localStorage
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -49,15 +58,17 @@ const AllExpensesOverviewScreen = () => {
 
   useEffect(() => {
     // Save totalBudget to localStorage whenever it changes
-    localStorage.setItem('totalBudget', totalBudget);
+    localStorage.setItem("totalBudget", totalBudget);
   }, [totalBudget]);
 
   const totalSpent = expenses.reduce((sum, e) => sum + parseFloat(e.amount), 0); // Calculate total spent
 
   return (
-    <ScrollView 
-    contentContainerStyle={styles.container}>
-      <Image source={require('../../assets/Pig/front_smile.png')} style={styles.piggyImage} />
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image
+        source={require("../../assets/Pig/front_smile.png")}
+        style={styles.piggyImage}
+      />
 
       {/* Title and Subtitle */}
       <Text style={styles.title}>Overview</Text>
@@ -78,20 +89,18 @@ const AllExpensesOverviewScreen = () => {
         {((totalSpent / totalBudget) * 100).toFixed(1)}% of your budget spent
       </Text>
 
-    
-
       {/* Category and Expenses buttons */}
       <View style={styles.buttonRow}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.expensesButton}
-          onPress={() => navigation.navigate('Overview')}
+          onPress={() => navigation.navigate("Overview")}
         >
           <Text style={styles.expensesButtonText}>Expenses</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.categoryButton}
-          onPress={() => navigation.navigate('Overview')} 
+          onPress={() => navigation.navigate("Overview")}
         >
           <Text style={styles.categoryButtonText}>Category</Text>
         </TouchableOpacity>
@@ -107,8 +116,12 @@ const AllExpensesOverviewScreen = () => {
           {expenses.map((expense, index) => (
             <View key={index} style={styles.expenseRow}>
               <Text style={styles.expenseDate}>{formatDate(expense.date)}</Text>
-              <Text style={styles.expenseName}>{expense.store || 'No Store Name'}</Text>
-              <Text style={styles.expenseAmount}>{parseFloat(expense.amount).toFixed(0)},-</Text>
+              <Text style={styles.expenseName}>
+                {expense.store || "No Store Name"}
+              </Text>
+              <Text style={styles.expenseAmount}>
+                {parseFloat(expense.amount).toFixed(0)},-
+              </Text>
             </View>
           ))}
         </ScrollView>
@@ -131,7 +144,7 @@ const styles = StyleSheet.create({
   piggyImage: {
     width: 100,
     height: 100,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 50,
     marginBottom: 20,
   },
@@ -163,17 +176,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center', // Center the inputs
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center", // Center the inputs
     marginBottom: 20,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
     padding: 8, // Reduced padding for smaller size
-    textAlign: 'center',
+    textAlign: "center",
     width: 100, // Smaller width
     marginRight: 10, // Space between TextInput and file input
   },
@@ -181,31 +194,31 @@ const styles = StyleSheet.create({
     fontSize: 12, // Smaller font size
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginBottom: 10,
   },
   categoryButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 20,
-    marginLeft: 10, 
+    marginLeft: 10,
   },
   categoryButtonText: {
-    fontWeight: 'bold',
-    color: 'black',
+    fontWeight: "bold",
+    color: "black",
   },
   expensesButton: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 20,
   },
   expensesButtonText: {
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
   expensesListContainer: {
     width: "100%",
@@ -217,9 +230,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10, // Adds spacing at the bottom
   },
   expenseRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#e0e0e0',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#e0e0e0",
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -227,19 +240,17 @@ const styles = StyleSheet.create({
   },
   expenseDate: {
     flex: 1,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   expenseName: {
     flex: 2,
-    textAlign: 'center',
+    textAlign: "center",
   },
   expenseAmount: {
     flex: 1,
-    textAlign: 'right',
-    fontWeight: 'bold',
+    textAlign: "right",
+    fontWeight: "bold",
   },
 });
 
 export default AllExpensesOverviewScreen;
-
-

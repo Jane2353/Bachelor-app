@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from "react-native";
 import NextButtonWithDots from "../components/NextButtonWithDots";
 
 const DisposableIncome = ({ navigation }) => {
@@ -15,13 +23,20 @@ const DisposableIncome = ({ navigation }) => {
       if (savedIncome) {
         setIncomeItems(JSON.parse(savedIncome));
       } else {
-        setIncomeItems([{ name: "SU", amount: 6000 }, { name: "Work", amount: 2500 }, { name: "Others", amount: 500 }]);
+        setIncomeItems([
+          { name: "SU", amount: 6000 },
+          { name: "Work", amount: 2500 },
+          { name: "Others", amount: 500 },
+        ]);
       }
 
       if (savedExpenses) {
         setFixedExpenses(JSON.parse(savedExpenses));
       } else {
-        setFixedExpenses([{ name: "Rent", amount: 6000 }, { name: "Electricity", amount: 2500 }]);
+        setFixedExpenses([
+          { name: "Rent", amount: 6000 },
+          { name: "Electricity", amount: 2500 },
+        ]);
       }
     };
 
@@ -76,14 +91,17 @@ const DisposableIncome = ({ navigation }) => {
 
   useEffect(() => {
     const disposableIncome = totalIncome - totalFixed; // Calculate disposable income
-    localStorage.setItem('disposableIncome', disposableIncome.toString());
-    localStorage.setItem('totalBudget', disposableIncome.toString()); // Save as totalBudget
+    localStorage.setItem("disposableIncome", disposableIncome.toString());
+    localStorage.setItem("totalBudget", disposableIncome.toString()); // Save as totalBudget
   }, [totalIncome, totalFixed]); // Update whenever income or expenses change
 
   return (
     <View style={styles.wrapper}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Image source={require("../../assets/Pig/front_smile.png")} style={styles.piggy} />
+        <Image
+          source={require("../../assets/Pig/front_smile.png")}
+          style={styles.piggy}
+        />
 
         <Text style={styles.message}>
           We have located your monthly income {""}
@@ -102,7 +120,9 @@ const DisposableIncome = ({ navigation }) => {
               />
               <TextInput
                 value={item.amount.toString()}
-                onChangeText={(text) => handleIncomeChange(index, "amount", text)}
+                onChangeText={(text) =>
+                  handleIncomeChange(index, "amount", text)
+                }
                 keyboardType="numeric"
                 style={styles.inputAmount}
               />
@@ -122,12 +142,16 @@ const DisposableIncome = ({ navigation }) => {
             <View key={index} style={styles.row}>
               <TextInput
                 value={item.name}
-                onChangeText={(text) => handleExpenseChange(index, "name", text)}
+                onChangeText={(text) =>
+                  handleExpenseChange(index, "name", text)
+                }
                 style={styles.inputName}
               />
               <TextInput
                 value={item.amount.toString()}
-                onChangeText={(text) => handleExpenseChange(index, "amount", text)}
+                onChangeText={(text) =>
+                  handleExpenseChange(index, "amount", text)
+                }
                 keyboardType="numeric"
                 style={styles.inputAmount}
               />

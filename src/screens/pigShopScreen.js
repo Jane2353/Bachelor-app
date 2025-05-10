@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import NavigationButtons from '../components/NavigationButtons';
-import Popup from '../components/popup';
+import React, { useState } from "react";
+import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import NavigationButtons from "../components/NavigationButtons";
+import Popup from "../components/popup";
 
 // Reusable ItemBox component
 const ItemBox = ({ label, onPress, icon }) => (
-  <TouchableOpacity style={styles.itemsBox} onPress={() => onPress(label, icon)}>
+  <TouchableOpacity
+    style={styles.itemsBox}
+    onPress={() => onPress(label, icon)}
+  >
     {icon && <Image source={icon} style={styles.icon} />}
     <Text>{label}</Text>
   </TouchableOpacity>
@@ -13,7 +16,7 @@ const ItemBox = ({ label, onPress, icon }) => (
 
 const PigShopScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedLabel, setSelectedLabel] = useState('');
+  const [selectedLabel, setSelectedLabel] = useState("");
   const [selectedIcon, setSelectedIcon] = useState(null);
 
   const handleItemPress = (label, icon) => {
@@ -26,14 +29,17 @@ const PigShopScreen = () => {
     <View style={styles.container}>
       <NavigationButtons currentScreen="PigShopScreen" />
       <Text style={styles.textShop}>
-        Welcome to the Pig Shop. Here you can buy items for your pig. Click on the items to view them.
+        Welcome to the Pig Shop. Here you can buy items for your pig. Click on
+        the items to view them.
       </Text>
-      <Text style={styles.textTotal}>
-        BaconBucks = 1000
-      </Text>
-        <View style={styles.line} />
+      <Text style={styles.textTotal}>BaconBucks = 1000</Text>
+      <View style={styles.line} />
       <View style={styles.itemsContainer}>
-        <ItemBox label="Summer hat" onPress={handleItemPress} icon={require('../../assets/Pig/pigHat.png')} />
+        <ItemBox
+          label="Summer hat"
+          onPress={handleItemPress}
+          icon={require("../../assets/Pig/pigHat.png")}
+        />
       </View>
       <Popup
         modalVisible={modalVisible}
@@ -49,48 +55,48 @@ const PigShopScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'white',
+    alignItems: "center",
+    backgroundColor: "white",
   },
   textShop: {
-    marginTop: '5%',
+    marginTop: "5%",
     fontSize: 15,
-    color: 'black',
-    width: '80%',
-    marginBottom: '2%',
+    color: "black",
+    width: "80%",
+    marginBottom: "2%",
   },
   textTotal: {
-    marginTop: '2%',
+    marginTop: "2%",
     fontSize: 15,
-    color: 'black',
-    width: '80%',
+    color: "black",
+    width: "80%",
   },
   itemsContainer: {
-    width: '80%',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
+    width: "80%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
   },
   itemsBox: {
-    width: '30%',
+    width: "30%",
     aspectRatio: 1, // gør boksen kvadratisk
     borderWidth: 1,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: "grey",
+    justifyContent: "center",
+    alignItems: "center",
     margin: 5, // lidt luft omkring boksene
   },
   icon: {
     width: 100,
     height: 50,
     marginBottom: 5,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   line: {
-    width: '80%', 
-    height: 1,     
-    backgroundColor: 'black',
-    marginBottom: '2%',
+    width: "80%",
+    height: 1,
+    backgroundColor: "black",
+    marginBottom: "2%",
   },
 });
 
