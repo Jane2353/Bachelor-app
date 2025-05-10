@@ -174,16 +174,29 @@ const PigCategorise = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'white' },
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 20,
     marginTop: '10%',
   },
-  backArrow: { marginRight: 10 },
-  arrowIcon: { width: 40, height: 40, resizeMode: 'contain' },
-  pigIcon: { width: 95, height: 95, resizeMode: 'contain' },
+  backArrow: {
+    marginRight: 10,
+  },
+  arrowIcon: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+  },
+  pigIcon: {
+    width: 95,
+    height: 95,
+    resizeMode: 'contain',
+  },
   speechBubble: {
     marginLeft: 10,
     padding: 10,
@@ -194,8 +207,16 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
   },
-  speechBubbleText: { color: 'black', fontSize: 14, textAlign: 'center' },
-  instructionText: { textAlign: 'center', fontSize: 16, marginVertical: 10 },
+  speechBubbleText: {
+    color: 'black',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  instructionText: {
+    textAlign: 'center',
+    fontSize: 16,
+    marginVertical: 10,
+  },
   expensesContainer: {
     width: '90%',
     height: '50%',
@@ -224,7 +245,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 10,
   },
-  expenseText: { fontSize: 14, color: 'black' },
+  expenseText: {
+    fontSize: 14,
+    color: 'black',
+  },
   dropdownContainer: {
     flex: 1.5,
     backgroundColor: '#E0E0E0',
