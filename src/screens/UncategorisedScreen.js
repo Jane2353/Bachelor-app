@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 20, // Adds spacing at the bottom
+    paddingBottom: 20, 
   },
   expenseCard: {
     backgroundColor: "#f89da1",

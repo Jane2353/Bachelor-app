@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     width: "100%",
-    height: 30, // Increased height of the progress bar
+    height: 30, 
     backgroundColor: "#ccc",
     borderRadius: 10,
     overflow: "hidden",
@@ -178,20 +178,20 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center", // Center the inputs
+    justifyContent: "center", 
     marginBottom: 20,
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    padding: 8, // Reduced padding for smaller size
+    padding: 8, 
     textAlign: "center",
-    width: 100, // Smaller width
-    marginRight: 10, // Space between TextInput and file input
+    width: 100, 
+    marginRight: 10, 
   },
   fileInput: {
-    fontSize: 12, // Smaller font size
+    fontSize: 12, 
   },
   buttonRow: {
     flexDirection: "row",
@@ -223,11 +223,11 @@ const styles = StyleSheet.create({
   expensesListContainer: {
     width: "100%",
     marginTop: 10,
-    height: 400, // Set a fixed height for the scrollable area
+    height: 400, 
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 10, // Adds spacing at the bottom
+    paddingBottom: 10,
   },
   expenseRow: {
     flexDirection: "row",

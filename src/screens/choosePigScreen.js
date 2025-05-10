@@ -154,14 +154,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   selectedButton: {
-    backgroundColor: "#FFD700", // Highlight selected pig button
+    backgroundColor: "#FFD700", 
   },
   selectButtonText: {
     color: "#fff",
     fontSize: 14,
   },
   selectedButtonText: {
-    color: "#000", // Change text color to black for selected pig
+    color: "#000",
   },
   inputLabel: {
     fontSize: 16,

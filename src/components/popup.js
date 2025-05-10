@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   modalImage: {
-    width: 200, // Adjusted size for smaller icons
+    width: 200, 
     height: 200,
     alignSelf: "center",
     marginBottom: 10,

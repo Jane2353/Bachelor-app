@@ -79,12 +79,12 @@ const styles = StyleSheet.create({
   },
   itemsBox: {
     width: "30%",
-    aspectRatio: 1, // gør boksen kvadratisk
+    aspectRatio: 1,
     borderWidth: 1,
     borderColor: "grey",
     justifyContent: "center",
     alignItems: "center",
-    margin: 5, // lidt luft omkring boksene
+    margin: 5, 
   },
   icon: {
     width: 100,

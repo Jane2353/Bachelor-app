@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     padding: 10,
-    overflow: "hidden", // Ensures content stays within the container
+    overflow: "hidden",
   },
   scrollContent: {
     flexGrow: 1,

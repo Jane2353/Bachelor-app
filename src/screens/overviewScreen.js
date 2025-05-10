@@ -153,12 +153,10 @@ const OverviewScreen = ({ navigation }) => {
           />
         ))}
       </View>
-      {/* Percentage Spent */}
       <Text style={styles.percentageText}>
         {progress}% of your budget spent
       </Text>
-      <View style={styles.buttonSpacing} /> {/* Add space above the buttons */}
-      {/* Add Expenses and Category buttons */}
+      <View style={styles.buttonSpacing} />
       <View style={styles.buttonRow}>
         <TouchableOpacity
           style={styles.categoryButton}
@@ -271,10 +269,10 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     width: "100%",
-    height: 30, // Increased height of the progress bar
-    backgroundColor: "#ccc", // Background for unused budget
+    height: 30, 
+    backgroundColor: "#ccc", 
     borderRadius: 10,
-    flexDirection: "row", // Stack segments horizontally
+    flexDirection: "row", 
     overflow: "hidden",
     marginBottom: 15,
   },
@@ -289,11 +287,11 @@ const styles = StyleSheet.create({
   categoriesContainer: {
     width: "100%",
     marginTop: 10,
-    height: 350, // Set a fixed height for the scrollable area
+    height: 350, 
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 10, // Adds spacing at the bottom
+    paddingBottom: 10, 
   },
   categoryCard: {
     flexDirection: "row",
@@ -345,7 +343,7 @@ const styles = StyleSheet.create({
   expenseName: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 4, // Add spacing below the name
+    marginBottom: 4,
   },
   backArrow: {
     position: "absolute",
@@ -360,7 +358,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   buttonSpacing: {
-    marginTop: 20, // Space above the buttons
+    marginTop: 20, 
   },
   buttonRow: {
     flexDirection: "row",

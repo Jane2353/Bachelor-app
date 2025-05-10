@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   csvInput: {
-    display: "none", // Keep the input hidden
+    display: "none", 
   },
   csvButtonText: {
     color: "white",
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   expensesList: {
-    maxHeight: 100, // Limit the height of the scrollable list
+    maxHeight: 100, 
   },
   expenseRow: {
     flexDirection: "row",

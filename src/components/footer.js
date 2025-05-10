@@ -79,12 +79,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -35,
     left: "50%",
-    transform: [{ translateX: -35 }], // Remove this and it'll work on the phone
+    transform: [{ translateX: -35 }],
     zIndex: 2,
   },
   diamond: {
-    width: 70, // ← was 60
-    height: 70, // ← was 60
+    width: 70,
+    height: 70, 
     backgroundColor: "#EB9999",
     transform: [{ rotate: "45deg" }],
     justifyContent: "center",
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
     borderColor: "black",
   },
   pigIcon: {
-    width: 40, // ← was 30
-    height: 40, // ← was 30
+    width: 40,
+    height: 40,
     resizeMode: "contain",
     tintColor: "black",
     transform: [{ rotate: "-45deg" }],

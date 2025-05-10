@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "space-between", // Ensures consistent spacing
+    justifyContent: "space-between",
     paddingHorizontal: 20,
   },
   content: {
