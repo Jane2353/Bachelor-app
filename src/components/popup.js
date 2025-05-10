@@ -1,14 +1,28 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback, Image } from 'react-native';
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
+  Image,
+} from "react-native";
 
-export default function Popup({ modalVisible, setModalVisible, title, message, imageSource }) {
+export default function Popup({
+  modalVisible,
+  setModalVisible,
+  title,
+  message,
+  imageSource,
+}) {
   const closeModal = () => {
     setModalVisible(false);
   };
 
   const handlePurchase = () => {
     // Logic for handling the purchase can be added here
-    console.log('Purchase button clicked');
+    console.log("Purchase button clicked");
     closeModal();
   };
 
@@ -24,9 +38,14 @@ export default function Popup({ modalVisible, setModalVisible, title, message, i
           <View style={styles.modalContent}>
             <View style={styles.modal}>
               <Text style={styles.modalTextBold}>{title}</Text>
-              {imageSource && <Image style={styles.modalImage} source={imageSource} />}
+              {imageSource && (
+                <Image style={styles.modalImage} source={imageSource} />
+              )}
               {message ? <Text style={styles.modalText}>{message}</Text> : null}
-              <TouchableOpacity style={styles.purchaseButton} onPress={handlePurchase}>
+              <TouchableOpacity
+                style={styles.purchaseButton}
+                onPress={handlePurchase}
+              >
                 <Text style={styles.purchaseButtonText}>Purchase</Text>
               </TouchableOpacity>
             </View>
@@ -40,51 +59,51 @@ export default function Popup({ modalVisible, setModalVisible, title, message, i
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
-    width: '70%',
+    width: "70%",
   },
   modal: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
     elevation: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalText: {
     fontSize: 24,
     marginBottom: 20,
-    alignContent: 'center',
-    textAlign: 'center',
+    alignContent: "center",
+    textAlign: "center",
   },
   modalTextBold: {
     fontSize: 24,
     marginBottom: 20,
-    justifyContent: 'center',
-    textAlign: 'center',
-    fontWeight: 'bold',
+    justifyContent: "center",
+    textAlign: "center",
+    fontWeight: "bold",
   },
   modalImage: {
-    width: 200, // Adjusted size for smaller icons
+    width: 200, 
     height: 200,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginBottom: 10,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   purchaseButton: {
-    backgroundColor: '#2ECC71',
+    backgroundColor: "#2ECC71",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
     marginTop: 10,
   },
   purchaseButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

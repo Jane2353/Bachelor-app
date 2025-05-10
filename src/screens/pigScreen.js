@@ -1,10 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
-import { ProgressChart } from 'react-native-chart-kit';
-import { useNavigation } from '@react-navigation/native';
-import NavigationButtons from '../components/NavigationButtons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { getUncategorizedCount, subscribeToUncategorizedCount } from '../utils/globalState';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
+import { ProgressChart } from "react-native-chart-kit";
+import { useNavigation } from "@react-navigation/native";
+import NavigationButtons from "../components/NavigationButtons";
+import { LinearGradient } from "expo-linear-gradient";
+import {
+  getUncategorizedCount,
+  subscribeToUncategorizedCount,
+} from "../utils/globalState";
 
 const DonutChart = ({ percentage, total }) => {
   const remaining = total - percentage; // Calculate remaining amount
@@ -22,17 +32,19 @@ const DonutChart = ({ percentage, total }) => {
           strokeWidth={30}
           radius={75}
           chartConfig={{
-            backgroundGradientFrom: '#fff',
-            backgroundGradientTo: '#fff',
+            backgroundGradientFrom: "#fff",
+            backgroundGradientTo: "#fff",
             color: (opacity = 1) => `rgba(233, 113, 113, ${opacity})`,
           }}
           hideLegend={true}
         />
       </View>
       <View style={styles.donutChartTextContainer}>
-        <Text style={styles.donutChartPercentage}>{remaining}</Text> {/* Display remaining amount */}
+        <Text style={styles.donutChartPercentage}>{remaining}</Text>{" "}
+        {/* Display remaining amount */}
         <View style={styles.donutChartDivider} />
-        <Text style={styles.donutChartTotal}>{total}</Text> {/* Display total */}
+        <Text style={styles.donutChartTotal}>{total}</Text>{" "}
+        {/* Display total */}
       </View>
     </View>
   );
@@ -41,11 +53,11 @@ const DonutChart = ({ percentage, total }) => {
 const ProgressBar = ({ PigHappiness }) => {
   const getDynamicColors = () => {
     if (PigHappiness < 25) {
-      return ['#E97171', '#E97171'];
+      return ["#E97171", "#E97171"];
     } else if (PigHappiness <= 75) {
-      return ['#E97171', '#C3AE65'];
+      return ["#E97171", "#C3AE65"];
     } else {
-      return ['#E97171', '#C3AE65', '#2ECC71'];
+      return ["#E97171", "#C3AE65", "#2ECC71"];
     }
   };
 
@@ -60,9 +72,21 @@ const ProgressBar = ({ PigHappiness }) => {
         />
       </View>
       <View style={styles.progressBarLabels}>
-        <Text style={[styles.labelText, { color: 'black', fontWeight: 'medium' }]}>Sad</Text>
-        <Text style={[styles.labelText, { color: 'black', fontWeight: 'medium' }]}>Worried</Text>
-        <Text style={[styles.labelText, { color: 'black', fontWeight: 'medium' }]}>Happy</Text>
+        <Text
+          style={[styles.labelText, { color: "black", fontWeight: "medium" }]}
+        >
+          Sad
+        </Text>
+        <Text
+          style={[styles.labelText, { color: "black", fontWeight: "medium" }]}
+        >
+          Worried
+        </Text>
+        <Text
+          style={[styles.labelText, { color: "black", fontWeight: "medium" }]}
+        >
+          Happy
+        </Text>
       </View>
     </View>
   );
@@ -71,13 +95,14 @@ const ProgressBar = ({ PigHappiness }) => {
 const PigScreen = () => {
   const navigation = useNavigation();
   const [PigHappiness, setPigHappiness] = useState(100); // Track happiness
-  const [hasUncategorizedExpenses, setHasUncategorizedExpenses] = useState(false); // Track uncategorized expenses
+  const [hasUncategorizedExpenses, setHasUncategorizedExpenses] =
+    useState(false); // Track uncategorized expenses
   const [totalBudget, setTotalBudget] = useState(0); // Track totalBudget
   const animation = useRef(new Animated.Value(1)).current; // Initialize animation value
 
   useEffect(() => {
     // Retrieve totalBudget from localStorage
-    const storedBudget = localStorage.getItem('totalBudget');
+    const storedBudget = localStorage.getItem("totalBudget");
     if (storedBudget) {
       setTotalBudget(parseFloat(storedBudget));
     }
@@ -88,7 +113,9 @@ const PigScreen = () => {
       const newHappiness = Math.max(0, 100 - count * 10);
       setPigHappiness(newHappiness);
       setHasUncategorizedExpenses(count > 0); // Update state based on uncategorized count
-      console.log(`Updated PigHappiness: ${newHappiness}, Uncategorized Count: ${count}`);
+      console.log(
+        `Updated PigHappiness: ${newHappiness}, Uncategorized Count: ${count}`
+      );
     };
 
     // Initialize happiness based on current uncategorized count
@@ -122,23 +149,25 @@ const PigScreen = () => {
     }
   }, [animation, hasUncategorizedExpenses]);
 
-  let pigMessage = '';
-  let pigIcon = '';
-  let clickIcon = require('../../assets/Pig/click_transparent.png');
+  let pigMessage = "";
+  let pigIcon = "";
+  let clickIcon = require("../../assets/Pig/click_transparent.png");
 
   if (PigHappiness < 25) {
-    pigMessage = "I am sad, please categorise your expenses as soon as possible!";
-    pigIcon = require('../../assets/Pig/side_sad_transparent.png');
+    pigMessage =
+      "I am sad, please categorise your expenses as soon as possible!";
+    pigIcon = require("../../assets/Pig/side_sad_transparent.png");
   } else if (PigHappiness <= 75) {
     pigMessage = "I am getting worried! You have uncategorised expenses";
-    pigIcon = require('../../assets/Pig/side_worried_transparent.png');
+    pigIcon = require("../../assets/Pig/side_worried_transparent.png");
   } else {
-    pigMessage = "I am happy, you are doing well keeping track of your expenses.";
-    pigIcon = require('../../assets/Pig/side_happy_transparent.png');
+    pigMessage =
+      "I am happy, you are doing well keeping track of your expenses.";
+    pigIcon = require("../../assets/Pig/side_happy_transparent.png");
   }
 
   const handlePigClick = () => {
-    navigation.navigate('PigCategorise'); // Navigate to categorization screen
+    navigation.navigate("PigCategorise"); // Navigate to categorization screen
   };
 
   return (
@@ -158,14 +187,12 @@ const PigScreen = () => {
           source={clickIcon}
         />
       )}
-      <TouchableOpacity 
-        onPress={handlePigClick} 
-        style={styles.pigTouchable}
-      >
+      <TouchableOpacity onPress={handlePigClick} style={styles.pigTouchable}>
         <Image style={styles.pigIcon} source={pigIcon} />
       </TouchableOpacity>
       <View style={styles.bottomLine} />
-      <DonutChart percentage={100} total={totalBudget} /> {/* Pass totalBudget */}
+      <DonutChart percentage={100} total={totalBudget} />{" "}
+      {/* Pass totalBudget */}
     </View>
   );
 };
@@ -173,179 +200,179 @@ const PigScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'white',
+    alignItems: "center",
+    backgroundColor: "white",
   },
   Title: {
-    marginTop: '10%',
+    marginTop: "10%",
     fontSize: 32,
   },
   containerButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: '10%',
-    width: '90%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: "10%",
+    width: "90%",
   },
   blackButton: {
-    flex: 'row',
-    backgroundColor: 'black',
-    width: '32%',
+    flex: "row",
+    backgroundColor: "black",
+    width: "32%",
     height: 50,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     fontSize: 20,
-    color: 'white',
+    color: "white",
   },
   blackButtonUnclicked: {
-    flex: 'row',
-    backgroundColor: 'white',
-    width: '32%',
+    flex: "row",
+    backgroundColor: "white",
+    width: "32%",
     height: 50,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     fontSize: 20,
-    color: 'black',
+    color: "black",
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: "black",
   },
   blackButtonText: {
     fontSize: 20,
-    color: 'white',
+    color: "white",
   },
   blackButtonTextUnclicked: {
     fontSize: 20,
-    color: 'black',
+    color: "black",
   },
   containerMeter: {
-    marginTop: '5%',
-    width: '90%',
-    height: '8%',
-    backgroundColor: 'transparent',
+    marginTop: "5%",
+    width: "90%",
+    height: "8%",
+    backgroundColor: "transparent",
   },
   progressBarContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   progressBarBackground: {
-    width: '100%',
+    width: "100%",
     height: 30,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     borderRadius: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   progressBarFill: {
-    height: '100%',
+    height: "100%",
   },
   progressBarLabels: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
     paddingHorizontal: 10,
     marginTop: 5,
   },
   label: {
-    marginTop: '25%',
-    alignSelf: 'flex-start',
-    marginLeft: '12%',
+    marginTop: "25%",
+    alignSelf: "flex-start",
+    marginLeft: "12%",
   },
   clickIcon: {
-    position: 'absolute',
-    top: '35%',
-    left: '10%',
+    position: "absolute",
+    top: "35%",
+    left: "10%",
     width: 90,
     height: 90,
-    resizeMode: 'contain',
+    resizeMode: "contain",
     zIndex: 3,
   },
   pigTouchable: {
-    marginTop: '25%',
-    alignSelf: 'flex-start',
-    marginLeft: '12%',
+    marginTop: "25%",
+    alignSelf: "flex-start",
+    marginLeft: "12%",
   },
   pigIcon: {
     width: 150,
     height: 150,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   donutChartContainer: {
     width: 250,
     height: 250,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   donutChartWrapper: {
     width: 200,
     height: 200,
   },
   donutChartTextContainer: {
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
   },
   donutChartPercentage: {
     fontSize: 24,
-    color: 'black',
+    color: "black",
   },
   donutChartDivider: {
-    width: '100%',
+    width: "100%",
     height: 1,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     marginVertical: 2,
   },
   donutChartTotal: {
     fontSize: 24,
-    color: 'black',
+    color: "black",
   },
   speechBubble: {
-    marginTop: '5%',
-    position: 'absolute',
-    top: '34%',
-    left: '70%',
+    marginTop: "5%",
+    position: "absolute",
+    top: "34%",
+    left: "70%",
     transform: [{ translateX: -100 }],
     width: 200,
     padding: 10,
-    backgroundColor: '#FE9894',
+    backgroundColor: "#FE9894",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#FE9894',
-    alignItems: 'center',
+    borderColor: "#FE9894",
+    alignItems: "center",
     zIndex: 2,
   },
   speechBubbleText: {
-    color: 'black',
+    color: "black",
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
   },
   speechBubbleTail: {
-    position: 'absolute',
+    position: "absolute",
     bottom: -10,
-    left: '10%',
+    left: "10%",
     transform: [{ translateX: -10 }],
     width: 0,
     height: 0,
     borderLeftWidth: 10,
     borderRightWidth: 10,
     borderTopWidth: 10,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderTopColor: '#FE9894',
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderTopColor: "#FE9894",
   },
   topLine: {
-    width: '90%',
+    width: "90%",
     height: 1,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     marginTop: 10,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   bottomLine: {
-    width: '90%',
+    width: "90%",
     height: 1,
-    backgroundColor: 'black',
-    alignSelf: 'center',
+    backgroundColor: "black",
+    alignSelf: "center",
   },
 });
 

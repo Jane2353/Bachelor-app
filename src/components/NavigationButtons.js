@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const NavigationButtons = ({ currentScreen }) => {
   const navigation = useNavigation();
@@ -9,7 +9,9 @@ const NavigationButtons = ({ currentScreen }) => {
     screen === currentScreen ? styles.blackButton : styles.blackButtonUnclicked;
 
   const getTextStyle = (screen) =>
-    screen === currentScreen ? styles.blackButtonText : styles.blackButtonTextUnclicked;
+    screen === currentScreen
+      ? styles.blackButtonText
+      : styles.blackButtonTextUnclicked;
 
   return (
     <View style={styles.container}>
@@ -19,22 +21,22 @@ const NavigationButtons = ({ currentScreen }) => {
       </Text>
       <View style={styles.containerButtons}>
         <TouchableOpacity
-          style={getButtonStyle('PigScreen')}
-          onPress={() => navigation.navigate('PigScreen')}
+          style={getButtonStyle("PigScreen")}
+          onPress={() => navigation.navigate("PigScreen")}
         >
-          <Text style={getTextStyle('PigScreen')}>Home</Text>
+          <Text style={getTextStyle("PigScreen")}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={getButtonStyle('PigChallengeScreen')}
-          onPress={() => navigation.navigate('PigChallengeScreen')}
+          style={getButtonStyle("PigChallengeScreen")}
+          onPress={() => navigation.navigate("PigChallengeScreen")}
         >
-          <Text style={getTextStyle('PigChallengeScreen')}>Challenge</Text>
+          <Text style={getTextStyle("PigChallengeScreen")}>Challenge</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={getButtonStyle('PigShopScreen')}
-          onPress={() => navigation.navigate('PigShopScreen')}
+          style={getButtonStyle("PigShopScreen")}
+          onPress={() => navigation.navigate("PigShopScreen")}
         >
-          <Text style={getTextStyle('PigShopScreen')}>Shop</Text>
+          <Text style={getTextStyle("PigShopScreen")}>Shop</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -43,50 +45,50 @@ const NavigationButtons = ({ currentScreen }) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    marginTop: '5%',
+    alignItems: "center",
+    marginTop: "5%",
   },
   title: {
     fontSize: 30,
-    marginTop: '10%',
+    marginTop: "10%",
   },
   pinkText: {
-    color: '#E97171',
+    color: "#E97171",
   },
   containerButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: '10%',
-    width: '90%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: "10%",
+    width: "90%",
   },
   blackButton: {
-    flex: 'row',
-    backgroundColor: 'black',
-    width: '30%',
+    flex: "row",
+    backgroundColor: "black",
+    width: "30%",
     height: 50,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   blackButtonUnclicked: {
-    flex: 'row',
-    backgroundColor: 'white',
-    width: '30%',
+    flex: "row",
+    backgroundColor: "white",
+    width: "30%",
     height: 50,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: "black",
   },
   blackButtonText: {
     fontSize: 20,
-    color: 'white',
+    color: "white",
   },
   blackButtonTextUnclicked: {
     fontSize: 20,
-    color: 'black',
+    color: "black",
   },
 });
 
