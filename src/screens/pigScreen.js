@@ -17,7 +17,7 @@ import {
 } from "../utils/globalState";
 
 const DonutChart = ({ percentage, total }) => {
-  const remaining = total - percentage; // Calculate remaining amount
+  const remaining = total / 4; // Calculate remaining amount
   const data = {
     data: [remaining / total], // Calculate remaining percentage
   };
